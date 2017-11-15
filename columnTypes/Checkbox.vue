@@ -1,6 +1,6 @@
 <template>
     <div class="column type-checkbox">
-        <i class="material-icons icon icon--selection-control icon--checkbox">{{isTrue() ? 'check_box' : 'check_box_outline_blank'}}</i>
+        <i class="material-icons icon icon--selection-control icon--checkbox">{{isTrue() ? 'check_circle' : ''}}</i>
     </div>
 </template>
 
