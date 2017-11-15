@@ -1,0 +1,22 @@
+{
+  "name": "vuetify-resource",
+  "version": "0.1.0",
+  "description": "An easy way to create a resource list with the vuetify data table with default create  update and delete dialogs/actions and potential your own actions",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kingscode/vuetify-resource.git"
+  },
+  "keywords": [
+    "vue",
+    "vuetify",
+    "crud",
+    "resource"
+  ],
+  "author": "Ricardo van Laarhoven",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kingscode/vuetify-resource/issues"
+  },
+  "homepage": "https://github.com/kingscode/vuetify-resource#readme"
+}
