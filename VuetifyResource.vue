@@ -1,5 +1,5 @@
 <template>
-    <div class="resource-list">
+    <div class="vuetify-resource">
         <v-container fluid grid-list-lg>
 
 
@@ -138,7 +138,7 @@
 
 <script>
     export default {
-        name: 'ResourceList',
+        name: 'VuetifyResource',
         data() {
             return {
                 meta: {
@@ -345,21 +345,21 @@
 </script>
 
 <style>
-    .resource-list {
+    .vuetify-resource {
         position: relative;
         margin-top: 30px
     }
 
-    .resource-list th:first-child {
+    .vuetify-resource th:first-child {
         width: 40px;
     }
 
-    .resource-list .speed-dial {
+    .vuetify-resource .speed-dial {
         right: -25px;
         top: 10px;
     }
 
-    .resource-list .datatable {
+    .vuetify-resource .datatable {
         width: 70vw;
     }
 </style>
