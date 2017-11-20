@@ -112,7 +112,7 @@
                         v-bind:rows-per-page-items="[10, 25, 100]"
                     >
 
-                        <template slot="items" scope="props">
+                        <template slot="items" slot-scope="props">
                             <td>
                                 <v-checkbox
                                     primary
