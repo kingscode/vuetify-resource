@@ -1,8 +1,6 @@
 <template>
     <div class="vuetify-resource">
         <v-container fluid grid-list-lg>
-
-
             <v-dialog
                 v-model="dialog.create"
                 fullscreen
@@ -28,6 +26,7 @@
                     <div style="flex: 1 1 auto;"></div>
                 </v-card>
             </v-dialog>
+
             <v-dialog
                 v-model="dialog.update"
                 fullscreen
@@ -62,7 +61,6 @@
                 {{ snackbar.text }}
                 <v-btn dark flat @click.native="snackbar.active = false">Sluiten</v-btn>
             </v-snackbar>
-
 
             <v-layout row wrap>
                 <v-flex>
@@ -111,7 +109,6 @@
                         class="elevation-1"
                         v-bind:rows-per-page-items="[10, 25, 100]"
                     >
-
                         <template slot="items" slot-scope="props">
                             <td>
                                 <v-checkbox
@@ -166,17 +163,22 @@
             /**
              * getDataCallBack
              *
-             *
              * @param pagination
              * @return promise with resolving items and total for the table
              */
-            getDataCallback: {required: true, type: Function},
+            getDataCallback: {
+                required: true,
+                type: Function,
+            },
 
             /**
-             * beforecreateCallback
+             * beforeCreateCallback
              * the callback wich is called before opening the create form
              */
-            beforeCreateCallback: {required: false, type: Function},
+            beforeCreateCallback: {
+                required: false,
+                type: Function,
+            },
 
             /**
              * createCallBack
@@ -184,13 +186,19 @@
              *
              * @return promise
              */
-            createCallback: {required: true, type: Function},
+            createCallback: {
+                required: true,
+                type: Function,
+            },
 
             /**
              * beforeUpdateCallback
              * the callback which is called before the update dialog is opened
              */
-            beforeUpdateCallback: {required: true, type: Function},
+            beforeUpdateCallback: {
+                required: true,
+                type: Function,
+            },
 
             /**
              * updateCallback
@@ -198,7 +206,10 @@
              *
              * @return promise
              */
-            updateCallback: {required: true, type: Function},
+            updateCallback: {
+                required: true,
+                type: Function,
+            },
 
             /**
              * deleteCallback
@@ -206,7 +217,10 @@
              *
              * @return promise
              */
-            deleteCallback: {required: true, type: Function},
+            deleteCallback: {
+                required: true,
+                type: Function,
+            },
 
             /**
              * @param array with object(s) for each column in the table
@@ -336,7 +350,7 @@
              */
             clearSelected() {
                 this.selected = [];
-            }
+            },
         },
         created() {
             this.getDataHandler();
