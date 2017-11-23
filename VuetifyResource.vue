@@ -54,7 +54,7 @@
             </v-dialog>
 
             <v-snackbar
-                v-bind:timeout="2000"
+                :timeout="2000"
                 color="success"
                 v-model="snackbar.active"
             >
@@ -68,9 +68,9 @@
                     <v-speed-dial
                         absolute
                         v-model="fab"
-                        v-bind:top="true"
-                        v-bind:right="true"
-                        v-bind:hover="true"
+                        :top="true"
+                        :right="true"
+                        :hover="true"
                         direction="bottom"
                         transition="slide-y-reverse-transition"
                     >
@@ -97,17 +97,17 @@
                     </v-speed-dial>
 
                     <v-data-table
-                        v-bind:headers="tableContent"
-                        v-bind:items="items"
-                        v-bind:search="search"
-                        v-bind:pagination.sync="pagination"
+                        :headers="tableContent"
+                        :items="items"
+                        :search="search"
+                        :pagination.sync="pagination"
                         v-model="selected"
                         item-key="id"
                         select-all
                         :total-items="totalItems"
                         :loading="loading"
                         class="elevation-1"
-                        v-bind:rows-per-page-items="[10, 25, 100]"
+                        :rows-per-page-items="[10, 25, 100]"
                     >
                         <template slot="items" slot-scope="props">
                             <td>
@@ -120,8 +120,8 @@
                             <td v-for="item in tableContent">
                                 <component
                                     v-if="typeof item.columnType === 'object'"
-                                    v-bind:is="item.columnType"
-                                    v-bind:content="props.item[item.value]"
+                                    :is="item.columnType"
+                                    :content="props.item[item.value]"
                                 ></component>
                                 <span v-if="typeof item.columnType !== 'object'">{{ props.item[item.value] }}</span>
                             </td>

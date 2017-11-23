@@ -84,11 +84,11 @@ npm install @kingscode/vuetify-resource --save
     <v-app>
         <div class="page page-news">
             <resource-list
-                v-bind:getDataCallback="getDataFromApi"
-                v-bind:tableContent="tableContent"
-                v-bind:createCallback="createNews"
-                v-bind:updateCallback="updateNews"
-                v-bind:deleteCallback="deleteNews"
+                :getDataCallback="getDataFromApi"
+                :tableContent="tableContent"
+                :createCallback="createNews"
+                :updateCallback="updateNews"
+                :deleteCallback="deleteNews"
             >
                 <div slot="createContent">
                     place here your form
