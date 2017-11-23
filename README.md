@@ -22,7 +22,7 @@ npm install @kingscode/vuetify-resource --save
 
 ```
 /**
- * beforecreateCallback
+ * beforeCreateCallback
  * the callback wich is called before opening the create form
  */
 ```
