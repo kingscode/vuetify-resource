@@ -16,7 +16,7 @@
                         <v-toolbar-title>{{ meta.name }}</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
-                            <v-btn dark flat v-on:click="createHandler()">Save</v-btn>
+                            <v-btn dark flat @click="createHandler()">Save</v-btn>
                             <slot name="createToolbar"></slot>
                         </v-toolbar-items>
                     </v-toolbar>
@@ -42,7 +42,7 @@
                         <v-toolbar-title>{{ meta.name }}</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
-                            <v-btn dark flat v-on:click="updateHandler()">Save</v-btn>
+                            <v-btn dark flat @click="updateHandler()">Save</v-btn>
                             <slot name="updateToolbar"></slot>
                         </v-toolbar-items>
                     </v-toolbar>
@@ -84,14 +84,14 @@
                             small
                             color="green"
                             v-if="selected.length === 1"
-                            v-on:click="openUpdateHandler()"
+                            @click="openUpdateHandler()"
                         >
                             <v-icon>create</v-icon>
                         </v-btn>
-                        <v-btn fab dark small color="indigo" v-on:click="openCreateHandler()">
+                        <v-btn fab dark small color="indigo" @click="openCreateHandler()">
                             <v-icon>add</v-icon>
                         </v-btn>
-                        <v-btn fab dark small color="red" v-if="selected.length >= 1" v-on:click="deleteHandler()">
+                        <v-btn fab dark small color="red" v-if="selected.length >= 1" @click="deleteHandler()">
                             <v-icon>delete</v-icon>
                         </v-btn>
                     </v-speed-dial>
