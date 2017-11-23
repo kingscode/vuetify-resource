@@ -84,8 +84,8 @@ npm install @kingscode/vuetify-resource --save
     <v-app>
         <div class="page page-news">
             <resource-list
-                v-bind:get-data-callback="getDataFromApi"
-                v-bind:table-content="tableContent"
+                v-bind:getDataCallback="getDataFromApi"
+                v-bind:tableContent="tableContent"
                 v-bind:createCallback="createNews"
                 v-bind:updateCallback="updateNews"
                 v-bind:deleteCallback="deleteNews"
