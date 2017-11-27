@@ -1,8 +1,6 @@
 <template>
-    <div class="resource-list">
+    <div class="vuetify-resource">
         <v-container fluid grid-list-lg>
-
-
             <v-dialog
                 v-model="dialog.create"
                 fullscreen
@@ -18,7 +16,7 @@
                         <v-toolbar-title>{{ meta.name }}</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
-                            <v-btn dark flat v-on:click="createHandler()">Save</v-btn>
+                            <v-btn dark flat @click="createHandler()">Save</v-btn>
                             <slot name="createToolbar"></slot>
                         </v-toolbar-items>
                     </v-toolbar>
@@ -28,6 +26,7 @@
                     <div style="flex: 1 1 auto;"></div>
                 </v-card>
             </v-dialog>
+
             <v-dialog
                 v-model="dialog.update"
                 fullscreen
@@ -43,7 +42,7 @@
                         <v-toolbar-title>{{ meta.name }}</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
-                            <v-btn dark flat v-on:click="updateHandler()">Save</v-btn>
+                            <v-btn dark flat @click="updateHandler()">Save</v-btn>
                             <slot name="updateToolbar"></slot>
                         </v-toolbar-items>
                     </v-toolbar>
@@ -55,7 +54,7 @@
             </v-dialog>
 
             <v-snackbar
-                v-bind:timeout="2000"
+                :timeout="2000"
                 color="success"
                 v-model="snackbar.active"
             >
@@ -63,16 +62,15 @@
                 <v-btn dark flat @click.native="snackbar.active = false">Sluiten</v-btn>
             </v-snackbar>
 
-
             <v-layout row wrap>
                 <v-flex>
 
                     <v-speed-dial
                         absolute
                         v-model="fab"
-                        v-bind:top="true"
-                        v-bind:right="true"
-                        v-bind:hover="true"
+                        :top="true"
+                        :right="true"
+                        :hover="true"
                         direction="bottom"
                         transition="slide-y-reverse-transition"
                     >
@@ -99,19 +97,18 @@
                     </v-speed-dial>
 
                     <v-data-table
-                        v-bind:headers="tableContent"
-                        v-bind:items="items"
-                        v-bind:search="search"
-                        v-bind:pagination.sync="pagination"
+                        :headers="tableContent"
+                        :items="items"
+                        :search="search"
+                        :pagination.sync="pagination"
                         v-model="selected"
                         item-key="id"
                         select-all
                         :total-items="totalItems"
                         :loading="loading"
                         class="elevation-1"
-                        v-bind:rows-per-page-items="[10, 25, 100]"
+                        :rows-per-page-items="[10, 25, 100]"
                     >
-
                         <template slot="items" scope="props">
                             <td>
                                 <v-checkbox
@@ -123,8 +120,8 @@
                             <td v-for="item in tableContent">
                                 <component
                                     v-if="typeof item.columnType === 'object'"
-                                    v-bind:is="item.columnType"
-                                    v-bind:content="props.item[item.value]"
+                                    :is="item.columnType"
+                                    :content="props.item[item.value]"
                                 ></component>
                                 <span v-if="typeof item.columnType !== 'object'">{{ props.item[item.value] }}</span>
                             </td>
@@ -166,17 +163,22 @@
             /**
              * getDataCallBack
              *
-             *
              * @param pagination
              * @return promise with resolving items and total for the table
              */
-            getDataCallback: {required: true, type: Function},
+            getDataCallback: {
+                required: true,
+                type: Function,
+            },
 
             /**
-             * beforecreateCallback
+             * beforeCreateCallback
              * the callback wich is called before opening the create form
              */
-            beforeCreateCallback: {required: false, type: Function},
+            beforeCreateCallback: {
+                required: false,
+                type: Function,
+            },
 
             /**
              * createCallBack
@@ -184,13 +186,19 @@
              *
              * @return promise
              */
-            createCallback: {required: true, type: Function},
+            createCallback: {
+                required: true,
+                type: Function,
+            },
 
             /**
              * beforeUpdateCallback
              * the callback which is called before the update dialog is opened
              */
-            beforeUpdateCallback: {required: true, type: Function},
+            beforeUpdateCallback: {
+                required: true,
+                type: Function,
+            },
 
             /**
              * updateCallback
@@ -198,7 +206,10 @@
              *
              * @return promise
              */
-            updateCallback: {required: true, type: Function},
+            updateCallback: {
+                required: true,
+                type: Function,
+            },
 
             /**
              * deleteCallback
@@ -206,7 +217,10 @@
              *
              * @return promise
              */
-            deleteCallback: {required: true, type: Function},
+            deleteCallback: {
+                required: true,
+                type: Function,
+            },
 
             /**
              * @param array with object(s) for each column in the table
@@ -339,7 +353,7 @@
              */
             clearSelected() {
                 this.selected = [];
-            }
+            },
         },
         created() {
             this.getDataHandler();

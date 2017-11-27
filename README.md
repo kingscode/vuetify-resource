@@ -22,7 +22,7 @@ npm install @kingscode/vuetify-resource --save
 
 ```
 /**
- * beforecreateCallback
+ * beforeCreateCallback
  * the callback wich is called before opening the create form
  */
 ```
@@ -84,11 +84,11 @@ npm install @kingscode/vuetify-resource --save
     <v-app>
         <div class="page page-news">
             <resource-list
-                v-bind:get-data-callback="getDataFromApi"
-                v-bind:table-content="tableContent"
-                v-bind:createCallback="createNews"
-                v-bind:updateCallback="updateNews"
-                v-bind:deleteCallback="deleteNews"
+                :getDataCallback="getDataFromApi"
+                :tableContent="tableContent"
+                :createCallback="createNews"
+                :updateCallback="updateNews"
+                :deleteCallback="deleteNews"
             >
                 <div slot="createContent">
                     place here your form
