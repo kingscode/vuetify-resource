@@ -362,21 +362,21 @@
 </script>
 
 <style>
-    .resource-list {
+    .vuetify-resource {
         position: relative;
         margin-top: 30px
     }
 
-    .resource-list th:first-child {
+    .vuetify-resource th:first-child {
         width: 40px;
     }
 
-    .resource-list .speed-dial {
+    .vuetify-resource .speed-dial {
         right: -25px;
         top: 10px;
     }
 
-    .resource-list .datatable {
+    .vuetify-resource .datatable {
         width: 70vw;
     }
 </style>
