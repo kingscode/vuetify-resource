@@ -1,5 +1,5 @@
 <template>
-    <div class="vuetify-resource">
+    <div class="resource-list">
         <v-container fluid grid-list-lg>
 
 
@@ -85,15 +85,15 @@
                             dark
                             small
                             color="green"
-                            v-if="selected.length === 1"
+                            v-if="canUpdate === true && selected.length === 1"
                             v-on:click="openUpdateHandler()"
                         >
                             <v-icon>create</v-icon>
                         </v-btn>
-                        <v-btn fab dark small color="indigo" v-on:click="openCreateHandler()">
+                        <v-btn fab dark small color="indigo" v-on:click="openCreateHandler()" v-if="canAdd === true">
                             <v-icon>add</v-icon>
                         </v-btn>
-                        <v-btn fab dark small color="red" v-if="selected.length >= 1" v-on:click="deleteHandler()">
+                        <v-btn fab dark small color="red" v-if="canDelete === true && selected.length >= 1" v-on:click="deleteHandler()">
                             <v-icon>delete</v-icon>
                         </v-btn>
                     </v-speed-dial>
@@ -112,7 +112,7 @@
                         v-bind:rows-per-page-items="[10, 25, 100]"
                     >
 
-                        <template slot="items" slot-scope="props">
+                        <template slot="items" scope="props">
                             <td>
                                 <v-checkbox
                                     primary
@@ -138,7 +138,7 @@
 
 <script>
     export default {
-        name: 'VuetifyResource',
+        name: 'ResourceList',
         data() {
             return {
                 meta: {
@@ -219,6 +219,9 @@
              *              }
              */
             tableContent: {required: true, type: Array},
+            canUpdate: {required: false, type: Boolean, default: true},
+            canAdd: {required: false, type: Boolean, default: true},
+            canDelete: {required: false, type: Boolean, default: true},
         },
         watch: {
             pagination: {
@@ -345,21 +348,21 @@
 </script>
 
 <style>
-    .vuetify-resource {
+    .resource-list {
         position: relative;
         margin-top: 30px
     }
 
-    .vuetify-resource th:first-child {
+    .resource-list th:first-child {
         width: 40px;
     }
 
-    .vuetify-resource .speed-dial {
+    .resource-list .speed-dial {
         right: -25px;
         top: 10px;
     }
 
-    .vuetify-resource .datatable {
+    .resource-list .datatable {
         width: 70vw;
     }
 </style>
