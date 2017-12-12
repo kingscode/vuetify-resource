@@ -94,6 +94,7 @@
                         <v-btn fab dark small color="red" v-if="canDelete === true && selected.length >= 1" v-on:click="deleteHandler()">
                             <v-icon>delete</v-icon>
                         </v-btn>
+                        <slot name="speedDailAfter"></slot>
                     </v-speed-dial>
 
                     <v-data-table
@@ -109,7 +110,7 @@
                         class="elevation-1"
                         :rows-per-page-items="[10, 25, 100]"
                     >
-                        <template slot="items" scope="props">
+                        <template slot="items" slot-scope="props">
                             <td>
                                 <v-checkbox
                                     primary
