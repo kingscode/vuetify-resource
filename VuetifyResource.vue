@@ -78,22 +78,50 @@
                             <v-icon>view_headline</v-icon>
                             <v-icon>close</v-icon>
                         </v-btn>
-                        <v-btn
-                            fab
-                            dark
-                            small
-                            color="green"
-                            v-if="canUpdate === true && selected.length === 1"
-                            v-on:click="openUpdateHandler()"
-                        >
-                            <v-icon>create</v-icon>
-                        </v-btn>
-                        <v-btn fab dark small color="indigo" v-on:click="openCreateHandler()" v-if="canAdd === true">
-                            <v-icon>add</v-icon>
-                        </v-btn>
-                        <v-btn fab dark small color="red" v-if="canDelete === true && selected.length >= 1" v-on:click="deleteHandler()">
-                            <v-icon>delete</v-icon>
-                        </v-btn>
+                        <v-tooltip left>
+                            <v-btn
+                                fab
+                                dark
+                                small
+                                color="green"
+                                v-if="canUpdate === true && selected.length === 1"
+                                v-on:click="openUpdateHandler()"
+                                slot="activator"
+                            >
+                                <v-icon>create</v-icon>
+                            </v-btn>
+                            <span>Bewerken</span>
+                        </v-tooltip>
+
+                        <v-tooltip left>
+                            <v-btn
+                                fab
+                                dark
+                                small
+                                color="indigo"
+                                v-on:click="openCreateHandler()"
+                                v-if="canAdd === true"
+                                slot="activator"
+                            >
+                                <v-icon>add</v-icon>
+                            </v-btn>
+                            <span>Toevoegen</span>
+                        </v-tooltip>
+
+                        <v-tooltip left>
+                            <v-btn
+                                fab
+                                dark
+                                small
+                                color="red"
+                                v-if="canDelete === true && selected.length >= 1"
+                                v-on:click="deleteHandler()"
+                                slot="activator"
+                            >
+                                <v-icon>delete</v-icon>
+                            </v-btn>
+                            <span>Verwijderen</span>
+                        </v-tooltip>
                         <slot name="speedDailAfter"></slot>
                     </v-speed-dial>
 
