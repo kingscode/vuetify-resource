@@ -169,7 +169,7 @@
             return {
                 meta: {
                     name: 'Resource',
-                    namePlural: 'Resources',
+                    namePlural: 'Resources'
                 },
                 fab: false,
                 search: '',
@@ -180,12 +180,17 @@
                 selected: [],
                 dialog: {
                     create: false,
-                    update: false,
+                    update: false
                 },
                 snackbar: {
                     text: 'hoi',
-                    active: false,
+                    active: false
                 },
+                activity: {
+                    isUpdating: false,
+                    isDeleting: false,
+                    isCreating: false
+                }
             };
         },
         props: {
@@ -197,7 +202,7 @@
              */
             getDataCallback: {
                 required: true,
-                type: Function,
+                type: Function
             },
 
             /**
@@ -206,7 +211,7 @@
              */
             beforeCreateCallback: {
                 required: false,
-                type: Function,
+                type: Function
             },
 
             /**
@@ -217,7 +222,7 @@
              */
             createCallback: {
                 required: true,
-                type: Function,
+                type: Function
             },
 
             /**
@@ -226,7 +231,7 @@
              */
             beforeUpdateCallback: {
                 required: true,
-                type: Function,
+                type: Function
             },
 
             /**
@@ -237,7 +242,7 @@
              */
             updateCallback: {
                 required: true,
-                type: Function,
+                type: Function
             },
 
             /**
@@ -248,7 +253,7 @@
              */
             deleteCallback: {
                 required: true,
-                type: Function,
+                type: Function
             },
 
             /**
@@ -264,15 +269,15 @@
             tableContent: {required: true, type: Array},
             canUpdate: {required: false, type: Boolean, default: true},
             canAdd: {required: false, type: Boolean, default: true},
-            canDelete: {required: false, type: Boolean, default: true},
+            canDelete: {required: false, type: Boolean, default: true}
         },
         watch: {
             pagination: {
                 handler() {
                     this.getDataHandler();
                 },
-                deep: true,
-            },
+                deep: true
+            }
         },
         methods: {
             /**
@@ -311,11 +316,19 @@
              * @return void
              */
             createHandler() {
-                this.createCallback().then(() => {
-                    this.dialog.create = false;
-                    this.showSnackbar('Het is opgeslagen');
-                    this.getDataHandler();
-                });
+                if (!this.activity.isCreating) {
+                    this.activity.isCreating = true;
+                    this.createCallback().then(() => {
+                        this.activity.isCreating = false;
+                        this.dialog.create = false;
+                        this.showSnackbar('Het is opgeslagen');
+                        this.getDataHandler();
+                    }).catch(() => {
+                        this.activity.isCreating = false;
+                        this.showSnackbar('Het is mislukt', 'error');
+
+                    });
+                }
             },
 
             /**
@@ -336,14 +349,19 @@
              * @return void
              */
             updateHandler() {
-                this.updateCallback(this.selected).then(() => {
-                    this.dialog.update = false;
-                    this.showSnackbar('Het is opgeslagen');
-                    this.getDataHandler();
-                }).catch(() => {
-                    this.showSnackbar('Het is mislukt', 'error');
+                if (!this.activity.isUpdating) {
+                    this.activity.isUpdating = true;
+                    this.updateCallback(this.selected).then(() => {
+                        this.activity.isUpdating = false;
+                        this.dialog.update = false;
+                        this.showSnackbar('Het is opgeslagen');
+                        this.getDataHandler();
+                    }).catch(() => {
+                        this.activity.isUpdating = false;
+                        this.showSnackbar('Het is mislukt', 'error');
 
-                });
+                    });
+                }
             },
 
             /**
@@ -353,10 +371,18 @@
              * @return void
              */
             deleteHandler() {
-                this.deleteCallback(this.selected).then(() => {
-                    this.showSnackbar('het is verwijderd');
-                    this.getDataHandler();
-                });
+                if (!this.activity.isDeleting) {
+                    this.activity.isDeleting = true;
+                    this.deleteCallback(this.selected).then(() => {
+                        this.activity.isDeleting = false;
+                        this.showSnackbar('het is verwijderd');
+                        this.getDataHandler();
+                    }).catch(() => {
+                        this.activity.isDeleting = false;
+                        this.showSnackbar('Het is mislukt', 'error');
+
+                    });
+                }
             },
 
             /**
@@ -382,11 +408,11 @@
              */
             clearSelected() {
                 this.selected = [];
-            },
+            }
         },
         created() {
             this.getDataHandler();
-        },
+        }
     };
 </script>
 
