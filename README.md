@@ -28,6 +28,18 @@ npm install @kingscode/vuetify-resource --save
 ```
 
 ```
+
+/**
+ * getItemCallback
+ *
+ * get the data of a single resource by the key (key is the id by default)
+ *
+ * @param key
+ * @return promise with resolving the data of an resource
+ */
+```
+
+```
 /**
  * beforeCreateCallback
  * the callback wich is called before opening the create form
@@ -71,6 +83,34 @@ npm install @kingscode/vuetify-resource --save
 
 ```
 /**
+ * useResourceKeyInUrl
+ * Do you want the resource key (by default the resource's id) in the hash in the url?
+ *
+ * @return boolean
+ */
+```
+
+```
+/**
+ * resourceKeyName
+ * What is the name of the resource key? (default: id)
+ * Notice: useResourceKeyInUrl must be true to use this property
+ *
+ * @return string
+ */
+```
+
+```
+/**
+ * getItemByCallback
+ * find items by a callback (true) or from the items array (false)
+ *
+ * @return string
+ */
+```
+            
+```
+/**
  * tableContent
  * @param array with object(s) for each column in the table
  *     {
@@ -91,6 +131,7 @@ npm install @kingscode/vuetify-resource --save
     <v-app>
         <div class="page page-news">
             <resource-list
+                :getItemCallback="getItemFromApi"
                 :getDataCallback="getDataFromApi"
                 :tableContent="tableContent"
                 :createCallback="createNews"
@@ -155,6 +196,14 @@ npm install @kingscode/vuetify-resource --save
                         total,
                     });
 
+                });
+            },
+            getItemFromApi(id) {
+                return new Promise((resolve, reject) => {
+                    let item = [title: 'hallo'];
+                    resolve({
+                        item
+                    });
                 });
             },
             createNews() {

@@ -190,7 +190,8 @@
                     isUpdating: false,
                     isDeleting: false,
                     isCreating: false
-                }
+                },
+                lastOpenedHash: null
             };
         },
         props: {
@@ -202,6 +203,19 @@
              */
             getDataCallback: {
                 required: true,
+                type: Function
+            },
+
+            /**
+             * getItemCallback
+             *
+             * get the data of a single resource by the key (key is the id by default)
+             *
+             * @param key
+             * @return promise with resolving the data of an resource
+             */
+            getItemCallback: {
+                required: false,
                 type: Function
             },
 
@@ -257,6 +271,43 @@
             },
 
             /**
+             * useResourceKeyInUrl
+             * Do you want the resource key (by default the resource's id) in the hash in the url?
+             *
+             * @return boolean
+             */
+            useResourceKeyInUrl: {
+                required: false,
+                type: Boolean,
+                default: true
+            },
+
+            /**
+             * resourceKeyName
+             * What is the name of the resource key? (default: id)
+             * Notice: useResourceKeyInUrl must be true to use this property
+             *
+             * @return string
+             */
+            resourceKeyName: {
+                required: false,
+                type: String,
+                default: 'id'
+            },
+
+            /**
+             * getItemByCallback
+             * find items by a callback (true) or from the items array (false)
+             *
+             * @return string
+             */
+            shouldGetItemByCallback: {
+                required: false,
+                type: Boolean,
+                default: true
+            },
+
+            /**
              * @param array with object(s) for each column in the table
              *              {
              *                  text:       string              the text which is presented above the column
@@ -277,6 +328,12 @@
                     this.getDataHandler();
                 },
                 deep: true
+            },
+            $route: {
+                handler() {
+                    this.handleUrlChange();
+                },
+                deep: true
             }
         },
         methods: {
@@ -295,6 +352,7 @@
                         this.items = data.items;
                         this.totalItems = data.total;
                         this.loading = false;
+                        this.handleUrlChange();
                     });
             },
 
@@ -338,6 +396,7 @@
              * @return void
              */
             openUpdateHandler() {
+                this.setIndentificationKey(this.selected[0][this.resourceKeyName]);
                 this.beforeUpdateCallback(this.selected);
                 this.dialog.update = true;
             },
@@ -407,11 +466,92 @@
              * @return void
              */
             clearSelected() {
+
                 this.selected = [];
+            },
+
+            /**
+             * setIdentificationKey
+             * set the identification key to the hash of the url
+             *
+             * @param key
+             */
+            setIndentificationKey(key) {
+                window.location.hash = '#' + key;
+            },
+
+            /**
+             * getIdentificationKey
+             * get the identification key from to the hash of the url
+             *
+             * @return key
+             */
+            getIndentificationKey() {
+
+                return window.location.hash.substring(1);
+            },
+
+            /**
+             * getItemByIdentificationKey
+             *
+             * call the getItemFromCallbackByIdentificationKey method or the getItemFromItemsByIdentificationKey method
+             * the choise is made by the boolean property: shouldGetItemByCallback
+             */
+            getItemByIdentificationKey(key, callback) {
+                if (this.shouldGetItemByCallback) {
+                    this.getItemFromCallbackByIdentificationKey(key, callback);
+                } else {
+                    this.getItemFromItemsByIdentificationKey(key, callback);
+                }
+            },
+
+            /**
+             * getItemFromCallbackByIdentificationKey
+             *
+             * get the items from the api callback (getItemCallback) and call the callback
+             */
+            getItemFromCallbackByIdentificationKey(key, callback) {
+                this.getItemCallback(key)
+                    .then(data => {
+                        callback(data.item);
+                    });
+            },
+
+            /**
+             * getItemFromItemsByIdentificationKey
+             *
+             * get the items from the this.selected and call the callback
+             */
+            getItemFromItemsByIdentificationKey(key, callback) {
+                let returnItem = false;
+                this.items.forEach((item) => {
+                    if (item[this.resourceKeyName] === key) {
+                        returnItem = item;
+                        return;
+                    }
+                });
+                callback(returnItem);
+            },
+
+            /**
+             * handleUrlChange
+             * get the items by the identificationkey (default the id)
+             * the items will be recheived via the getItemByIdentificationKey method wich eather gets them from the
+             * itemCallback or the selected array
+             * and then open the update dialog
+             */
+            handleUrlChange() {
+                this.getItemByIdentificationKey(this.getIndentificationKey(), (item) => {
+                    if (item === false) {
+                        this.showSnackbar('Het is niet gelukt om een item te vinden.', 'error');
+                        return false;
+                    } else if (this.lastOpenedHash !== this.getIndentificationKey()) {
+                        this.lastOpenedHash = this.getIndentificationKey();
+                        this.beforeUpdateCallback([item]);
+                        this.dialog.update = true;
+                    }
+                });
             }
-        },
-        created() {
-            this.getDataHandler();
         }
     };
 </script>
