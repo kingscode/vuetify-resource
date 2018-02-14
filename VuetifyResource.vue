@@ -397,8 +397,16 @@
              */
             openUpdateHandler() {
                 this.setIndentificationKey(this.selected[0][this.resourceKeyName]);
-                this.beforeUpdateCallback(this.selected);
-                this.dialog.update = true;
+                this.getItemByIdentificationKey(this.selected[0][this.resourceKeyName], (item) => {
+                    if (item === false) {
+                        this.showSnackbar('Het is niet gelukt om een item te vinden.', 'error');
+                        return false;
+                    } else {
+                        this.lastOpenedHash = this.getIndentificationKey();
+                        this.beforeUpdateCallback([item]);
+                        this.dialog.update = true;
+                    }
+                });
             },
 
             /**
@@ -541,16 +549,18 @@
              * and then open the update dialog
              */
             handleUrlChange() {
-                this.getItemByIdentificationKey(this.getIndentificationKey(), (item) => {
-                    if (item === false) {
-                        this.showSnackbar('Het is niet gelukt om een item te vinden.', 'error');
-                        return false;
-                    } else if (this.lastOpenedHash !== this.getIndentificationKey()) {
-                        this.lastOpenedHash = this.getIndentificationKey();
-                        this.beforeUpdateCallback([item]);
-                        this.dialog.update = true;
-                    }
-                });
+                if (this.getIndentificationKey() !== '') {
+                    this.getItemByIdentificationKey(this.getIndentificationKey(), (item) => {
+                        if (item === false) {
+                            this.showSnackbar('Het is niet gelukt om een item te vinden.', 'error');
+                            return false;
+                        } else if (this.lastOpenedHash !== this.getIndentificationKey()) {
+                            this.lastOpenedHash = this.getIndentificationKey();
+                            this.beforeUpdateCallback([item]);
+                            this.dialog.update = true;
+                        }
+                    });
+                }
             }
         }
     };
