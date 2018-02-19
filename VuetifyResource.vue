@@ -137,6 +137,7 @@
                         :loading="loading"
                         class="elevation-1"
                         :rows-per-page-items="[10, 25, 100]"
+                        v-on:input="onSelectedChange"
                     >
                         <template slot="items" slot-scope="props">
                             <td>
@@ -183,7 +184,7 @@
                     update: false
                 },
                 snackbar: {
-                    text: 'hoi',
+                    text: '',
                     active: false
                 },
                 activity: {
@@ -561,6 +562,14 @@
                         }
                     });
                 }
+            },
+
+            /**
+             * onSelectedChange
+             * When the selected in the vuetify table changes, emit the v-model
+             */
+            onSelectedChange() {
+                this.$emit('input', this.selected);
             }
         }
     };
