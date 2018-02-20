@@ -404,7 +404,8 @@
                         return false;
                     } else {
                         this.lastOpenedHash = this.getIndentificationKey();
-                        this.beforeUpdateCallback([item]);
+                        this.selected = [item];
+                        this.beforeUpdateCallback(this.selected);
                         this.dialog.update = true;
                     }
                 });
@@ -557,7 +558,8 @@
                             return false;
                         } else if (this.lastOpenedHash !== this.getIndentificationKey()) {
                             this.lastOpenedHash = this.getIndentificationKey();
-                            this.beforeUpdateCallback([item]);
+                            this.selected = [item];
+                            this.beforeUpdateCallback(this.selected);
                             this.dialog.update = true;
                         }
                     });
