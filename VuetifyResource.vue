@@ -405,6 +405,7 @@
                     } else {
                         this.lastOpenedHash = this.getIndentificationKey();
                         this.selected = [item];
+                        this.onSelectedChange();
                         this.beforeUpdateCallback(this.selected);
                         this.dialog.update = true;
                     }
@@ -559,6 +560,7 @@
                         } else if (this.lastOpenedHash !== this.getIndentificationKey()) {
                             this.lastOpenedHash = this.getIndentificationKey();
                             this.selected = [item];
+                            this.onSelectedChange();
                             this.beforeUpdateCallback(this.selected);
                             this.dialog.update = true;
                         }
