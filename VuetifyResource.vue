@@ -355,7 +355,11 @@
                         this.totalItems = data.total;
                         this.loading = false;
                         this.handleUrlChange();
-                    });
+                    }).catch(() => {
+                    this.activity.isCreating = false;
+                    this.showSnackbar('Er ging iets mis met het ophalen van de data', 'error');
+
+                });
             },
 
             /**
@@ -383,11 +387,9 @@
                         this.dialog.create = false;
                         this.showSnackbar('Het is opgeslagen');
                         this.getDataHandler();
-                        console.log('aaaa');
                     }).catch(() => {
                         this.activity.isCreating = false;
                         this.showSnackbar('Het is mislukt', 'error');
-                        console.log('aabbaa');
 
                     });
                 }
