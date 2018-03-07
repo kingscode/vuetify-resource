@@ -55,7 +55,7 @@
 
             <v-snackbar
                 :timeout="2000"
-                color="success"
+                :color="snackbar.color"
                 v-model="snackbar.active"
             >
                 {{ snackbar.text }}
@@ -185,7 +185,8 @@
                 },
                 snackbar: {
                     text: '',
-                    active: false
+                    active: false,
+                    color: 'success'
                 },
                 activity: {
                     isUpdating: false,
