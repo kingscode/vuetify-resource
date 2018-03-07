@@ -16,7 +16,7 @@
                         <v-toolbar-title>{{ meta.name }}</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
-                            <v-btn dark flat @click="createHandler()">Save</v-btn>
+                            <v-btn dark flat @click="createHandler()">{{lang('save')}}</v-btn>
                             <slot name="createToolbar"></slot>
                         </v-toolbar-items>
                     </v-toolbar>
@@ -42,7 +42,7 @@
                         <v-toolbar-title>{{ meta.name }}</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
-                            <v-btn dark flat @click="updateHandler()">Save</v-btn>
+                            <v-btn dark flat @click="updateHandler()">{{lang('save')}}</v-btn>
                             <slot name="updateToolbar"></slot>
                         </v-toolbar-items>
                     </v-toolbar>
@@ -55,7 +55,7 @@
 
             <v-snackbar
                 :timeout="2000"
-                color="success"
+                :color="snackbar.color"
                 v-model="snackbar.active"
             >
                 {{ snackbar.text }}
@@ -70,7 +70,7 @@
                         v-model="fab"
                         :top="true"
                         :right="true"
-                        :hover="true"
+                        :open-on-hover="true"
                         direction="bottom"
                         transition="slide-y-reverse-transition"
                     >
@@ -138,6 +138,7 @@
                         class="elevation-1"
                         :rows-per-page-items="[10, 25, 100]"
                         v-on:input="onSelectedChange"
+                        :rows-per-page-text="lang('rows-per-page-text')"
                     >
                         <template slot="items" slot-scope="props">
                             <td>
@@ -156,6 +157,15 @@
                                 <span v-if="typeof item.columnType !== 'object'">{{ props.item[item.value] }}</span>
                             </td>
                         </template>
+                        <template slot="pageText" slot-scope="{ pageStart, pageStop }">
+                            {{lang('from')}} {{ pageStart }} {{lang('till')}} {{ pageStop }}
+                        </template>
+                        <template slot="no-data">
+                            {{lang('no-data')}}
+                        </template>
+                        <template slot="no-results">
+                            {{lang('no-results')}}
+                        </template>
                     </v-data-table>
                 </v-flex>
             </v-layout>
@@ -164,6 +174,8 @@
 </template>
 
 <script>
+    import texts from './texts.js';
+
     export default {
         name: 'ResourceList',
         data() {
@@ -185,7 +197,8 @@
                 },
                 snackbar: {
                     text: '',
-                    active: false
+                    active: false,
+                    color: 'success'
                 },
                 activity: {
                     isUpdating: false,
@@ -321,7 +334,25 @@
             tableContent: {required: true, type: Array},
             canUpdate: {required: false, type: Boolean, default: true},
             canAdd: {required: false, type: Boolean, default: true},
-            canDelete: {required: false, type: Boolean, default: true}
+            canDelete: {required: false, type: Boolean, default: true},
+
+            /**
+             * texts
+             *
+             * @return Object with the texts you want to overrule
+             * {
+             *     save: 'Save',
+             *     from: 'from',
+             *     till: 'till',
+             *     'no-data': 'There is nothing found',
+             *     'no-results': 'There is nothing found for this filter',
+             *     'rows-per-page-text': 'Rows per page'
+             * }
+             */
+            texts: {
+                required: false,
+                type: Object
+            }
         },
         watch: {
             pagination: {
@@ -354,7 +385,11 @@
                         this.totalItems = data.total;
                         this.loading = false;
                         this.handleUrlChange();
-                    });
+                    }).catch(() => {
+                    this.activity.isCreating = false;
+                    this.showSnackbar('Er ging iets mis met het ophalen van de data', 'error');
+
+                });
             },
 
             /**
@@ -574,6 +609,14 @@
              */
             onSelectedChange() {
                 this.$emit('input', this.selected);
+            },
+
+            lang(t) {
+                if (typeof this.texts === 'undefined' || typeof this.texts[t] === 'undefined') {
+                    return texts[t];
+                } else {
+                    return this.texts[t];
+                }
             }
         }
     };
