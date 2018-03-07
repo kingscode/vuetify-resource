@@ -70,7 +70,7 @@
                         v-model="fab"
                         :top="true"
                         :right="true"
-                        :hover="true"
+                        :open-on-hover="true"
                         direction="bottom"
                         transition="slide-y-reverse-transition"
                     >
@@ -382,9 +382,11 @@
                         this.dialog.create = false;
                         this.showSnackbar('Het is opgeslagen');
                         this.getDataHandler();
+                        console.log('aaaa');
                     }).catch(() => {
                         this.activity.isCreating = false;
                         this.showSnackbar('Het is mislukt', 'error');
+                        console.log('aabbaa');
 
                     });
                 }
