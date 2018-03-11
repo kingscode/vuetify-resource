@@ -59,7 +59,7 @@
                 v-model="snackbar.active"
             >
                 {{ snackbar.text }}
-                <v-btn dark flat @click.native="snackbar.active = false">Sluiten</v-btn>
+                <v-btn dark flat @click.native="snackbar.active = false">{{lang('close')}}</v-btn>
             </v-snackbar>
 
             <v-layout row wrap>
@@ -182,7 +182,7 @@
             return {
                 meta: {
                     name: 'Resource',
-                    namePlural: 'Resources'
+                    namePlural: 'Resources',
                 },
                 fab: false,
                 search: '',
@@ -193,19 +193,19 @@
                 selected: [],
                 dialog: {
                     create: false,
-                    update: false
+                    update: false,
                 },
                 snackbar: {
                     text: '',
                     active: false,
-                    color: 'success'
+                    color: 'success',
                 },
                 activity: {
                     isUpdating: false,
                     isDeleting: false,
-                    isCreating: false
+                    isCreating: false,
                 },
-                lastOpenedHash: null
+                lastOpenedHash: null,
             };
         },
         props: {
@@ -217,7 +217,7 @@
              */
             getDataCallback: {
                 required: true,
-                type: Function
+                type: Function,
             },
 
             /**
@@ -230,7 +230,7 @@
              */
             getItemCallback: {
                 required: false,
-                type: Function
+                type: Function,
             },
 
             /**
@@ -239,7 +239,7 @@
              */
             beforeCreateCallback: {
                 required: false,
-                type: Function
+                type: Function,
             },
 
             /**
@@ -250,7 +250,7 @@
              */
             createCallback: {
                 required: true,
-                type: Function
+                type: Function,
             },
 
             /**
@@ -259,7 +259,7 @@
              */
             beforeUpdateCallback: {
                 required: true,
-                type: Function
+                type: Function,
             },
 
             /**
@@ -270,7 +270,7 @@
              */
             updateCallback: {
                 required: true,
-                type: Function
+                type: Function,
             },
 
             /**
@@ -281,7 +281,7 @@
              */
             deleteCallback: {
                 required: true,
-                type: Function
+                type: Function,
             },
 
             /**
@@ -293,7 +293,7 @@
             useResourceKeyInUrl: {
                 required: false,
                 type: Boolean,
-                default: true
+                default: true,
             },
 
             /**
@@ -306,7 +306,7 @@
             resourceKeyName: {
                 required: false,
                 type: String,
-                default: 'id'
+                default: 'id',
             },
 
             /**
@@ -318,7 +318,7 @@
             shouldGetItemByCallback: {
                 required: false,
                 type: Boolean,
-                default: true
+                default: true,
             },
 
             /**
@@ -351,22 +351,22 @@
              */
             texts: {
                 required: false,
-                type: Object
-            }
+                type: Object,
+            },
         },
         watch: {
             pagination: {
                 handler() {
                     this.getDataHandler();
                 },
-                deep: true
+                deep: true,
             },
             $route: {
                 handler() {
                     this.handleUrlChange();
                 },
-                deep: true
-            }
+                deep: true,
+            },
         },
         methods: {
             /**
@@ -380,16 +380,16 @@
                 this.loading = true;
                 this.getDataCallback(this.pagination)
                     .then(data => {
-                        this.clearSelected();
-                        this.items = data.items;
-                        this.totalItems = data.total;
-                        this.loading = false;
-                        this.handleUrlChange();
-                    }).catch(() => {
+                    this.clearSelected();
+                this.items = data.items;
+                this.totalItems = data.total;
+                this.loading = false;
+                this.handleUrlChange();
+            }).catch(() => {
                     this.activity.isCreating = false;
-                    this.showSnackbar('Er ging iets mis met het ophalen van de data', 'error');
+                this.showSnackbar('Er ging iets mis met het ophalen van de data', 'error');
 
-                });
+            });
             },
 
             /**
@@ -414,14 +414,14 @@
                     this.activity.isCreating = true;
                     this.createCallback().then(() => {
                         this.activity.isCreating = false;
-                        this.dialog.create = false;
-                        this.showSnackbar('Het is opgeslagen');
-                        this.getDataHandler();
-                    }).catch(() => {
+                    this.dialog.create = false;
+                    this.showSnackbar(this.lang('snackbar-saved'));
+                    this.getDataHandler();
+                }).catch(() => {
                         this.activity.isCreating = false;
-                        this.showSnackbar('Het is mislukt', 'error');
+                    this.showSnackbar(this.lang('snackbar-saveerror'), 'error');
 
-                    });
+                });
                 }
             },
 
@@ -435,16 +435,16 @@
                 this.setIndentificationKey(this.selected[0][this.resourceKeyName]);
                 this.getItemByIdentificationKey(this.selected[0][this.resourceKeyName], (item) => {
                     if (item === false) {
-                        this.showSnackbar('Het is niet gelukt om een item te vinden.', 'error');
-                        return false;
-                    } else {
-                        this.lastOpenedHash = this.getIndentificationKey();
-                        this.selected = [item];
-                        this.onSelectedChange();
-                        this.beforeUpdateCallback(this.selected);
-                        this.dialog.update = true;
-                    }
-                });
+                    this.showSnackbar(this.lang('snackbar-geterror'), 'error');
+                    return false;
+                } else {
+                    this.lastOpenedHash = this.getIndentificationKey();
+                    this.selected = [item];
+                    this.onSelectedChange();
+                    this.beforeUpdateCallback(this.selected);
+                    this.dialog.update = true;
+                }
+            });
             },
 
             /**
@@ -458,14 +458,14 @@
                     this.activity.isUpdating = true;
                     this.updateCallback(this.selected).then(() => {
                         this.activity.isUpdating = false;
-                        this.dialog.update = false;
-                        this.showSnackbar('Het is opgeslagen');
-                        this.getDataHandler();
-                    }).catch(() => {
+                    this.dialog.update = false;
+                    this.showSnackbar(this.lang('snackbar-saved'));
+                    this.getDataHandler();
+                }).catch(() => {
                         this.activity.isUpdating = false;
-                        this.showSnackbar('Het is mislukt', 'error');
+                    this.showSnackbar(this.lang('snackbar-saveerror'), 'error');
 
-                    });
+                });
                 }
             },
 
@@ -480,13 +480,13 @@
                     this.activity.isDeleting = true;
                     this.deleteCallback(this.selected).then(() => {
                         this.activity.isDeleting = false;
-                        this.showSnackbar('het is verwijderd');
-                        this.getDataHandler();
-                    }).catch(() => {
+                    this.showSnackbar(this.lang('snackbar-deleted'));
+                    this.getDataHandler();
+                }).catch(() => {
                         this.activity.isDeleting = false;
-                        this.showSnackbar('Het is mislukt', 'error');
+                    this.showSnackbar(this.lang('snackbar-deleteerror'), 'error');
 
-                    });
+                });
                 }
             },
 
@@ -559,8 +559,8 @@
             getItemFromCallbackByIdentificationKey(key, callback) {
                 this.getItemCallback(key)
                     .then(data => {
-                        callback(data.item);
-                    });
+                    callback(data.item);
+            });
             },
 
             /**
@@ -572,10 +572,10 @@
                 let returnItem = false;
                 this.items.forEach((item) => {
                     if (item[this.resourceKeyName] === key) {
-                        returnItem = item;
-                        return;
-                    }
-                });
+                    returnItem = item;
+                    return;
+                }
+            });
                 callback(returnItem);
             },
 
@@ -590,16 +590,18 @@
                 if (this.getIndentificationKey() !== '') {
                     this.getItemByIdentificationKey(this.getIndentificationKey(), (item) => {
                         if (item === false) {
-                            this.showSnackbar('Het is niet gelukt om een item te vinden.', 'error');
-                            return false;
-                        } else if (this.lastOpenedHash !== this.getIndentificationKey()) {
+                        this.showSnackbar('Het is niet gelukt om een item te vinden.', 'error');
+                        return false;
+                    } else {
+                        if (this.lastOpenedHash !== this.getIndentificationKey()) {
                             this.lastOpenedHash = this.getIndentificationKey();
                             this.selected = [item];
                             this.onSelectedChange();
                             this.beforeUpdateCallback(this.selected);
                             this.dialog.update = true;
                         }
-                    });
+                    }
+                });
                 }
             },
 
@@ -617,15 +619,16 @@
                 } else {
                     return this.texts[t];
                 }
-            }
-        }
+            },
+        },
     };
 </script>
 
 <style>
     .vuetify-resource {
         position: relative;
-        margin-top: 30px
+        margin-top: 30px;
+        margin-right: 10px;
     }
 
     .vuetify-resource th:first-child {
@@ -637,7 +640,34 @@
         top: 10px;
     }
 
-    .vuetify-resource .datatable {
-        width: 70vw;
+    @media only screen and (max-width: 599px) {
+        .vuetify-resource .speed-dial {
+            right: 0px;
+            top: 10px;
+        }
+
+        .vuetify-resource {
+            margin-right: 0;
+        }
+
+        .datatable__actions__select {
+            display: none;
+        }
+
+        .vuetify-resource th {
+            display: none;
+        }
+
+        .vuetify-resource th:first-child, .vuetify-resource th:nth-child(2) {
+            display: table-cell;
+        }
+
+        .vuetify-resource td {
+            display: none;
+        }
+
+        .vuetify-resource td:first-child, .vuetify-resource td:nth-child(2) {
+            display: table-cell;
+        }
     }
 </style>
