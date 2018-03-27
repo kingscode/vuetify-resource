@@ -248,3 +248,6 @@ npm install @kingscode/vuetify-resource --save
 
 ```
 
+## Extra information
+- For debugging purposes when there is an error inside a callback, this will be outputted in a console.error if process.env.NODE_ENV === 'development'
+

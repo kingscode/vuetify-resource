@@ -182,7 +182,7 @@
             return {
                 meta: {
                     name: 'Resource',
-                    namePlural: 'Resources',
+                    namePlural: 'Resources'
                 },
                 fab: false,
                 search: '',
@@ -193,19 +193,19 @@
                 selected: [],
                 dialog: {
                     create: false,
-                    update: false,
+                    update: false
                 },
                 snackbar: {
                     text: '',
                     active: false,
-                    color: 'success',
+                    color: 'success'
                 },
                 activity: {
                     isUpdating: false,
                     isDeleting: false,
-                    isCreating: false,
+                    isCreating: false
                 },
-                lastOpenedHash: null,
+                lastOpenedHash: null
             };
         },
         props: {
@@ -217,7 +217,7 @@
              */
             getDataCallback: {
                 required: true,
-                type: Function,
+                type: Function
             },
 
             /**
@@ -230,7 +230,7 @@
              */
             getItemCallback: {
                 required: false,
-                type: Function,
+                type: Function
             },
 
             /**
@@ -239,7 +239,7 @@
              */
             beforeCreateCallback: {
                 required: false,
-                type: Function,
+                type: Function
             },
 
             /**
@@ -250,7 +250,7 @@
              */
             createCallback: {
                 required: true,
-                type: Function,
+                type: Function
             },
 
             /**
@@ -259,7 +259,7 @@
              */
             beforeUpdateCallback: {
                 required: true,
-                type: Function,
+                type: Function
             },
 
             /**
@@ -270,7 +270,7 @@
              */
             updateCallback: {
                 required: true,
-                type: Function,
+                type: Function
             },
 
             /**
@@ -281,7 +281,7 @@
              */
             deleteCallback: {
                 required: true,
-                type: Function,
+                type: Function
             },
 
             /**
@@ -293,7 +293,7 @@
             useResourceKeyInUrl: {
                 required: false,
                 type: Boolean,
-                default: true,
+                default: true
             },
 
             /**
@@ -306,7 +306,7 @@
             resourceKeyName: {
                 required: false,
                 type: String,
-                default: 'id',
+                default: 'id'
             },
 
             /**
@@ -318,7 +318,7 @@
             shouldGetItemByCallback: {
                 required: false,
                 type: Boolean,
-                default: true,
+                default: true
             },
 
             /**
@@ -351,22 +351,22 @@
              */
             texts: {
                 required: false,
-                type: Object,
-            },
+                type: Object
+            }
         },
         watch: {
             pagination: {
                 handler() {
                     this.getDataHandler();
                 },
-                deep: true,
+                deep: true
             },
             $route: {
                 handler() {
                     this.handleUrlChange();
                 },
-                deep: true,
-            },
+                deep: true
+            }
         },
         methods: {
             /**
@@ -380,16 +380,21 @@
                 this.loading = true;
                 this.getDataCallback(this.pagination)
                     .then(data => {
-                    this.clearSelected();
-                this.items = data.items;
-                this.totalItems = data.total;
-                this.loading = false;
-                this.handleUrlChange();
-            }).catch(() => {
-                    this.activity.isCreating = false;
-                this.showSnackbar('Er ging iets mis met het ophalen van de data', 'error');
+                        this.clearSelected();
+                        this.items = data.items;
+                        this.totalItems = data.total;
+                        this.loading = false;
+                        this.handleUrlChange();
+                    })
 
-            });
+                    .catch((e) => {
+                        if (process.env.NODE_ENV === 'development') {
+                            console.error(e);
+                        }
+                        this.activity.isCreating = false;
+                        this.showSnackbar('Er ging iets mis met het ophalen van de data', 'error');
+
+                    });
             },
 
             /**
@@ -412,16 +417,22 @@
             createHandler() {
                 if (!this.activity.isCreating) {
                     this.activity.isCreating = true;
-                    this.createCallback().then(() => {
-                        this.activity.isCreating = false;
-                    this.dialog.create = false;
-                    this.showSnackbar(this.lang('snackbar-saved'));
-                    this.getDataHandler();
-                }).catch(() => {
-                        this.activity.isCreating = false;
-                    this.showSnackbar(this.lang('snackbar-saveerror'), 'error');
+                    this.createCallback()
+                        .then(() => {
+                            this.activity.isCreating = false;
+                            this.dialog.create = false;
+                            this.showSnackbar(this.lang('snackbar-saved'));
+                            this.getDataHandler();
+                        })
 
-                });
+                        .catch((e) => {
+                            if (process.env.NODE_ENV === 'development') {
+                                console.error(e);
+                            }
+                            this.activity.isCreating = false;
+                            this.showSnackbar(this.lang('snackbar-saveerror'), 'error');
+
+                        });
                 }
             },
 
@@ -435,16 +446,16 @@
                 this.setIndentificationKey(this.selected[0][this.resourceKeyName]);
                 this.getItemByIdentificationKey(this.selected[0][this.resourceKeyName], (item) => {
                     if (item === false) {
-                    this.showSnackbar(this.lang('snackbar-geterror'), 'error');
-                    return false;
-                } else {
-                    this.lastOpenedHash = this.getIndentificationKey();
-                    this.selected = [item];
-                    this.onSelectedChange();
-                    this.beforeUpdateCallback(this.selected);
-                    this.dialog.update = true;
-                }
-            });
+                        this.showSnackbar(this.lang('snackbar-geterror'), 'error');
+                        return false;
+                    } else {
+                        this.lastOpenedHash = this.getIndentificationKey();
+                        this.selected = [item];
+                        this.onSelectedChange();
+                        this.beforeUpdateCallback(this.selected);
+                        this.dialog.update = true;
+                    }
+                });
             },
 
             /**
@@ -456,16 +467,21 @@
             updateHandler() {
                 if (!this.activity.isUpdating) {
                     this.activity.isUpdating = true;
-                    this.updateCallback(this.selected).then(() => {
-                        this.activity.isUpdating = false;
-                    this.dialog.update = false;
-                    this.showSnackbar(this.lang('snackbar-saved'));
-                    this.getDataHandler();
-                }).catch(() => {
-                        this.activity.isUpdating = false;
-                    this.showSnackbar(this.lang('snackbar-saveerror'), 'error');
+                    this.updateCallback(this.selected)
+                        .then(() => {
+                            this.activity.isUpdating = false;
+                            this.dialog.update = false;
+                            this.showSnackbar(this.lang('snackbar-saved'));
+                            this.getDataHandler();
+                        })
+                        .catch((e) => {
+                            if (process.env.NODE_ENV === 'development') {
+                                console.error(e);
+                            }
+                            this.activity.isUpdating = false;
+                            this.showSnackbar(this.lang('snackbar-saveerror'), 'error');
 
-                });
+                        });
                 }
             },
 
@@ -478,15 +494,20 @@
             deleteHandler() {
                 if (!this.activity.isDeleting) {
                     this.activity.isDeleting = true;
-                    this.deleteCallback(this.selected).then(() => {
-                        this.activity.isDeleting = false;
-                    this.showSnackbar(this.lang('snackbar-deleted'));
-                    this.getDataHandler();
-                }).catch(() => {
-                        this.activity.isDeleting = false;
-                    this.showSnackbar(this.lang('snackbar-deleteerror'), 'error');
+                    this.deleteCallback(this.selected)
+                        .then(() => {
+                            this.activity.isDeleting = false;
+                            this.showSnackbar(this.lang('snackbar-deleted'));
+                            this.getDataHandler();
+                        })
+                        .catch((e) => {
+                            if (process.env.NODE_ENV === 'development') {
+                                console.error(e);
+                            }
+                            this.activity.isDeleting = false;
+                            this.showSnackbar(this.lang('snackbar-deleteerror'), 'error');
 
-                });
+                        });
                 }
             },
 
@@ -559,8 +580,13 @@
             getItemFromCallbackByIdentificationKey(key, callback) {
                 this.getItemCallback(key)
                     .then(data => {
-                    callback(data.item);
-            });
+                        callback(data.item);
+                    })
+                    .catch((e) => {
+                        if (process.env.NODE_ENV === 'development') {
+                            console.error(e);
+                        }
+                    });
             },
 
             /**
@@ -572,10 +598,10 @@
                 let returnItem = false;
                 this.items.forEach((item) => {
                     if (item[this.resourceKeyName] === key) {
-                    returnItem = item;
-                    return;
-                }
-            });
+                        returnItem = item;
+                        return;
+                    }
+                });
                 callback(returnItem);
             },
 
@@ -590,18 +616,18 @@
                 if (this.getIndentificationKey() !== '') {
                     this.getItemByIdentificationKey(this.getIndentificationKey(), (item) => {
                         if (item === false) {
-                        this.showSnackbar('Het is niet gelukt om een item te vinden.', 'error');
-                        return false;
-                    } else {
-                        if (this.lastOpenedHash !== this.getIndentificationKey()) {
-                            this.lastOpenedHash = this.getIndentificationKey();
-                            this.selected = [item];
-                            this.onSelectedChange();
-                            this.beforeUpdateCallback(this.selected);
-                            this.dialog.update = true;
+                            this.showSnackbar('Het is niet gelukt om een item te vinden.', 'error');
+                            return false;
+                        } else {
+                            if (this.lastOpenedHash !== this.getIndentificationKey()) {
+                                this.lastOpenedHash = this.getIndentificationKey();
+                                this.selected = [item];
+                                this.onSelectedChange();
+                                this.beforeUpdateCallback(this.selected);
+                                this.dialog.update = true;
+                            }
                         }
-                    }
-                });
+                    });
                 }
             },
 
@@ -619,8 +645,8 @@
                 } else {
                     return this.texts[t];
                 }
-            },
-        },
+            }
+        }
     };
 </script>
 
