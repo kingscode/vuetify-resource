@@ -66,7 +66,6 @@
                 <v-flex>
 
                     <v-speed-dial
-                        absolute
                         v-model="fab"
                         :top="true"
                         :right="true"
@@ -662,14 +661,14 @@
     }
 
     .vuetify-resource .speed-dial {
+        position: absolute;
         right: -25px;
-        top: 10px;
+        top: -10px;
     }
 
     @media only screen and (max-width: 599px) {
         .vuetify-resource .speed-dial {
             right: 0px;
-            top: 10px;
         }
 
         .vuetify-resource {
