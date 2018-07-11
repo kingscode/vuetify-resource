@@ -140,6 +140,20 @@ npm install @kingscode/vuetify-resource --save
 ```
 
 
+```
+canUpdate: {required: false, type: Boolean, default: true},
+```
+```
+canAdd: {required: false, type: Boolean, default: true},
+```
+```
+canDelete: {required: false, type: Boolean, default: true},
+```
+```
+canSearch: {required: false, type: Boolean, default: false},
+```
+
+
 ## SPA example
 
 ``` javascript
