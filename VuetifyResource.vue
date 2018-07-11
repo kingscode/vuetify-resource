@@ -1,5 +1,5 @@
 <template>
-    <div class="vuetify-resource">
+    <div :class="resourceHtmlClass">
         <v-container fluid grid-list-lg>
             <v-dialog
                 v-model="dialog.create"
@@ -216,6 +216,14 @@
                 lastOpenedHash: null
             };
         },
+        computed: {
+            resourceHtmlClass() {
+                return {
+                    'vuetify-resource': true,
+                    'with-search': this.canSearch
+                };
+            }
+        },
         props: {
             /**
              * getDataCallBack
@@ -381,7 +389,7 @@
                     clearTimeout(this.searchTimeout);
                     this.searchTimeout = setTimeout(() => {
                         this.getDataHandler();
-                    }, 500)
+                    }, 500);
                 },
                 deep: true
             }
@@ -683,6 +691,10 @@
         position: absolute;
         right: -25px;
         top: -10px;
+    }
+
+    .vuetify-resource.with-search .speed-dial {
+        top: 55px;
     }
 
     @media only screen and (max-width: 599px) {
