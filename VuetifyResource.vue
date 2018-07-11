@@ -179,10 +179,6 @@
         name: 'ResourceList',
         data() {
             return {
-                meta: {
-                    name: 'Resource',
-                    namePlural: 'Resources'
-                },
                 fab: false,
                 search: '',
                 totalItems: 0,
@@ -351,6 +347,15 @@
             texts: {
                 required: false,
                 type: Object
+            },
+
+            meta: {
+                required: false,
+                type: Object,
+                default: {
+                    name: 'Resource',
+                    namePlural: 'Resources'
+                }
             }
         },
         watch: {
