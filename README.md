@@ -137,6 +137,18 @@ npm install @kingscode/vuetify-resource --save
  *     'rows-per-page-text': 'Rows per page'
  * }
  */
+```   
+ 
+```
+/**
+ * meta
+ *
+ * @return Object with the meta you want to overrule
+ * {
+ *     name: 'Resource',
+ *     namePlural: 'Resources'
+ * }
+ */
 ```
 
 
