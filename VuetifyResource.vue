@@ -128,7 +128,7 @@
                             <v-text-field
                                 v-model="search"
                                 append-icon="search"
-                                label="Search"
+                                :label="lang('search')"
                                 single-line
                                 hide-details
                             ></v-text-field>
