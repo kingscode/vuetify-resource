@@ -123,11 +123,20 @@
                         </v-tooltip>
                         <slot name="speedDailAfter"></slot>
                     </v-speed-dial>
-
+                    <v-layout row v-if="canSearch">
+                        <v-flex sm4>
+                            <v-text-field
+                                v-model="search"
+                                append-icon="search"
+                                label="Search"
+                                single-line
+                                hide-details
+                            ></v-text-field>
+                        </v-flex>
+                    </v-layout>
                     <v-data-table
                         :headers="tableContent"
                         :items="items"
-                        :search="search"
                         :pagination.sync="pagination"
                         v-model="selected"
                         item-key="id"
@@ -334,6 +343,7 @@
             canUpdate: {required: false, type: Boolean, default: true},
             canAdd: {required: false, type: Boolean, default: true},
             canDelete: {required: false, type: Boolean, default: true},
+            canSearch: {required: false, type: Boolean, default: false},
 
             /**
              * texts
@@ -365,6 +375,15 @@
                     this.handleUrlChange();
                 },
                 deep: true
+            },
+            search: {
+                handler() {
+                    clearTimeout(this.searchTimeout);
+                    this.searchTimeout = setTimeout(() => {
+                        this.getDataHandler();
+                    }, 500)
+                },
+                deep: true
             }
         },
         methods: {
@@ -377,7 +396,7 @@
              */
             getDataHandler() {
                 this.loading = true;
-                this.getDataCallback(this.pagination)
+                this.getDataCallback(this.pagination, this.search)
                     .then(data => {
                         this.clearSelected();
                         this.items = data.items;
