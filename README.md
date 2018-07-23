@@ -1,6 +1,10 @@
 # Vuetify resource
 
-An easy way to create a resource list with the vuetify data table with default create  update and delete dialogs/actions and potential your own actions
+An easy way to create a resource or crud list with the vuetify data table.
+With default a create, update and delete dialogs/actions and potential your own actions.
+it can be used in CMS driven by vue/vuetify
+
+
 
 ## Project Install
 
@@ -172,7 +176,7 @@ canSearch: {required: false, type: Boolean, default: false},
 <template>
     <v-app>
         <div class="page page-news">
-            <resource-list
+            <vuetify-resource
                 :getItemCallback="getItemFromApi"
                 :getDataCallback="getDataFromApi"
                 :tableContent="tableContent"
@@ -186,7 +190,7 @@ canSearch: {required: false, type: Boolean, default: false},
                 <div slot="updateContent">
                     place here your form
                 </div>
-            </resource-list>
+            </vuetify-resource>
         </div>
     </v-app>
 </template>
