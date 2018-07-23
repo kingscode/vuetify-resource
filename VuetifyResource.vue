@@ -22,8 +22,8 @@
                     </v-toolbar>
                     <v-card-text>
                         <slot name="createContent"></slot>
+                        <activity-overlay v-model="activity.isCreating"/>
                     </v-card-text>
-                    <div style="flex: 1 1 auto;"></div>
                 </v-card>
             </v-dialog>
 
@@ -48,8 +48,8 @@
                     </v-toolbar>
                     <v-card-text>
                         <slot name="updateContent"></slot>
+                        <activity-overlay v-model="activity.isUpdating"/>
                     </v-card-text>
-                    <div style="flex: 1 1 auto;"></div>
                 </v-card>
             </v-dialog>
 
@@ -183,9 +183,11 @@
 
 <script>
     import texts from './texts.js';
+    import ActivityOverlay from './components/ActivityOverlay.vue';
 
     export default {
-        name: 'ResourceList',
+        name: 'vuetify-resource',
+        components: {ActivityOverlay},
         data() {
             return {
                 fab: false,
