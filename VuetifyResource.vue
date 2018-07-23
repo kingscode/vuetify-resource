@@ -456,7 +456,7 @@
                                 console.error(e);
                             }
                             this.activity.isCreating = false;
-                            this.showSnackbar(this.lang('snackbar-saveerror'), 'error');
+                            this.showSnackbar(this.lang('snackbar-save-error'), 'error');
 
                         });
                 }
@@ -472,7 +472,7 @@
                 this.setIndentificationKey(this.selected[0][this.resourceKeyName]);
                 this.getItemByIdentificationKey(this.selected[0][this.resourceKeyName], (item) => {
                     if (item === false) {
-                        this.showSnackbar(this.lang('snackbar-geterror'), 'error');
+                        this.showSnackbar(this.lang('snackbar-get-error'), 'error');
                         return false;
                     } else {
                         this.lastOpenedHash = this.getIndentificationKey();
@@ -505,7 +505,7 @@
                                 console.error(e);
                             }
                             this.activity.isUpdating = false;
-                            this.showSnackbar(this.lang('snackbar-saveerror'), 'error');
+                            this.showSnackbar(this.lang('snackbar-save-error'), 'error');
 
                         });
                 }
@@ -531,7 +531,7 @@
                                 console.error(e);
                             }
                             this.activity.isDeleting = false;
-                            this.showSnackbar(this.lang('snackbar-deleteerror'), 'error');
+                            this.showSnackbar(this.lang('snackbar-delete-error'), 'error');
 
                         });
                 }
