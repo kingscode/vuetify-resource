@@ -89,7 +89,7 @@
                             >
                                 <v-icon>create</v-icon>
                             </v-btn>
-                            <span>Bewerken</span>
+                            <span>{{ lang('update') }}</span>
                         </v-tooltip>
 
                         <v-tooltip left>
@@ -104,7 +104,7 @@
                             >
                                 <v-icon>add</v-icon>
                             </v-btn>
-                            <span>Toevoegen</span>
+                            <span>{{ lang('create') }}</span>
                         </v-tooltip>
 
                         <v-tooltip left>
@@ -119,7 +119,7 @@
                             >
                                 <v-icon>delete</v-icon>
                             </v-btn>
-                            <span>Verwijderen</span>
+                            <span>{{ lang('delete') }}</span>
                         </v-tooltip>
                         <slot name="speedDialAfter"></slot>
                     </v-speed-dial>
@@ -135,7 +135,7 @@
                         </v-flex>
                     </v-layout>
                     <v-data-table
-                        :headers="tableContent"
+                        :headers="headers"
                         :items="items"
                         :pagination.sync="pagination"
                         v-model="selected"
@@ -163,6 +163,32 @@
                                     :content="props.item[item.value]"
                                 ></component>
                                 <span v-if="typeof item.columnType !== 'object'">{{ props.item[item.value] }}</span>
+                            </td>
+                            <td class="crud-actions">
+                                <v-tooltip left>
+                                    <v-btn
+                                        flat
+                                        icon
+                                        color="green"
+                                        v-on:click="openUpdateHandler(props.item[resourceKeyName])"
+                                        slot="activator"
+                                    >
+                                        <v-icon>create</v-icon>
+                                    </v-btn>
+                                    <span>{{ lang('update') }}</span>
+                                </v-tooltip>
+                                <v-tooltip left>
+                                    <v-btn
+                                        flat
+                                        icon
+                                        color="red"
+                                        v-on:click="deleteHandler([props.item[resourceKeyName]])"
+                                        slot="activator"
+                                    >
+                                        <v-icon>delete</v-icon>
+                                    </v-btn>
+                                    <span>{{ lang('delete') }}</span>
+                                </v-tooltip>
                             </td>
                         </template>
                         <template slot="pageText" slot-scope="{ pageStart, pageStop }">
@@ -197,6 +223,7 @@
                 loading: true,
                 pagination: {},
                 selected: [],
+                headers: [],
                 dialog: {
                     create: false,
                     update: false
@@ -401,6 +428,10 @@
                 deep: true
             }
         },
+        created() {
+            this.headers = JSON.parse(JSON.stringify(this.tableContent));
+            this.headers.push({text: '', value: 'crud-actions', sortable: false});
+        },
         methods: {
             /**
              * getDataHandler
@@ -475,9 +506,13 @@
              *
              * @return void
              */
-            openUpdateHandler() {
-                this.setIndentificationKey(this.selected[0][this.resourceKeyName]);
-                this.getItemByIdentificationKey(this.selected[0][this.resourceKeyName], (item) => {
+            openUpdateHandler(resourceKey) {
+                if(typeof resourceKey === 'undefined') {
+                    resourceKey = this.selected[0][this.resourceKeyName];
+
+                }
+                this.setIndentificationKey(resourceKey);
+                this.getItemByIdentificationKey(resourceKey, (item) => {
                     if (item === false) {
                         this.showSnackbar(this.lang('snackbar-get-error'), 'error');
                         return false;
@@ -524,10 +559,13 @@
              *
              * @return void
              */
-            deleteHandler() {
+            deleteHandler(ids) {
+                if (typeof ids === 'undefined') {
+                    ids = this.selected.map(item => item[this.resourceKeyName]);
+                }
                 if (!this.activity.isDeleting) {
                     this.activity.isDeleting = true;
-                    this.deleteCallback(this.selected)
+                    this.deleteCallback(ids)
                         .then(() => {
                             this.activity.isDeleting = false;
                             this.showSnackbar(this.lang('snackbar-deleted'));
@@ -732,5 +770,10 @@
         .vuetify-resource td:first-child, .vuetify-resource td:nth-child(2) {
             display: table-cell;
         }
+    }
+
+    td.crud-actions {
+        float: right;
+        padding-top: 0px !important;
     }
 </style>
