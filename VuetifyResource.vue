@@ -1,5 +1,5 @@
 <template>
-    <div class="vuetify-resource">
+    <div :class="resourceHtmlClass">
         <v-container fluid grid-list-lg>
             <v-dialog
                 v-model="dialog.create"
@@ -123,11 +123,20 @@
                         </v-tooltip>
                         <slot name="speedDailAfter"></slot>
                     </v-speed-dial>
-
+                    <v-layout row v-if="canSearch">
+                        <v-flex sm4>
+                            <v-text-field
+                                v-model="search"
+                                append-icon="search"
+                                :label="lang('search')"
+                                single-line
+                                hide-details
+                            ></v-text-field>
+                        </v-flex>
+                    </v-layout>
                     <v-data-table
                         :headers="tableContent"
                         :items="items"
-                        :search="search"
                         :pagination.sync="pagination"
                         v-model="selected"
                         item-key="id"
@@ -202,6 +211,14 @@
                 },
                 lastOpenedHash: null
             };
+        },
+        computed: {
+            resourceHtmlClass() {
+                return {
+                    'vuetify-resource': true,
+                    'with-search': this.canSearch
+                };
+            }
         },
         props: {
             /**
@@ -330,6 +347,7 @@
             canUpdate: {required: false, type: Boolean, default: true},
             canAdd: {required: false, type: Boolean, default: true},
             canDelete: {required: false, type: Boolean, default: true},
+            canSearch: {required: false, type: Boolean, default: false},
 
             /**
              * texts
@@ -370,6 +388,15 @@
                     this.handleUrlChange();
                 },
                 deep: true
+            },
+            search: {
+                handler() {
+                    clearTimeout(this.searchTimeout);
+                    this.searchTimeout = setTimeout(() => {
+                        this.getDataHandler();
+                    }, 200);
+                },
+                deep: true
             }
         },
         methods: {
@@ -382,7 +409,7 @@
              */
             getDataHandler() {
                 this.loading = true;
-                this.getDataCallback(this.pagination)
+                this.getDataCallback(this.pagination, this.search)
                     .then(data => {
                         this.clearSelected();
                         this.items = data.items;
@@ -434,7 +461,7 @@
                                 console.error(e);
                             }
                             this.activity.isCreating = false;
-                            this.showSnackbar(this.lang('snackbar-saveerror'), 'error');
+                            this.showSnackbar(this.lang('snackbar-save-error'), 'error');
 
                         });
                 }
@@ -450,7 +477,7 @@
                 this.setIndentificationKey(this.selected[0][this.resourceKeyName]);
                 this.getItemByIdentificationKey(this.selected[0][this.resourceKeyName], (item) => {
                     if (item === false) {
-                        this.showSnackbar(this.lang('snackbar-geterror'), 'error');
+                        this.showSnackbar(this.lang('snackbar-get-error'), 'error');
                         return false;
                     } else {
                         this.lastOpenedHash = this.getIndentificationKey();
@@ -483,7 +510,7 @@
                                 console.error(e);
                             }
                             this.activity.isUpdating = false;
-                            this.showSnackbar(this.lang('snackbar-saveerror'), 'error');
+                            this.showSnackbar(this.lang('snackbar-save-error'), 'error');
 
                         });
                 }
@@ -509,7 +536,7 @@
                                 console.error(e);
                             }
                             this.activity.isDeleting = false;
-                            this.showSnackbar(this.lang('snackbar-deleteerror'), 'error');
+                            this.showSnackbar(this.lang('snackbar-delete-error'), 'error');
 
                         });
                 }
@@ -669,6 +696,10 @@
         position: absolute;
         right: -25px;
         top: -10px;
+    }
+
+    .vuetify-resource.with-search .speed-dial {
+        top: 55px;
     }
 
     @media only screen and (max-width: 599px) {
