@@ -177,7 +177,7 @@
     import ActivityOverlay from './components/ActivityOverlay';
 
     export default {
-        name: 'ResourceList',
+        name: 'vuetify-resource',
         components: {ActivityOverlay},
         data() {
             return {
