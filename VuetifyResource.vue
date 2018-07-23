@@ -527,7 +527,7 @@
              */
             deleteHandler(ids) {
                 if (typeof ids === 'undefined') {
-                    ids = this.selected.map(item => item.id);
+                    ids = this.selected.map(item => item[this.resourceKeyName]);
                 }
                 if (!this.activity.isDeleting) {
                     this.activity.isDeleting = true;
