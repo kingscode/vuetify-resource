@@ -22,7 +22,7 @@
                     </v-toolbar>
                     <v-card-text>
                         <slot name="createContent"></slot>
-                        <activity-overlay/>
+                        <activity-overlay v-model="activity.isCreating"/>
                     </v-card-text>
                 </v-card>
             </v-dialog>
@@ -48,7 +48,7 @@
                     </v-toolbar>
                     <v-card-text>
                         <slot name="updateContent"></slot>
-                        <activity-overlay/>
+                        <activity-overlay v-model="activity.isUpdating"/>
                     </v-card-text>
                 </v-card>
             </v-dialog>
@@ -174,7 +174,7 @@
 
 <script>
     import texts from './texts.js';
-    import ActivityOverlay from './components/ActivityOverlay';
+    import ActivityOverlay from './components/ActivityOverlay.vue';
 
     export default {
         name: 'vuetify-resource',
@@ -652,27 +652,6 @@
 </script>
 
 <style>
-    .indicator-overlay-wrapper .overlay{
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: #000000;
-        opacity: 0.2;
-        z-index: 99;
-        pointer-events: bounding-box;
-    }
-
-    .indicator-overlay-wrapper .indicator-wrapper{
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        margin-left: -35px;
-        margin-top: -35px;
-        z-index: 100;
-    }
-
     .vuetify-resource {
         position: relative;
         margin-top: 30px;
