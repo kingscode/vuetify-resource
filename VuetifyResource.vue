@@ -73,7 +73,7 @@
                         direction="bottom"
                         transition="slide-y-reverse-transition"
                     >
-                        <v-btn slot="activator" color="blue darken-2" dark fab hover v-model="fab">
+                        <v-btn slot="activator" color="accent" dark fab hover v-model="fab">
                             <v-icon>view_headline</v-icon>
                             <v-icon>close</v-icon>
                         </v-btn>
