@@ -89,7 +89,7 @@
                             >
                                 <v-icon>create</v-icon>
                             </v-btn>
-                            <span>Bewerken</span>
+                            <span>{{ lang('update') }}</span>
                         </v-tooltip>
 
                         <v-tooltip left>
@@ -104,7 +104,7 @@
                             >
                                 <v-icon>add</v-icon>
                             </v-btn>
-                            <span>Toevoegen</span>
+                            <span>{{ lang('create') }}</span>
                         </v-tooltip>
 
                         <v-tooltip left>
@@ -119,7 +119,7 @@
                             >
                                 <v-icon>delete</v-icon>
                             </v-btn>
-                            <span>Verwijderen</span>
+                            <span>{{ lang('delete') }}</span>
                         </v-tooltip>
                         <slot name="speedDailAfter"></slot>
                     </v-speed-dial>
@@ -166,7 +166,7 @@
                                     >
                                         <v-icon>create</v-icon>
                                     </v-btn>
-                                    <span>Bewerken</span>
+                                    <span>{{ lang('update') }}</span>
                                 </v-tooltip>
                                 <v-tooltip left>
                                     <v-btn
@@ -178,7 +178,7 @@
                                     >
                                         <v-icon>delete</v-icon>
                                     </v-btn>
-                                    <span>Verwijderen</span>
+                                    <span>{{ lang('delete') }}</span>
                                 </v-tooltip>
                             </td>
                         </template>
