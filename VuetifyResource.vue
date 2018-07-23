@@ -121,7 +121,7 @@
                             </v-btn>
                             <span>Verwijderen</span>
                         </v-tooltip>
-                        <slot name="speedDailAfter"></slot>
+                        <slot name="speedDialAfter"></slot>
                     </v-speed-dial>
 
                     <v-data-table

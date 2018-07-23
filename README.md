@@ -14,7 +14,7 @@ npm install @kingscode/vuetify-resource --save
 - createContent (what's inside the create modal(your form))
 - updateToolbar (you can add something before the save button, like other buttons, or an titlte)
 - updateContent (what's inside the update modal(your form))
-- speedDailAfter (you can add something after the default speed dail buttons create, update and delete.)
+- speedDialAfter (you can add something after the default speed dail buttons create, update and delete.)
 
 ## Props
 ```
