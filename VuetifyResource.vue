@@ -124,7 +124,7 @@
                         <slot name="speedDialAfter"></slot>
                     </v-speed-dial>
                     <v-layout row v-if="canSearch">
-                        <v-flex sm4>
+                        <v-flex xs10 sm4>
                             <v-text-field
                                 v-model="search"
                                 append-icon="search"
@@ -720,31 +720,30 @@
         }
     };
 </script>
-
 <style>
-    .vuetify-resource {
-        position: relative;
-        margin-top: 30px;
-        margin-right: 10px;
+    .v-speed-dial {
+        position: absolute;
     }
-
     .vuetify-resource th:first-child {
         width: 40px;
     }
 
-    .vuetify-resource .speed-dial {
-        position: absolute;
-        right: -25px;
-        top: -10px;
+    td.crud-actions {
+        float: right;
+        padding-top: 0px !important;
     }
 
-    .vuetify-resource.with-search .speed-dial {
-        top: 55px;
+    .vuetify-resource.with-search .v-speed-dial {
+        top: 85px;
     }
 
     @media only screen and (max-width: 599px) {
-        .vuetify-resource .speed-dial {
-            right: 0px;
+        .vuetify-resource.with-search .v-speed-dial {
+            top: 65px;
+        }
+
+        .v-speed-dial {
+            right: 0;
         }
 
         .vuetify-resource {
@@ -770,10 +769,5 @@
         .vuetify-resource td:first-child, .vuetify-resource td:nth-child(2) {
             display: table-cell;
         }
-    }
-
-    td.crud-actions {
-        float: right;
-        padding-top: 0px !important;
     }
 </style>
