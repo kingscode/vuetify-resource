@@ -423,7 +423,7 @@
                     clearTimeout(this.searchTimeout);
                     this.searchTimeout = setTimeout(() => {
                         this.getDataHandler();
-                    }, 200);
+                    }, 400);
                 },
                 deep: true
             }

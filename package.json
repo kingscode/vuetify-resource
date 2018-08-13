@@ -21,7 +21,7 @@
     "homepage": "https://github.com/kingscode/vuetify-resource#readme",
     "dependencies": {
         "vue": "^2.5.0",
-        "vuetify": "^1.0"
+        "vuetify": "^1.1.10"
     },
     "scripts": {
         "dev": "node_modules/webpack/bin/webpack.js --progress --config build/webpack.config.js",
