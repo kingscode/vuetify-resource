@@ -721,7 +721,7 @@
     };
 </script>
 <style>
-    .v-speed-dial {
+    .vuetify-resource .v-speed-dial {
         position: absolute;
     }
     .vuetify-resource th:first-child {
