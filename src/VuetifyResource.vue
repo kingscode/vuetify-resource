@@ -226,28 +226,28 @@
                 headers: [],
                 dialog: {
                     create: false,
-                    update: false
+                    update: false,
                 },
                 snackbar: {
                     text: '',
                     active: false,
-                    color: 'success'
+                    color: 'success',
                 },
                 activity: {
                     isUpdating: false,
                     isDeleting: false,
-                    isCreating: false
+                    isCreating: false,
                 },
-                lastOpenedHash: null
+                lastOpenedHash: null,
             };
         },
         computed: {
             resourceHtmlClass() {
                 return {
                     'vuetify-resource': true,
-                    'with-search': this.canSearch
+                    'with-search': this.canSearch,
                 };
-            }
+            },
         },
         props: {
             /**
@@ -258,7 +258,7 @@
              */
             getDataCallback: {
                 required: true,
-                type: Function
+                type: Function,
             },
 
             /**
@@ -271,7 +271,7 @@
              */
             getItemCallback: {
                 required: false,
-                type: Function
+                type: Function,
             },
 
             /**
@@ -280,7 +280,7 @@
              */
             beforeCreateCallback: {
                 required: false,
-                type: Function
+                type: Function,
             },
 
             /**
@@ -291,7 +291,7 @@
              */
             createCallback: {
                 required: true,
-                type: Function
+                type: Function,
             },
 
             /**
@@ -300,7 +300,7 @@
              */
             beforeUpdateCallback: {
                 required: true,
-                type: Function
+                type: Function,
             },
 
             /**
@@ -311,7 +311,7 @@
              */
             updateCallback: {
                 required: true,
-                type: Function
+                type: Function,
             },
 
             /**
@@ -322,7 +322,7 @@
              */
             deleteCallback: {
                 required: true,
-                type: Function
+                type: Function,
             },
 
             /**
@@ -334,7 +334,7 @@
             useResourceKeyInUrl: {
                 required: false,
                 type: Boolean,
-                default: true
+                default: true,
             },
 
             /**
@@ -347,7 +347,7 @@
             resourceKeyName: {
                 required: false,
                 type: String,
-                default: 'id'
+                default: 'id',
             },
 
             /**
@@ -359,7 +359,7 @@
             shouldGetItemByCallback: {
                 required: false,
                 type: Boolean,
-                default: true
+                default: true,
             },
 
             /**
@@ -393,30 +393,32 @@
              */
             texts: {
                 required: false,
-                type: Object
+                type: Object,
             },
 
             meta: {
                 required: false,
                 type: Object,
-                default: {
-                    name: 'Resource',
-                    namePlural: 'Resources'
-                }
-            }
+                default: function () {
+                    return {
+                        name: 'Resource',
+                        namePlural: 'Resources',
+                    };
+                },
+            },
         },
         watch: {
             pagination: {
                 handler() {
                     this.getDataHandler();
                 },
-                deep: true
+                deep: true,
             },
             $route: {
                 handler() {
                     this.handleUrlChange();
                 },
-                deep: true
+                deep: true,
             },
             search: {
                 handler() {
@@ -425,8 +427,8 @@
                         this.getDataHandler();
                     }, 400);
                 },
-                deep: true
-            }
+                deep: true,
+            },
         },
         created() {
             this.headers = JSON.parse(JSON.stringify(this.tableContent));
@@ -507,7 +509,7 @@
              * @return void
              */
             openUpdateHandler(resourceKey) {
-                if(typeof resourceKey === 'undefined') {
+                if (typeof resourceKey === 'undefined') {
                     resourceKey = this.selected[0][this.resourceKeyName];
 
                 }
@@ -716,57 +718,71 @@
                 } else {
                     return this.texts[t];
                 }
-            }
-        }
+            },
+        },
     };
 </script>
 <style>
-    .vuetify-resource .v-speed-dial {
+    .vuetify-resource .v-speed-dial
+    {
         position: absolute;
     }
-    .vuetify-resource th:first-child {
+
+    .vuetify-resource th:first-child
+    {
         width: 40px;
     }
 
-    td.crud-actions {
-        float: right;
+    td.crud-actions
+    {
+        float:       right;
         padding-top: 0px !important;
     }
 
-    .vuetify-resource.with-search .v-speed-dial {
+    .vuetify-resource.with-search .v-speed-dial
+    {
         top: 85px;
     }
 
-    @media only screen and (max-width: 599px) {
-        .vuetify-resource.with-search .v-speed-dial {
+    @media only screen and (max-width: 599px)
+    {
+        .vuetify-resource.with-search .v-speed-dial
+        {
             top: 65px;
         }
 
-        .v-speed-dial {
+        .v-speed-dial
+        {
             right: 0;
         }
 
-        .vuetify-resource {
+        .vuetify-resource
+        {
             margin-right: 0;
         }
 
-        .datatable__actions__select {
+        .datatable__actions__select
+        {
             display: none;
         }
 
-        .vuetify-resource th {
+        .vuetify-resource th
+        {
             display: none;
         }
 
-        .vuetify-resource th:first-child, .vuetify-resource th:nth-child(2) {
+        .vuetify-resource th:first-child, .vuetify-resource th:nth-child(2)
+        {
             display: table-cell;
         }
 
-        .vuetify-resource td {
+        .vuetify-resource td
+        {
             display: none;
         }
 
-        .vuetify-resource td:first-child, .vuetify-resource td:nth-child(2) {
+        .vuetify-resource td:first-child, .vuetify-resource td:nth-child(2)
+        {
             display: table-cell;
         }
     }
