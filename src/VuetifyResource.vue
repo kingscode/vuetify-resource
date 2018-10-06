@@ -209,7 +209,7 @@
 
 <script>
     import texts from './texts.js';
-    import ActivityOverlay from '../../components/ActivityOverlay.vue';
+    import ActivityOverlay from './components/ActivityOverlay.vue';
 
     export default {
         name: 'vuetify-resource',
