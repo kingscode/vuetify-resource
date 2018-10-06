@@ -17,7 +17,7 @@
     "bugs": {
         "url": "https://github.com/kingscode/vuetify-resource/issues"
     },
-    "main": "dest/vuetify-resource.common.js",
+    "main": "dist/vuetify-resource.common.js",
     "homepage": "https://github.com/kingscode/vuetify-resource#readme",
     "scripts": {
         "serve": "vue-cli-service serve",
