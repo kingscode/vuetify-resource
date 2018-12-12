@@ -19,7 +19,25 @@ npm install @kingscode/vuetify-resource --save
 - updateToolbar (you can add something before the save button, like other buttons, or an titlte)
 - updateContent (what's inside the update modal(your form))
 - speedDialAfter (you can add something after the default speed dail buttons create, update and delete.)
+- crudActionsAfter (add an own crud action with a prop: `resource` which is the selected item)
 
+example for crudActionsAfter slot:
+```
+<template slot="crudActionsAfter" slot-scope="slotProps">
+    <v-tooltip left>
+        <v-btn
+            flat
+            icon
+            color="blue"
+            slot="activator"
+            @click="viewDocuments(slotProps.resource.id)"
+        >
+            <v-icon>fa-archive</v-icon>
+        </v-btn>
+        <span>view documents</span>
+    </v-tooltip>
+</template>
+```
 ## Props
 ```
 /**
@@ -191,6 +209,7 @@ canSearch: {required: false, type: Boolean, default: false},
                     place here your form
                 </div>
             </vuetify-resource>
+            
         </div>
     </v-app>
 </template>
