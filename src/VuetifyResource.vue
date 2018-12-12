@@ -189,6 +189,7 @@
                                     </v-btn>
                                     <span>{{ lang('delete') }}</span>
                                 </v-tooltip>
+                                <slot name="crudActionsAfter" :resource="props.item"></slot>
                             </td>
                         </template>
                         <template slot="pageText" slot-scope="{ pageStart, pageStop }">
