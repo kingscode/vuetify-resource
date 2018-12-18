@@ -72,6 +72,7 @@
                         :open-on-hover="true"
                         direction="bottom"
                         transition="slide-y-reverse-transition"
+                        v-if="speedDailNotEmpty"
                     >
                         <v-btn slot="activator" color="accent" dark fab hover v-model="fab">
                             <v-icon>view_headline</v-icon>
@@ -165,7 +166,7 @@
                                 <span v-if="typeof item.columnType !== 'object'">{{ props.item[item.value] }}</span>
                             </td>
                             <td class="crud-actions">
-                                <v-tooltip left>
+                                <v-tooltip left v-if="canUpdate === true">
                                     <v-btn
                                         flat
                                         icon
@@ -177,7 +178,7 @@
                                     </v-btn>
                                     <span>{{ lang('update') }}</span>
                                 </v-tooltip>
-                                <v-tooltip left>
+                                <v-tooltip left v-if="canDelete === true">
                                     <v-btn
                                         flat
                                         icon
@@ -248,6 +249,15 @@
                     'vuetify-resource': true,
                     'with-search': this.canSearch,
                 };
+            },
+            speedDailNotEmpty() {
+                if (this.canAdd || this.canUpdate || this.canDelete) {
+                    return true;
+                }
+                if (typeof this.$slots.speedDialAfter !== 'undefined') {
+                    return true;
+                }
+                return false;
             },
         },
         props: {
