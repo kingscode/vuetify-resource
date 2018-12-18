@@ -301,7 +301,7 @@
              * @return promise
              */
             createCallback: {
-                required: true,
+                required: false,
                 type: Function,
             },
 
@@ -310,7 +310,7 @@
              * the callback which is called before the update dialog is opened
              */
             beforeUpdateCallback: {
-                required: true,
+                required: false,
                 type: Function,
             },
 
@@ -321,7 +321,7 @@
              * @return promise
              */
             updateCallback: {
-                required: true,
+                required: false,
                 type: Function,
             },
 
@@ -332,7 +332,7 @@
              * @return promise
              */
             deleteCallback: {
-                required: true,
+                required: false,
                 type: Function,
             },
 
