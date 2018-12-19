@@ -186,6 +186,13 @@ canDelete: {required: false, type: Boolean, default: true},
 ```
 canSearch: {required: false, type: Boolean, default: false},
 ```
+```
+showSpeedDail: {required: false, type: Boolean},
+```
+
+## Events
+
+selected
 
 
 ## SPA example
