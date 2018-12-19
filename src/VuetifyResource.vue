@@ -63,8 +63,7 @@
             </v-snackbar>
 
             <v-layout row wrap>
-                <v-flex>
-
+                <v-fab-transition>
                     <v-speed-dial
                         v-model="fab"
                         :top="true"
@@ -122,8 +121,10 @@
                             </v-btn>
                             <span>{{ lang('delete') }}</span>
                         </v-tooltip>
-                        <slot name="speedDialAfter"></slot>
+                        <slot name="speedDialAfter" :resources="selected"></slot>
                     </v-speed-dial>
+                </v-fab-transition>
+                <v-flex>
                     <v-layout row v-if="canSearch">
                         <v-flex xs10 sm4>
                             <v-text-field
@@ -254,7 +255,11 @@
                 if (this.canAdd || this.canUpdate || this.canDelete) {
                     return true;
                 }
-                if (typeof this.$slots.speedDialAfter !== 'undefined') {
+
+                if (typeof this.$scopedSlots.speedDialAfter !== 'undefined') {
+                    if (typeof this.showSpeedDail !== 'undefined') {
+                        return this.showSpeedDail;
+                    }
                     return true;
                 }
                 return false;
@@ -388,6 +393,7 @@
             canAdd: {required: false, type: Boolean, default: true},
             canDelete: {required: false, type: Boolean, default: true},
             canSearch: {required: false, type: Boolean, default: false},
+            showSpeedDail: {required: false, type: Boolean},
 
             /**
              * texts
@@ -422,6 +428,12 @@
             pagination: {
                 handler() {
                     this.getDataHandler();
+                },
+                deep: true,
+            },
+            selected: {
+                handler() {
+                    this.$emit('selected', this.selected);
                 },
                 deep: true,
             },
@@ -734,9 +746,9 @@
     };
 </script>
 <style>
-    .vuetify-resource .v-speed-dial
+    .vuetify-resource
     {
-        position: absolute;
+        position: relative;
     }
 
     .vuetify-resource th:first-child
@@ -750,9 +762,18 @@
         padding-top: 0px !important;
     }
 
+    .vuetify-resource .v-speed-dial
+    {
+        position: absolute;
+        top:      0px;
+        right:    35px;
+        z-index:  2;
+    }
+
     .vuetify-resource.with-search .v-speed-dial
     {
-        top: 85px;
+        top:   55px;
+        right: 35px;
     }
 
     @media only screen and (max-width: 599px)
