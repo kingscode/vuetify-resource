@@ -11,7 +11,7 @@
                 <v-card>
                     <v-toolbar style="flex: 0 0 auto;" dark class="primary">
                         <v-btn icon @click.native="dialog.create = false" dark>
-                            <v-icon>close</v-icon>
+                            <v-icon>$vuetify.icons.close</v-icon>
                         </v-btn>
                         <v-toolbar-title>{{ meta.name }}</v-toolbar-title>
                         <v-spacer></v-spacer>
@@ -37,7 +37,7 @@
                 <v-card>
                     <v-toolbar style="flex: 0 0 auto;" dark class="primary">
                         <v-btn icon @click.native="dialog.update = false" dark>
-                            <v-icon>close</v-icon>
+                            <v-icon>$vuetify.icons.close</v-icon>
                         </v-btn>
                         <v-toolbar-title>{{ meta.name }}</v-toolbar-title>
                         <v-spacer></v-spacer>
@@ -74,8 +74,8 @@
                         v-if="speedDailNotEmpty"
                     >
                         <v-btn slot="activator" color="accent" dark fab hover v-model="fab">
-                            <v-icon>view_headline</v-icon>
-                            <v-icon>close</v-icon>
+                            <v-icon>$vuetify.icons.menu</v-icon>
+                            <v-icon>$vuetify.icons.close</v-icon>
                         </v-btn>
                         <v-tooltip left>
                             <v-btn
@@ -87,7 +87,7 @@
                                 v-on:click="openUpdateHandler()"
                                 slot="activator"
                             >
-                                <v-icon>create</v-icon>
+                                <v-icon>$vuetify.icons.edit</v-icon>
                             </v-btn>
                             <span>{{ lang('update') }}</span>
                         </v-tooltip>
@@ -102,7 +102,7 @@
                                 v-if="canAdd === true"
                                 slot="activator"
                             >
-                                <v-icon>add</v-icon>
+                                <v-icon>$vuetify.icons.add</v-icon>
                             </v-btn>
                             <span>{{ lang('create') }}</span>
                         </v-tooltip>
@@ -117,7 +117,7 @@
                                 v-on:click="deleteHandler()"
                                 slot="activator"
                             >
-                                <v-icon>delete</v-icon>
+                                <v-icon>$vuetify.icons.delete</v-icon>
                             </v-btn>
                             <span>{{ lang('delete') }}</span>
                         </v-tooltip>
@@ -175,7 +175,7 @@
                                         v-on:click="openUpdateHandler(props.item[resourceKeyName])"
                                         slot="activator"
                                     >
-                                        <v-icon>create</v-icon>
+                                        <v-icon>$vuetify.icons.edit</v-icon>
                                     </v-btn>
                                     <span>{{ lang('update') }}</span>
                                 </v-tooltip>
@@ -187,7 +187,7 @@
                                         v-on:click="deleteHandler([props.item[resourceKeyName]])"
                                         slot="activator"
                                     >
-                                        <v-icon>delete</v-icon>
+                                        <v-icon>$vuetify.icons.delete</v-icon>
                                     </v-btn>
                                     <span>{{ lang('delete') }}</span>
                                 </v-tooltip>
