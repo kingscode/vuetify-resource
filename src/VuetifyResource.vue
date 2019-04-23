@@ -198,7 +198,12 @@
                             {{lang('from')}} {{ pageStart }} {{lang('till')}} {{ pageStop }}
                         </template>
                         <template slot="no-data">
-                            {{lang('no-data')}}
+                            <template v-if="!loading">
+                                {{lang('no-data')}}
+                            </template>
+                            <template v-else="!loading">
+                                {{lang('loading')}}
+                            </template>
                         </template>
                         <template slot="no-results">
                             {{lang('no-results')}}
