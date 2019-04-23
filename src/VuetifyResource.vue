@@ -129,7 +129,7 @@
                         <v-flex xs10 sm4>
                             <v-text-field
                                 v-model="search"
-                                append-icon="search"
+                                :append-icon="$vuetify.icons.search"
                                 :label="lang('search')"
                                 single-line
                                 hide-details
