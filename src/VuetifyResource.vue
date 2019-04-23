@@ -142,7 +142,7 @@
                         :pagination.sync="pagination"
                         v-model="selected"
                         item-key="id"
-                        select-all
+                        :select-all="useCheckboxes"
                         :total-items="totalItems"
                         :loading="loading"
                         class="elevation-1"
@@ -151,7 +151,7 @@
                         :rows-per-page-text="lang('rows-per-page-text')"
                     >
                         <template slot="items" slot-scope="props">
-                            <td>
+                            <td v-if="useCheckboxes">
                                 <v-checkbox
                                     primary
                                     hide-details
@@ -393,6 +393,7 @@
             canAdd: {required: false, type: Boolean, default: true},
             canDelete: {required: false, type: Boolean, default: true},
             canSearch: {required: false, type: Boolean, default: false},
+            useCheckboxes: {required: false, type: Boolean, default: true},
             showSpeedDail: {required: false, type: Boolean},
 
             /**
