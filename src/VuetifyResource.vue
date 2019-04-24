@@ -125,7 +125,7 @@
             </v-fab-transition>
             <v-flex>
                 <v-layout row v-if="canSearch">
-                    <v-flex sm4 xs10 mb-3>
+                    <v-flex sm4 xs10>
                         <v-text-field
                             :label="lang('search')"
                             append-icon="search"
@@ -197,7 +197,12 @@
                         {{lang('from')}} {{ pageStart }} {{lang('till')}} {{ pageStop }}
                     </template>
                     <template slot="no-data">
-                        {{lang('no-data')}}
+                        <template v-if="!loading">
+                            {{lang('no-data')}}
+                        </template>
+                        <template v-else>
+                            {{lang('loading')}}
+                        </template>
                     </template>
                     <template slot="no-results">
                         {{lang('no-results')}}
