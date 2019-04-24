@@ -201,7 +201,7 @@
                             <template v-if="!loading">
                                 {{lang('no-data')}}
                             </template>
-                            <template v-else="!loading">
+                            <template v-else>
                                 {{lang('loading')}}
                             </template>
                         </template>
