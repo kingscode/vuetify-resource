@@ -125,7 +125,7 @@
             </v-fab-transition>
             <v-flex>
                 <v-layout row v-if="canSearch">
-                    <v-flex sm4 xs10>
+                    <v-flex mb-3 sm4 xs10>
                         <v-text-field
                             :label="lang('search')"
                             :append-icon="$vuetify.icons.search"
