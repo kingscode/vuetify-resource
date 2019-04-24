@@ -145,12 +145,12 @@
                     :total-items="totalItems"
                     class="elevation-1"
                     item-key="id"
-                    select-all
+                    :select-all="useCheckboxes"
                     v-model="selected"
                     v-on:input="onSelectedChange"
                 >
                     <template slot="items" slot-scope="props">
-                        <td>
+                        <td v-if="useCheckboxes">
                             <v-checkbox
                                 hide-details
                                 primary
@@ -396,6 +396,7 @@
             canAdd: {required: false, type: Boolean, default: true},
             canDelete: {required: false, type: Boolean, default: true},
             canSearch: {required: false, type: Boolean, default: false},
+            useCheckboxes: {required: false, type: Boolean, default: true},
             showSpeedDail: {required: false, type: Boolean},
 
             /**
