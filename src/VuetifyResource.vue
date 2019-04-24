@@ -763,13 +763,13 @@
     td.crud-actions
     {
         float:       right;
-        padding-top: 0px !important;
+        padding-top: 0 !important;
     }
 
     .vuetify-resource .v-speed-dial
     {
         position: absolute;
-        top:      0px;
+        top:      -35px;
         right:    5px;
         z-index:  2;
     }
