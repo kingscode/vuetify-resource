@@ -14,5 +14,6 @@ export default {
     'snackbar-get-error': 'Something went wrong, please try again later',
     'snackbar-deleted': 'It\'s successfully deleted!',
     'snackbar-delete-error': 'Something went wrong, please try again later',
-    'search': 'Search'
+    'search': 'Search',
+    'loading': 'Loading..'
 };
