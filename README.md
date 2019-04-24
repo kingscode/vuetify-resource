@@ -189,6 +189,9 @@ canSearch: {required: false, type: Boolean, default: false},
 ```
 showSpeedDail: {required: false, type: Boolean},
 ```
+```
+useCheckboxes: {required: false, type: Boolean},
+```
 
 ## Events
 

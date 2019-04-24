@@ -1,212 +1,215 @@
 <template>
     <div :class="resourceHtmlClass">
-        <v-container fluid grid-list-lg>
-            <v-dialog
-                v-model="dialog.create"
-                fullscreen
-                transition="dialog-bottom-transition"
-                :overlay=false
-                scrollable
-            >
-                <v-card>
-                    <v-toolbar style="flex: 0 0 auto;" dark class="primary">
-                        <v-btn icon @click.native="dialog.create = false" dark>
-                            <v-icon>$vuetify.icons.close</v-icon>
+        <v-dialog
+            :overlay=false
+            fullscreen
+            scrollable
+            transition="dialog-bottom-transition"
+            v-model="dialog.create"
+        >
+            <v-card>
+                <v-toolbar class="primary" dark style="flex: 0 0 auto;">
+                    <v-btn @click.native="dialog.create = false" dark icon>
+                        <v-icon>$vuetify.icons.close</v-icon>
+                    </v-btn>
+                    <v-toolbar-title>{{ meta.name }}</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-toolbar-items>
+                        <v-btn @click="createHandler()" dark flat>{{lang('save')}}</v-btn>
+                        <slot name="createToolbar"></slot>
+                    </v-toolbar-items>
+                </v-toolbar>
+                <v-card-text>
+                    <slot name="createContent"></slot>
+                    <activity-overlay v-model="activity.isCreating"/>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
+
+        <v-dialog
+            :overlay=false
+            fullscreen
+            scrollable
+            transition="dialog-bottom-transition"
+            v-model="dialog.update"
+        >
+            <v-card>
+                <v-toolbar class="primary" dark style="flex: 0 0 auto;">
+                    <v-btn @click.native="dialog.update = false" dark icon>
+                        <v-icon>$vuetify.icons.close</v-icon>
+                    </v-btn>
+                    <v-toolbar-title>{{ meta.name }}</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-toolbar-items>
+                        <v-btn @click="updateHandler()" dark flat>{{lang('save')}}</v-btn>
+                        <slot name="updateToolbar"></slot>
+                    </v-toolbar-items>
+                </v-toolbar>
+                <v-card-text>
+                    <slot name="updateContent"></slot>
+                    <activity-overlay v-model="activity.isUpdating"/>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
+
+        <v-snackbar
+            :color="snackbar.color"
+            :timeout="2000"
+            v-model="snackbar.active"
+        >
+            {{ snackbar.text }}
+            <v-btn @click.native="snackbar.active = false" dark flat>{{lang('close')}}</v-btn>
+        </v-snackbar>
+
+        <v-layout row wrap>
+            <v-fab-transition>
+                <v-speed-dial
+                    :open-on-hover="true"
+                    :right="true"
+                    :top="true"
+                    direction="bottom"
+                    transition="slide-y-reverse-transition"
+                    v-if="speedDailNotEmpty"
+                    v-model="fab"
+                >
+                    <v-btn color="accent" dark fab hover slot="activator" v-model="fab">
+                        <v-icon>$vuetify.icons.menu</v-icon>
+                        <v-icon>$vuetify.icons.close</v-icon>
+                    </v-btn>
+                    <v-tooltip left>
+                        <v-btn
+                            color="green"
+                            dark
+                            fab
+                            slot="activator"
+                            small
+                            v-if="canUpdate === true && selected.length === 1"
+                            v-on:click="openUpdateHandler()"
+                        >
+                            <v-icon>$vuetify.icons.edit</v-icon>
                         </v-btn>
-                        <v-toolbar-title>{{ meta.name }}</v-toolbar-title>
-                        <v-spacer></v-spacer>
-                        <v-toolbar-items>
-                            <v-btn dark flat @click="createHandler()">{{lang('save')}}</v-btn>
-                            <slot name="createToolbar"></slot>
-                        </v-toolbar-items>
-                    </v-toolbar>
-                    <v-card-text>
-                        <slot name="createContent"></slot>
-                        <activity-overlay v-model="activity.isCreating"/>
-                    </v-card-text>
-                </v-card>
-            </v-dialog>
+                        <span>{{ lang('update') }}</span>
+                    </v-tooltip>
 
-            <v-dialog
-                v-model="dialog.update"
-                fullscreen
-                transition="dialog-bottom-transition"
-                :overlay=false
-                scrollable
-            >
-                <v-card>
-                    <v-toolbar style="flex: 0 0 auto;" dark class="primary">
-                        <v-btn icon @click.native="dialog.update = false" dark>
-                            <v-icon>$vuetify.icons.close</v-icon>
+                    <v-tooltip left>
+                        <v-btn
+                            color="indigo"
+                            dark
+                            fab
+                            slot="activator"
+                            small
+                            v-if="canAdd === true"
+                            v-on:click="openCreateHandler()"
+                        >
+                            <v-icon>$vuetify.icons.add</v-icon>
                         </v-btn>
-                        <v-toolbar-title>{{ meta.name }}</v-toolbar-title>
-                        <v-spacer></v-spacer>
-                        <v-toolbar-items>
-                            <v-btn dark flat @click="updateHandler()">{{lang('save')}}</v-btn>
-                            <slot name="updateToolbar"></slot>
-                        </v-toolbar-items>
-                    </v-toolbar>
-                    <v-card-text>
-                        <slot name="updateContent"></slot>
-                        <activity-overlay v-model="activity.isUpdating"/>
-                    </v-card-text>
-                </v-card>
-            </v-dialog>
+                        <span>{{ lang('create') }}</span>
+                    </v-tooltip>
 
-            <v-snackbar
-                :timeout="2000"
-                :color="snackbar.color"
-                v-model="snackbar.active"
-            >
-                {{ snackbar.text }}
-                <v-btn dark flat @click.native="snackbar.active = false">{{lang('close')}}</v-btn>
-            </v-snackbar>
-
-            <v-layout row wrap>
-                <v-fab-transition>
-                    <v-speed-dial
-                        v-model="fab"
-                        :top="true"
-                        :right="true"
-                        :open-on-hover="true"
-                        direction="bottom"
-                        transition="slide-y-reverse-transition"
-                        v-if="speedDailNotEmpty"
-                    >
-                        <v-btn slot="activator" color="accent" dark fab hover v-model="fab">
-                            <v-icon>$vuetify.icons.menu</v-icon>
-                            <v-icon>$vuetify.icons.close</v-icon>
+                    <v-tooltip left>
+                        <v-btn
+                            color="red"
+                            dark
+                            fab
+                            slot="activator"
+                            small
+                            v-if="canDelete === true && selected.length >= 1"
+                            v-on:click="deleteHandler()"
+                        >
+                            <v-icon>$vuetify.icons.delete</v-icon>
                         </v-btn>
-                        <v-tooltip left>
-                            <v-btn
-                                fab
-                                dark
-                                small
-                                color="green"
-                                v-if="canUpdate === true && selected.length === 1"
-                                v-on:click="openUpdateHandler()"
-                                slot="activator"
-                            >
-                                <v-icon>$vuetify.icons.edit</v-icon>
-                            </v-btn>
-                            <span>{{ lang('update') }}</span>
-                        </v-tooltip>
-
-                        <v-tooltip left>
-                            <v-btn
-                                fab
-                                dark
-                                small
-                                color="indigo"
-                                v-on:click="openCreateHandler()"
-                                v-if="canAdd === true"
-                                slot="activator"
-                            >
-                                <v-icon>$vuetify.icons.add</v-icon>
-                            </v-btn>
-                            <span>{{ lang('create') }}</span>
-                        </v-tooltip>
-
-                        <v-tooltip left>
-                            <v-btn
-                                fab
-                                dark
-                                small
-                                color="red"
-                                v-if="canDelete === true && selected.length >= 1"
-                                v-on:click="deleteHandler()"
-                                slot="activator"
-                            >
-                                <v-icon>$vuetify.icons.delete</v-icon>
-                            </v-btn>
-                            <span>{{ lang('delete') }}</span>
-                        </v-tooltip>
-                        <slot name="speedDialAfter" :resources="selected"></slot>
-                    </v-speed-dial>
-                </v-fab-transition>
-                <v-flex>
-                    <v-layout row v-if="canSearch">
-                        <v-flex xs10 sm4>
-                            <v-text-field
-                                v-model="search"
-                                append-icon="search"
-                                :label="lang('search')"
-                                single-line
+                        <span>{{ lang('delete') }}</span>
+                    </v-tooltip>
+                    <slot :resources="selected" name="speedDialAfter"></slot>
+                </v-speed-dial>
+            </v-fab-transition>
+            <v-flex>
+                <v-layout row v-if="canSearch">
+                    <v-flex sm4 xs10>
+                        <v-text-field
+                            :label="lang('search')"
+                            :append-icon="$vuetify.icons.search"
+                            hide-details
+                            single-line
+                            v-model="search"
+                        ></v-text-field>
+                    </v-flex>
+                </v-layout>
+                <v-data-table
+                    :headers="headers"
+                    :items="items"
+                    :loading="loading"
+                    :pagination.sync="pagination"
+                    :rows-per-page-items="[10, 25, 100]"
+                    :rows-per-page-text="lang('rows-per-page-text')"
+                    :total-items="totalItems"
+                    class="elevation-1"
+                    item-key="id"
+                    :select-all="useCheckboxes"
+                    v-model="selected"
+                    v-on:input="onSelectedChange"
+                >
+                    <template slot="items" slot-scope="props">
+                        <td v-if="useCheckboxes">
+                            <v-checkbox
                                 hide-details
-                            ></v-text-field>
-                        </v-flex>
-                    </v-layout>
-                    <v-data-table
-                        :headers="headers"
-                        :items="items"
-                        :pagination.sync="pagination"
-                        v-model="selected"
-                        item-key="id"
-                        select-all
-                        :total-items="totalItems"
-                        :loading="loading"
-                        class="elevation-1"
-                        :rows-per-page-items="[10, 25, 100]"
-                        v-on:input="onSelectedChange"
-                        :rows-per-page-text="lang('rows-per-page-text')"
-                    >
-                        <template slot="items" slot-scope="props">
-                            <td>
-                                <v-checkbox
-                                    primary
-                                    hide-details
-                                    v-model="props.selected"
-                                ></v-checkbox>
-                            </td>
-                            <td v-for="item in tableContent">
-                                <component
-                                    v-if="typeof item.columnType === 'object'"
-                                    :is="item.columnType"
-                                    :content="props.item[item.value]"
-                                ></component>
-                                <span v-if="typeof item.columnType !== 'object'">{{ props.item[item.value] }}</span>
-                            </td>
-                            <td class="crud-actions">
-                                <v-tooltip left v-if="canUpdate === true">
-                                    <v-btn
-                                        flat
-                                        icon
-                                        color="green"
-                                        v-on:click="openUpdateHandler(props.item[resourceKeyName])"
-                                        slot="activator"
-                                    >
-                                        <v-icon>$vuetify.icons.edit</v-icon>
-                                    </v-btn>
-                                    <span>{{ lang('update') }}</span>
-                                </v-tooltip>
-                                <v-tooltip left v-if="canDelete === true">
-                                    <v-btn
-                                        flat
-                                        icon
-                                        color="red"
-                                        v-on:click="deleteHandler([props.item[resourceKeyName]])"
-                                        slot="activator"
-                                    >
-                                        <v-icon>$vuetify.icons.delete</v-icon>
-                                    </v-btn>
-                                    <span>{{ lang('delete') }}</span>
-                                </v-tooltip>
-                                <slot name="crudActionsAfter" :resource="props.item"></slot>
-                            </td>
-                        </template>
-                        <template slot="pageText" slot-scope="{ pageStart, pageStop }">
-                            {{lang('from')}} {{ pageStart }} {{lang('till')}} {{ pageStop }}
-                        </template>
-                        <template slot="no-data">
+                                primary
+                                v-model="props.selected"
+                            ></v-checkbox>
+                        </td>
+                        <td v-for="item in tableContent">
+                            <component
+                                :content="props.item[item.value]"
+                                :is="item.columnType"
+                                v-if="typeof item.columnType === 'object'"
+                            ></component>
+                            <span v-if="typeof item.columnType !== 'object'">{{ props.item[item.value] }}</span>
+                        </td>
+                        <td class="crud-actions">
+                            <v-tooltip left v-if="canUpdate === true">
+                                <v-btn
+                                    color="green"
+                                    flat
+                                    icon
+                                    slot="activator"
+                                    v-on:click="openUpdateHandler(props.item[resourceKeyName])"
+                                >
+                                    <v-icon>$vuetify.icons.edit</v-icon>
+                                </v-btn>
+                                <span>{{ lang('update') }}</span>
+                            </v-tooltip>
+                            <v-tooltip left v-if="canDelete === true">
+                                <v-btn
+                                    color="red"
+                                    flat
+                                    icon
+                                    slot="activator"
+                                    v-on:click="deleteHandler([props.item[resourceKeyName]])"
+                                >
+                                    <v-icon>$vuetify.icons.delete</v-icon>
+                                </v-btn>
+                                <span>{{ lang('delete') }}</span>
+                            </v-tooltip>
+                            <slot :resource="props.item" name="crudActionsAfter"></slot>
+                        </td>
+                    </template>
+                    <template slot="pageText" slot-scope="{ pageStart, pageStop }">
+                        {{lang('from')}} {{ pageStart }} {{lang('till')}} {{ pageStop }}
+                    </template>
+                    <template slot="no-data">
+                        <template v-if="!loading">
                             {{lang('no-data')}}
                         </template>
-                        <template slot="no-results">
-                            {{lang('no-results')}}
+                        <template v-else>
+                            {{lang('loading')}}
                         </template>
-                    </v-data-table>
-                </v-flex>
-            </v-layout>
-        </v-container>
+                    </template>
+                    <template slot="no-results">
+                        {{lang('no-results')}}
+                    </template>
+                </v-data-table>
+            </v-flex>
+        </v-layout>
     </div>
 </template>
 
@@ -393,6 +396,7 @@
             canAdd: {required: false, type: Boolean, default: true},
             canDelete: {required: false, type: Boolean, default: true},
             canSearch: {required: false, type: Boolean, default: false},
+            useCheckboxes: {required: false, type: Boolean, default: true},
             showSpeedDail: {required: false, type: Boolean},
 
             /**
@@ -766,14 +770,14 @@
     {
         position: absolute;
         top:      0px;
-        right:    35px;
+        right:    5px;
         z-index:  2;
     }
 
     .vuetify-resource.with-search .v-speed-dial
     {
-        top:   55px;
-        right: 35px;
+        top:   15px;
+        right: 5px;
     }
 
     @media only screen and (max-width: 599px)
