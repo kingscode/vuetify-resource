@@ -1,8 +1,10 @@
-import Vue from 'vue'
-import VuetifyResource from './VuetifyResource.vue'
+import VuetifyResourceComponent from './VuetifyResource.vue';
 
-export default {
+const VuetifyResource = {
     install(Vue, options) {
-        Vue.component('vuetify-resource', VuetifyResource)
-    }
-}
+        Vue.component('vuetify-resource', VuetifyResourceComponent);
+
+    },
+};
+
+export default VuetifyResource;

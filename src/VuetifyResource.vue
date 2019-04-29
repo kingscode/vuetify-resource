@@ -127,8 +127,8 @@
                 <v-layout row v-if="canSearch">
                     <v-flex mb-3 sm4 xs10>
                         <v-text-field
-                            :label="lang('search')"
                             :append-icon="$vuetify.icons.search"
+                            :label="lang('search')"
                             hide-details
                             single-line
                             v-model="search"
@@ -142,10 +142,10 @@
                     :pagination.sync="pagination"
                     :rows-per-page-items="[10, 25, 100]"
                     :rows-per-page-text="lang('rows-per-page-text')"
+                    :select-all="useCheckboxes"
                     :total-items="totalItems"
                     class="elevation-1"
                     item-key="id"
-                    :select-all="useCheckboxes"
                     v-model="selected"
                     v-on:input="onSelectedChange"
                 >
@@ -644,7 +644,9 @@
              * @param key
              */
             setIndentificationKey(key) {
-                window.location.hash = '#' + key;
+                if (this.useResourceKeyInUrl) {
+                    window.location.hash = '#' + key;
+                }
             },
 
             /**
@@ -713,7 +715,7 @@
              * and then open the update dialog
              */
             handleUrlChange() {
-                if (this.getIndentificationKey() !== '') {
+                if (this.useResourceKeyInUrl && this.getIndentificationKey() !== '') {
                     this.getItemByIdentificationKey(this.getIndentificationKey(), (item) => {
                         if (item === false) {
                             this.showSnackbar('Het is niet gelukt om een item te vinden.', 'error');
