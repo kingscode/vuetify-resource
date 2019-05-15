@@ -764,7 +764,8 @@
 
     td.crud-actions
     {
-        float:       right;
+        display: flex;
+        float: right;
         padding-top: 0 !important;
     }
 
