@@ -820,7 +820,7 @@
             display: none;
         }
 
-        .vuetify-resource td:first-child, .vuetify-resource td:nth-child(2)
+        .vuetify-resource td:first-child, .vuetify-resource td:nth-child(2), .vuetify-resource td.crud-actions
         {
             display: table-cell;
         }
