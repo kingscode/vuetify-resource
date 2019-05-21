@@ -1,6 +1,6 @@
 {
     "name": "@kingscode/vuetify-resource",
-    "version": "0.6.2",
+    "version": "0.6.3",
     "description": "An easy way to create a resource list with the vuetify data table with default create  update and delete dialogs/actions and potential your own actions",
     "repository": {
         "type": "git",
