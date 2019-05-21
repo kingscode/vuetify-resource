@@ -677,9 +677,7 @@
                         callback(data.item);
                     })
                     .catch((e) => {
-                        if (process.env.NODE_ENV === 'development') {
-                            console.error(e);
-                        }
+                        console.error(e);
                     });
             },
 
