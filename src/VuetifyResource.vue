@@ -481,9 +481,7 @@
                     })
 
                     .catch((e) => {
-                        if (process.env.NODE_ENV === 'development') {
-                            console.error(e);
-                        }
+                        console.error(e);
                         this.activity.isCreating = false;
                         this.showSnackbar('Er ging iets mis met het ophalen van de data', 'error');
 
@@ -519,9 +517,7 @@
                         })
 
                         .catch((e) => {
-                            if (process.env.NODE_ENV === 'development') {
-                                console.error(e);
-                            }
+                            console.error(e);
                             this.activity.isCreating = false;
                             this.showSnackbar(this.lang('snackbar-save-error'), 'error');
 
@@ -572,9 +568,7 @@
                             this.getDataHandler();
                         })
                         .catch((e) => {
-                            if (process.env.NODE_ENV === 'development') {
-                                console.error(e);
-                            }
+                            console.error(e);
                             this.activity.isUpdating = false;
                             this.showSnackbar(this.lang('snackbar-save-error'), 'error');
 
@@ -601,9 +595,7 @@
                             this.getDataHandler();
                         })
                         .catch((e) => {
-                            if (process.env.NODE_ENV === 'development') {
-                                console.error(e);
-                            }
+                            console.error(e);
                             this.activity.isDeleting = false;
                             this.showSnackbar(this.lang('snackbar-delete-error'), 'error');
 
@@ -759,8 +751,8 @@
 
     td.crud-actions
     {
-        display: flex;
-        float: right;
+        display:     flex;
+        float:       right;
         padding-top: 0 !important;
     }
 
