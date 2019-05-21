@@ -757,11 +757,6 @@
         position: relative;
     }
 
-    .vuetify-resource th:first-child
-    {
-        width: 40px;
-    }
-
     td.crud-actions
     {
         display: flex;
