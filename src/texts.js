@@ -6,6 +6,7 @@ export default {
     create: 'Create',
     update: 'Update',
     delete: 'Delete',
+    cancel: 'Cancel',
     'no-data': 'There is nothing found',
     'no-results': 'There is nothing found for this filter',
     'rows-per-page-text': 'Rows per page',
@@ -15,5 +16,7 @@ export default {
     'snackbar-deleted': 'It\'s successfully deleted!',
     'snackbar-delete-error': 'Something went wrong, please try again later',
     'search': 'Search',
-    'loading': 'Loading..'
+    'loading': 'Loading..',
+    'delete-confirmation-title': 'Are you sure?',
+    'delete-confirmation-content': 'Are you sure you want to delete these item(s)?',
 };
