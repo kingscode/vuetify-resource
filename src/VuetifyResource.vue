@@ -114,7 +114,7 @@
                             slot="activator"
                             small
                             v-if="canDeleteResources(selected) && selected.length >= 1"
-                            v-on:click="deleteHandler()"
+                            v-on:click="showDeleteConfirmation()"
                         >
                             <v-icon>$vuetify.icons.delete</v-icon>
                         </v-btn>
@@ -160,10 +160,10 @@
                         <td v-for="item in tableContent">
                             <component
                                 :content="props.item[item.value]"
-                                :is="item.columnType"
-                                v-if="typeof item.columnType === 'object'"
+                                :is="getColumnType(item.columnType)"
+                                :item="props.item"
+                                :table-column="item"
                             ></component>
-                            <span v-if="typeof item.columnType !== 'object'">{{ props.item[item.value] }}</span>
                         </td>
                         <td class="crud-actions">
                             <v-tooltip left v-if="canUpdateResources([props.item])">
@@ -184,7 +184,7 @@
                                     flat
                                     icon
                                     slot="activator"
-                                    v-on:click="deleteHandler([props.item[resourceKeyName]])"
+                                    @click="showDeleteConfirmation([props.item[resourceKeyName]])"
                                 >
                                     <v-icon>$vuetify.icons.delete</v-icon>
                                 </v-btn>
@@ -210,16 +210,22 @@
                 </v-data-table>
             </v-flex>
         </v-layout>
+        <delete-confirmation :texts="texts" ref="deleteConfirmation" :callback="deleteHandler"></delete-confirmation>
     </div>
 </template>
 
 <script>
-    import texts from './texts.js';
     import ActivityOverlay from './components/ActivityOverlay.vue';
+    import Text from './columnTypes/Text.vue';
+    import Checkbox from './columnTypes/Checkbox.vue';
+    import DeleteConfirmation from './components/DeleteConfirmation.vue';
+    import Language from './mixins/Language.js';
+
 
     export default {
         name: 'vuetify-resource',
-        components: {ActivityOverlay},
+        components: {DeleteConfirmation, ActivityOverlay},
+        mixins: [Language],
         data() {
             return {
                 fab: false,
@@ -388,7 +394,7 @@
              *                  align:      string
              *                  sortable:   coolean
              *                  value:      string
-             *                  columnType: object/component
+             *                  columnType: object/component or string
              *              }
              */
             tableContent: {required: true, type: Array},
@@ -577,7 +583,13 @@
                         });
                 }
             },
-
+            showDeleteConfirmation(ids) {
+                if (typeof ids === 'undefined') {
+                    ids = this.selected.map(item => item[this.resourceKeyName]);
+                }
+                this.$refs.deleteConfirmation.ids = ids;
+                this.$refs.deleteConfirmation.dialog = true;
+            },
             /**
              * deleteHandler
              * Handles the delete action and calls the deleteCallback and handles the promise
@@ -585,9 +597,6 @@
              * @return void
              */
             deleteHandler(ids) {
-                if (typeof ids === 'undefined') {
-                    ids = this.selected.map(item => item[this.resourceKeyName]);
-                }
                 if (!this.activity.isDeleting) {
                     this.activity.isDeleting = true;
                     this.deleteCallback(ids)
@@ -725,20 +734,27 @@
                 }
             },
 
+            getColumnType(columnType) {
+                if (typeof columnType === 'object') {
+                    return columnType;
+                } else if(typeof columnType === 'string') {
+                    switch (columnType.toLowerCase()) {
+                        case 'checkbox':
+                            return Checkbox;
+                        default:
+                        case 'text':
+                            return Text;
+                    }
+                }
+                return Text;
+            },
+
             /**
              * onSelectedChange
              * When the selected in the vuetify table changes, emit the v-model
              */
             onSelectedChange() {
                 this.$emit('input', this.selected);
-            },
-
-            lang(t) {
-                if (typeof this.texts === 'undefined' || typeof this.texts[t] === 'undefined') {
-                    return texts[t];
-                } else {
-                    return this.texts[t];
-                }
             },
 
             canDeleteResources(selected) {
@@ -765,7 +781,6 @@
                     });
                 }
                 return canUpdate;
-
             },
         },
     };
