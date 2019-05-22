@@ -161,6 +161,8 @@
                             <component
                                 :content="props.item[item.value]"
                                 :is="getColumnType(item.columnType)"
+                                :item="props.item"
+                                :table-column="item"
                             ></component>
                         </td>
                         <td class="crud-actions">
