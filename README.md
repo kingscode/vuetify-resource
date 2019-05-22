@@ -178,10 +178,16 @@ example for crudActionsAfter slot:
 canUpdate: {required: false, type: Boolean, default: true},
 ```
 ```
+canUpdateResourceKey: {required: false, type: String, default: ''},
+```
+```
 canAdd: {required: false, type: Boolean, default: true},
 ```
 ```
 canDelete: {required: false, type: Boolean, default: true},
+```
+```
+canDeleteResourceKey: {required: false, type: String, default: ''},
 ```
 ```
 canSearch: {required: false, type: Boolean, default: false},
