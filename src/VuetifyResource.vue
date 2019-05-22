@@ -812,6 +812,10 @@
         right: 5px;
     }
 
+    .vuetify-resource th:first-child:not(.column) {
+         width: 40px;
+     }
+
     @media only screen and (max-width: 599px)
     {
         .vuetify-resource.with-search .v-speed-dial
