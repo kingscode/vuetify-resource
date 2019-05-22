@@ -5,8 +5,8 @@
             <v-card-text>{{lang('delete-confirmation-content')}}</v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="green darken-1" flat @click="dialog = false">{{lang('cancel')}}</v-btn>
-                <v-btn color="green darken-1" flat @click="handleDelete">{{lang('delete')}}</v-btn>
+                <v-btn color="grey" flat @click="dialog = false">{{lang('cancel')}}</v-btn>
+                <v-btn color="priamry darken-1" flat @click="handleDelete">{{lang('delete')}}</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
