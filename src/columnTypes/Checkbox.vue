@@ -1,6 +1,6 @@
 <template>
     <div class="column type-checkbox">
-        <i class="material-icons icon icon--selection-control icon--checkbox">{{isTrue() ? 'check_circle' : ''}}</i>
+        <v-icon>{{isTrue() ? $vuetify.icons.checkboxOn : ''}}</v-icon>
     </div>
 </template>
 
