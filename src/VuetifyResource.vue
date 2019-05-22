@@ -160,10 +160,10 @@
                         <td v-for="item in tableContent">
                             <component
                                 :content="props.item[item.value]"
-                                :is="item.columnType"
-                                v-if="typeof item.columnType === 'object'"
+                                :is="getColumnType(item.columnType)"
+                                :item="props.item"
+                                :table-column="item"
                             ></component>
-                            <span v-if="typeof item.columnType !== 'object'">{{ props.item[item.value] }}</span>
                         </td>
                         <td class="crud-actions">
                             <v-tooltip left v-if="canUpdate === true">
@@ -216,8 +216,11 @@
 
 <script>
     import ActivityOverlay from './components/ActivityOverlay.vue';
+    import Text from './columnTypes/Text.vue';
+    import Checkbox from './columnTypes/Checkbox.vue';
     import DeleteConfirmation from './components/DeleteConfirmation.vue';
     import Language from './mixins/Language.js';
+
 
     export default {
         name: 'vuetify-resource',
@@ -391,7 +394,7 @@
              *                  align:      string
              *                  sortable:   coolean
              *                  value:      string
-             *                  columnType: object/component
+             *                  columnType: object/component or string
              *              }
              */
             tableContent: {required: true, type: Array},
@@ -727,6 +730,21 @@
                         }
                     });
                 }
+            },
+
+            getColumnType(columnType) {
+                if (typeof columnType === 'object') {
+                    return columnType;
+                } else if(typeof columnType === 'string') {
+                    switch (columnType.toLowerCase()) {
+                        case 'checkbox':
+                            return Checkbox;
+                        default:
+                        case 'text':
+                            return Text;
+                    }
+                }
+                return Text;
             },
 
             /**
