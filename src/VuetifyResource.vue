@@ -83,7 +83,7 @@
                             fab
                             slot="activator"
                             small
-                            v-if="canUpdate === true && selected.length === 1"
+                            v-if="canUpdateResources(selected) && selected.length === 1"
                             v-on:click="openUpdateHandler()"
                         >
                             <v-icon>$vuetify.icons.edit</v-icon>
@@ -113,7 +113,7 @@
                             fab
                             slot="activator"
                             small
-                            v-if="canDelete === true && selected.length >= 1"
+                            v-if="canDeleteResources(selected) && selected.length >= 1"
                             v-on:click="deleteHandler()"
                         >
                             <v-icon>$vuetify.icons.delete</v-icon>
@@ -166,7 +166,7 @@
                             <span v-if="typeof item.columnType !== 'object'">{{ props.item[item.value] }}</span>
                         </td>
                         <td class="crud-actions">
-                            <v-tooltip left v-if="canUpdate === true">
+                            <v-tooltip left v-if="canUpdateResources([props.item])">
                                 <v-btn
                                     color="green"
                                     flat
@@ -178,7 +178,7 @@
                                 </v-btn>
                                 <span>{{ lang('update') }}</span>
                             </v-tooltip>
-                            <v-tooltip left v-if="canDelete === true">
+                            <v-tooltip left v-if="canDeleteResources([props.item])">
                                 <v-btn
                                     color="red"
                                     flat
@@ -393,8 +393,10 @@
              */
             tableContent: {required: true, type: Array},
             canUpdate: {required: false, type: Boolean, default: true},
+            canUpdateResourceKey: {required: false, type: String, default: ''},
             canAdd: {required: false, type: Boolean, default: true},
             canDelete: {required: false, type: Boolean, default: true},
+            canDeleteResourceKey: {required: false, type: String, default: ''},
             canSearch: {required: false, type: Boolean, default: false},
             useCheckboxes: {required: false, type: Boolean, default: true},
             showSpeedDail: {required: false, type: Boolean},
@@ -737,6 +739,33 @@
                 } else {
                     return this.texts[t];
                 }
+            },
+
+            canDeleteResources(selected) {
+                let canDelete = this.canDelete;
+                if (this.canDeleteResourceKey !== '') {
+                    selected.forEach((resource) => {
+                        if (resource[this.canDeleteResourceKey] === false) {
+                            canDelete = false;
+                            return;
+                        }
+                    });
+                }
+                return canDelete;
+            },
+
+            canUpdateResources(selected) {
+                let canUpdate = this.canUpdate;
+                if (this.canUpdateResourceKey !== '') {
+                    selected.forEach((resource) => {
+                        if (resource[this.canUpdateResourceKey] === false) {
+                            canUpdate = false;
+                            return;
+                        }
+                    });
+                }
+                return canUpdate;
+
             },
         },
     };
