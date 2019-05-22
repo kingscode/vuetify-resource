@@ -114,7 +114,7 @@
                             slot="activator"
                             small
                             v-if="canDelete === true && selected.length >= 1"
-                            v-on:click="deleteHandler()"
+                            v-on:click="showDeleteConfirmation()"
                         >
                             <v-icon>$vuetify.icons.delete</v-icon>
                         </v-btn>
@@ -184,7 +184,7 @@
                                     flat
                                     icon
                                     slot="activator"
-                                    v-on:click="deleteHandler([props.item[resourceKeyName]])"
+                                    @click="showDeleteConfirmation([props.item[resourceKeyName]])"
                                 >
                                     <v-icon>$vuetify.icons.delete</v-icon>
                                 </v-btn>
@@ -210,18 +210,22 @@
                 </v-data-table>
             </v-flex>
         </v-layout>
+        <delete-confirmation :texts="texts" ref="deleteConfirmation" :callback="deleteHandler"></delete-confirmation>
     </div>
 </template>
 
 <script>
-    import texts from './texts.js';
     import ActivityOverlay from './components/ActivityOverlay.vue';
     import Text from './columnTypes/Text.vue';
     import Checkbox from './columnTypes/Checkbox.vue';
+    import DeleteConfirmation from './components/DeleteConfirmation.vue';
+    import Language from './mixins/Language.js';
+
 
     export default {
         name: 'vuetify-resource',
-        components: {ActivityOverlay},
+        components: {DeleteConfirmation, ActivityOverlay},
+        mixins: [Language],
         data() {
             return {
                 fab: false,
@@ -577,7 +581,13 @@
                         });
                 }
             },
-
+            showDeleteConfirmation(ids) {
+                if (typeof ids === 'undefined') {
+                    ids = this.selected.map(item => item[this.resourceKeyName]);
+                }
+                this.$refs.deleteConfirmation.ids = ids;
+                this.$refs.deleteConfirmation.dialog = true;
+            },
             /**
              * deleteHandler
              * Handles the delete action and calls the deleteCallback and handles the promise
@@ -585,9 +595,6 @@
              * @return void
              */
             deleteHandler(ids) {
-                if (typeof ids === 'undefined') {
-                    ids = this.selected.map(item => item[this.resourceKeyName]);
-                }
                 if (!this.activity.isDeleting) {
                     this.activity.isDeleting = true;
                     this.deleteCallback(ids)
@@ -746,15 +753,7 @@
              */
             onSelectedChange() {
                 this.$emit('input', this.selected);
-            },
-
-            lang(t) {
-                if (typeof this.texts === 'undefined' || typeof this.texts[t] === 'undefined') {
-                    return texts[t];
-                } else {
-                    return this.texts[t];
-                }
-            },
+            }
         },
     };
 </script>
