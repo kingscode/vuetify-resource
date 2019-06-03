@@ -784,10 +784,10 @@
             },
 
             cancelUpdate(){
-                this.dialog.update = false;
-
                 //Setting route without hash
                 this.$router.push({ name: this.$route.name, params:  this.$route.params });
+
+                this.dialog.update = false;
             }
         },
     };
