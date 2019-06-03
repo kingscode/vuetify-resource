@@ -35,7 +35,7 @@
         >
             <v-card>
                 <v-toolbar class="primary" dark style="flex: 0 0 auto;">
-                    <v-btn @click.native="dialog.update = false" dark icon>
+                    <v-btn @click.native="cancelUpdate" dark icon>
                         <v-icon>$vuetify.icons.close</v-icon>
                     </v-btn>
                     <v-toolbar-title>{{ meta.name }}</v-toolbar-title>
@@ -782,6 +782,13 @@
                 }
                 return canUpdate;
             },
+
+            cancelUpdate(){
+                this.dialog.update = false;
+
+                //Setting route without hash
+                this.$router.push({ name: this.$route.name, params:  this.$route.params });
+            }
         },
     };
 </script>
