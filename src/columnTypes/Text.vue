@@ -4,7 +4,7 @@
             <template v-slot:activator="{ on }">
                 <span v-on="on">{{ content }}</span>
             </template>
-            <span>{{item[tableColumn.tooltip]}}</span>
+            <span v-html="item[tableColumn.tooltip]"></span>
         </v-tooltip>
 
         <span v-else>{{ content }}</span>
