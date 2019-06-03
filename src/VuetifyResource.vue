@@ -784,8 +784,7 @@
             },
 
             cancelUpdate(){
-                //Setting route without hash
-                this.$router.push({ name: this.$route.name, params:  this.$route.params });
+                history.pushState("", document.title, window.location.pathname + window.location.search);
 
                 this.dialog.update = false;
             }
