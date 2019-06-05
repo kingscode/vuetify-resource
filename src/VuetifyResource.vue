@@ -799,7 +799,7 @@
 
     td.crud-actions
     {
-        display:     flex;
+        display:     flex !important;
         float:       right;
         padding-top: 0 !important;
     }
@@ -859,7 +859,7 @@
             display: none;
         }
 
-        .vuetify-resource td:first-child, .vuetify-resource td:nth-child(2), .vuetify-resource td.crud-actions
+        .vuetify-resource td:first-child, .vuetify-resource td:nth-child(2)
         {
             display: table-cell;
         }
