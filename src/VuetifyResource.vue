@@ -221,7 +221,6 @@
     import DeleteConfirmation from './components/DeleteConfirmation.vue';
     import Language from './mixins/Language.js';
 
-
     export default {
         name: 'vuetify-resource',
         components: {DeleteConfirmation, ActivityOverlay},
@@ -737,7 +736,7 @@
             getColumnType(columnType) {
                 if (typeof columnType === 'object') {
                     return columnType;
-                } else if(typeof columnType === 'string') {
+                } else if (typeof columnType === 'string') {
                     switch (columnType.toLowerCase()) {
                         case 'checkbox':
                             return Checkbox;
@@ -783,11 +782,11 @@
                 return canUpdate;
             },
 
-            cancelUpdate(){
-                history.pushState("", document.title, window.location.pathname + window.location.search);
+            cancelUpdate() {
+                history.pushState('', document.title, window.location.pathname + window.location.search);
 
                 this.dialog.update = false;
-            }
+            },
         },
     };
 </script>
@@ -795,13 +794,6 @@
     .vuetify-resource
     {
         position: relative;
-    }
-
-    td.crud-actions
-    {
-        display:     flex;
-        float:       right;
-        padding-top: 0 !important;
     }
 
     .vuetify-resource .v-speed-dial
@@ -818,9 +810,10 @@
         right: 5px;
     }
 
-    .vuetify-resource th:first-child:not(.column) {
-         width: 40px;
-     }
+    .vuetify-resource th:first-child:not(.column)
+    {
+        width: 40px;
+    }
 
     @media only screen and (max-width: 599px)
     {
@@ -859,9 +852,17 @@
             display: none;
         }
 
-        .vuetify-resource td:first-child, .vuetify-resource td:nth-child(2), .vuetify-resource td.crud-actions
+        .vuetify-resource td:first-child, .vuetify-resource td:nth-child(2)
         {
             display: table-cell;
         }
+
+        td.crud-actions
+        {
+            display:     flex;
+            float:       right;
+            padding-top: 0 !important;
+        }
+
     }
 </style>
