@@ -815,6 +815,13 @@
         width: 40px;
     }
 
+    td.crud-actions
+    {
+        display:     flex;
+        float:       right;
+        padding-top: 0 !important;
+    }
+
     @media only screen and (max-width: 599px)
     {
         .vuetify-resource.with-search .v-speed-dial
@@ -847,7 +854,7 @@
             display: table-cell;
         }
 
-        .vuetify-resource td
+        .vuetify-resource td:not(.crud-actions)
         {
             display: none;
         }
@@ -856,13 +863,5 @@
         {
             display: table-cell;
         }
-
-        td.crud-actions
-        {
-            display:     flex;
-            float:       right;
-            padding-top: 0 !important;
-        }
-
     }
 </style>
