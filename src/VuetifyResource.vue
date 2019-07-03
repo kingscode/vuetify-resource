@@ -193,8 +193,8 @@
                             <slot :resource="props.item" name="crudActionsAfter"></slot>
                         </td>
                     </template>
-                    <template slot="pageText" slot-scope="{ pageStart, pageStop }">
-                        {{lang('from')}} {{ pageStart }} {{lang('till')}} {{ pageStop }}
+                    <template slot="pageText" slot-scope="{ pageStart, pageStop, itemsLength }">
+                        {{lang('from')}} {{ pageStart }} {{lang('till')}} {{ pageStop }} {{lang('of')}} {{itemsLength}}
                     </template>
                     <template slot="no-data">
                         <template v-if="!loading">

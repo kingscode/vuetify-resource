@@ -3,6 +3,7 @@ export default {
     close: 'Close',
     from: 'from',
     till: 'till',
+    of: 'of',
     create: 'Create',
     update: 'Update',
     delete: 'Delete',
