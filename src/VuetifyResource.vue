@@ -150,48 +150,50 @@
                     v-on:input="onSelectedChange"
                 >
                     <template slot="items" slot-scope="props">
-                        <td v-if="useCheckboxes">
-                            <v-checkbox
-                                hide-details
-                                primary
-                                v-model="props.selected"
-                            ></v-checkbox>
-                        </td>
-                        <td v-for="item in tableContent">
-                            <component
-                                :content="props.item[item.value]"
-                                :is="getColumnType(item.columnType)"
-                                :item="props.item"
-                                :table-column="item"
-                            ></component>
-                        </td>
-                        <td class="crud-actions">
-                            <v-tooltip left v-if="canUpdateResources([props.item])">
-                                <v-btn
-                                    color="green"
-                                    flat
-                                    icon
-                                    slot="activator"
-                                    v-on:click="openUpdateHandler(props.item[resourceKeyName])"
-                                >
-                                    <v-icon>$vuetify.icons.edit</v-icon>
-                                </v-btn>
-                                <span>{{ lang('update') }}</span>
-                            </v-tooltip>
-                            <v-tooltip left v-if="canDeleteResources([props.item])">
-                                <v-btn
-                                    color="red"
-                                    flat
-                                    icon
-                                    slot="activator"
-                                    @click="showDeleteConfirmation([props.item[resourceKeyName]])"
-                                >
-                                    <v-icon>$vuetify.icons.delete</v-icon>
-                                </v-btn>
-                                <span>{{ lang('delete') }}</span>
-                            </v-tooltip>
-                            <slot :resource="props.item" name="crudActionsAfter"></slot>
-                        </td>
+                        <tr @click="handleRowClick(props.item[resourceKeyName])">
+                            <td v-if="useCheckboxes">
+                                <v-checkbox
+                                    hide-details
+                                    primary
+                                    v-model="props.selected"
+                                ></v-checkbox>
+                            </td>
+                            <td v-for="item in tableContent">
+                                <component
+                                    :content="props.item[item.value]"
+                                    :is="getColumnType(item.columnType)"
+                                    :item="props.item"
+                                    :table-column="item"
+                                ></component>
+                            </td>
+                            <td class="crud-actions">
+                                <v-tooltip left v-if="canUpdateResources([props.item])">
+                                    <v-btn
+                                        color="green"
+                                        flat
+                                        icon
+                                        slot="activator"
+                                        v-on:click="openUpdateHandler(props.item[resourceKeyName])"
+                                    >
+                                        <v-icon>$vuetify.icons.edit</v-icon>
+                                    </v-btn>
+                                    <span>{{ lang('update') }}</span>
+                                </v-tooltip>
+                                <v-tooltip left v-if="canDeleteResources([props.item])">
+                                    <v-btn
+                                        color="red"
+                                        flat
+                                        icon
+                                        slot="activator"
+                                        @click="showDeleteConfirmation([props.item[resourceKeyName]])"
+                                    >
+                                        <v-icon>$vuetify.icons.delete</v-icon>
+                                    </v-btn>
+                                    <span>{{ lang('delete') }}</span>
+                                </v-tooltip>
+                                <slot :resource="props.item" name="crudActionsAfter"></slot>
+                            </td>
+                        </tr>
                     </template>
                     <template slot="pageText" slot-scope="{ pageStart, pageStop }">
                         {{lang('from')}} {{ pageStart }} {{lang('till')}} {{ pageStop }}
@@ -787,6 +789,10 @@
 
                 this.dialog.update = false;
             },
+
+            handleRowClick(ResourceKey) {
+                this.$emit('row-click', ResourceKey);
+            }
         },
     };
 </script>
