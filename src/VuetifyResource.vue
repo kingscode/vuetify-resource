@@ -150,7 +150,7 @@
                     v-on:input="onSelectedChange"
                 >
                     <template slot="items" slot-scope="props">
-                        <tr @click="handleRowClick(props.item[resourceKeyName])">
+                        <tr @click.self="handleRowClick(props.item[resourceKeyName])">
                             <td v-if="useCheckboxes">
                                 <v-checkbox
                                     hide-details
