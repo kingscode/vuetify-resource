@@ -7,7 +7,7 @@
             transition="dialog-bottom-transition"
             v-model="dialog.create"
         >
-            <v-card>
+            <v-card v-if="dialog.create">
                 <v-toolbar class="primary" dark style="flex: 0 0 auto;">
                     <v-btn @click.native="dialog.create = false" dark icon>
                         <v-icon>$vuetify.icons.close</v-icon>
@@ -33,7 +33,7 @@
             transition="dialog-bottom-transition"
             v-model="dialog.update"
         >
-            <v-card>
+            <v-card v-if="dialog.update">
                 <v-toolbar class="primary" dark style="flex: 0 0 auto;">
                     <v-btn @click.native="cancelUpdate" dark icon>
                         <v-icon>$vuetify.icons.close</v-icon>
