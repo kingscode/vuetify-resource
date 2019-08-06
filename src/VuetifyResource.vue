@@ -492,7 +492,7 @@
                     .catch((e) => {
                         console.error(e);
                         this.activity.isCreating = false;
-                        this.showSnackbar('Er ging iets mis met het ophalen van de data', 'error');
+                        this.showSnackbar(this.lang('snackbar-get-error'), 'error');
 
                     });
             },
