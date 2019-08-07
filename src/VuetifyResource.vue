@@ -191,6 +191,15 @@
                                     </v-btn>
                                     <span>{{ lang('delete') }}</span>
                                 </v-tooltip>
+                                <v-btn
+                                    flat
+                                    icon
+                                    v-else
+                                    disabled
+                                >
+                                    <v-icon></v-icon>
+                                </v-btn>
+
                                 <slot :resource="props.item" name="crudActionsAfter"></slot>
                             </td>
                         </tr>
@@ -792,7 +801,7 @@
 
             handleRowClick(ResourceKey) {
                 this.$emit('row-click', ResourceKey);
-            }
+            },
         },
     };
 </script>
