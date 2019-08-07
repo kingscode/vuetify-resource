@@ -175,8 +175,8 @@ example for crudActionsAfter slot:
 
 ```
 /**
- * rowsPerPageItems
- * Multiple row selecting per page
+ * rowsPerPageOptions
+ * The rows per page option selection
  *
  * @return array
  */
@@ -184,8 +184,8 @@ example for crudActionsAfter slot:
 
 ```
 /**
- * defaultRowsPerPage
- * The number of how many rows their will been showed at start
+ * rowsPerPage
+ * The number of rows
  *
  * @return string
  */
