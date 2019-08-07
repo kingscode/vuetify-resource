@@ -140,7 +140,7 @@
                     :items="items"
                     :loading="loading"
                     :pagination.sync="pagination"
-                    :rows-per-page-items="rowsPerPageOptions"
+                    :rows-per-page-items="rowsPerPageItems"
                     :rows-per-page-text="lang('rows-per-page-text')"
                     :select-all="useCheckboxes"
                     :total-items="totalItems"
@@ -440,12 +440,12 @@
             },
 
             /**
-             * rowsPerPageOptions
+             * rowsPerPageItems
              * The rows per page option selection
              *
              * @return array
              */
-            rowsPerPageOptions: {
+            rowsPerPageItems: {
                 required: false,
                 type: Array,
                 default: () => {

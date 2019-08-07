@@ -175,7 +175,7 @@ example for crudActionsAfter slot:
 
 ```
 /**
- * rowsPerPageOptions
+ * rowsPerPageItems
  * The rows per page option selection
  *
  * @return array
