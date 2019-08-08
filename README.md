@@ -173,6 +173,24 @@ example for crudActionsAfter slot:
  */
 ```
 
+```
+/**
+ * rowsPerPageItems
+ * The rows per page option selection
+ *
+ * @return array
+ */
+```
+
+```
+/**
+ * rowsPerPage
+ * The number of rows
+ *
+ * @return string
+ */
+```
+
 
 ```
 canUpdate: {required: false, type: Boolean, default: true},

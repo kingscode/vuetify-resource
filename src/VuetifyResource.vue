@@ -140,7 +140,7 @@
                     :items="items"
                     :loading="loading"
                     :pagination.sync="pagination"
-                    :rows-per-page-items="[10, 25, 100]"
+                    :rows-per-page-items="rowsPerPageItems"
                     :rows-per-page-text="lang('rows-per-page-text')"
                     :select-all="useCheckboxes"
                     :total-items="totalItems"
@@ -234,7 +234,9 @@
                 totalItems: 0,
                 items: [],
                 loading: true,
-                pagination: {},
+                pagination: {
+                    rowsPerPage: this.rowsPerPage || 10,
+                },
                 selected: [],
                 headers: [],
                 dialog: {
@@ -435,6 +437,32 @@
                         namePlural: 'Resources',
                     };
                 },
+            },
+
+            /**
+             * rowsPerPageItems
+             * The rows per page option selection
+             *
+             * @return array
+             */
+            rowsPerPageItems: {
+                required: false,
+                type: Array,
+                default: () => {
+                    return [10, 25, 100];
+                },
+            },
+
+            /**
+             * rowsPerPage
+             * The number of rows
+             *
+             * @return string
+             */
+            rowsPerPage: {
+                required: false,
+                type: Number,
+                default: 10,
             },
         },
         watch: {
@@ -792,7 +820,7 @@
 
             handleRowClick(ResourceKey) {
                 this.$emit('row-click', ResourceKey);
-            }
+            },
         },
     };
 </script>
