@@ -178,7 +178,7 @@
                                     :table-column="headerItem"
                                 ></component>
                             </td>
-                            <td class="crud-actions">
+                            <td class="crud-actions text-right">
                                 <v-tooltip left v-if="canUpdateResources([item])">
                                     <template v-slot:activator="{ on }">
                                         <v-btn
@@ -881,8 +881,6 @@
 
     td.crud-actions
     {
-        display:     flex;
-        float:       right;
         padding-top: 7px !important;
     }
 
@@ -918,7 +916,7 @@
             display: table-cell;
         }
 
-        .vuetify-resource td:not(.crud-actions)
+        .vuetify-resource td
         {
             display: none;
         }
