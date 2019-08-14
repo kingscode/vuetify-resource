@@ -881,12 +881,7 @@
     {
         display:     flex;
         float:       right;
-        padding-top: 0 !important;
-    }
-
-    .v-data-table td
-    {
-        height: 56px;
+        padding-top: 7px !important;
     }
 
     @media only screen and (max-width: 599px)
