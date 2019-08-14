@@ -610,7 +610,9 @@
                         this.lastOpenedHash = this.getIndentificationKey();
                         this.selected = [item];
                         this.onSelectedChange();
-                        this.beforeUpdateCallback(this.selected);
+                        // deep clone so selected wont be triggered
+                        // @TODO on a new major version we should change this that this isn't an array
+                        this.beforeUpdateCallback([JSON.parse(JSON.stringify(item))]);
                         this.dialog.update = true;
                     }
                 });
