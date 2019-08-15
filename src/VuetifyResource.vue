@@ -1,7 +1,7 @@
 <template>
     <div :class="resourceHtmlClass">
         <v-dialog
-            :overlay=false
+            hide-overlay
             fullscreen
             scrollable
             transition="dialog-bottom-transition"
@@ -15,7 +15,7 @@
                     <v-toolbar-title>{{ meta.name }}</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
-                        <v-btn @click="createHandler()" dark flat>{{lang('save')}}</v-btn>
+                        <v-btn @click="createHandler()" dark text>{{lang('save')}}</v-btn>
                         <slot name="createToolbar"></slot>
                     </v-toolbar-items>
                 </v-toolbar>
@@ -41,7 +41,7 @@
                     <v-toolbar-title>{{ meta.name }}</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
-                        <v-btn @click="updateHandler()" dark flat>{{lang('save')}}</v-btn>
+                        <v-btn @click="updateHandler()" dark text>{{lang('save')}}</v-btn>
                         <slot name="updateToolbar"></slot>
                     </v-toolbar-items>
                 </v-toolbar>
@@ -58,10 +58,10 @@
             v-model="snackbar.active"
         >
             {{ snackbar.text }}
-            <v-btn @click.native="snackbar.active = false" dark flat>{{lang('close')}}</v-btn>
+            <v-btn @click.native="snackbar.active = false" dark text>{{lang('close')}}</v-btn>
         </v-snackbar>
 
-        <v-layout row wrap>
+        <v-layout>
             <v-fab-transition>
                 <v-speed-dial
                     :open-on-hover="true"
@@ -72,52 +72,63 @@
                     v-if="speedDailNotEmpty"
                     v-model="fab"
                 >
-                    <v-btn color="accent" dark fab hover slot="activator" v-model="fab">
-                        <v-icon>$vuetify.icons.menu</v-icon>
-                        <v-icon>$vuetify.icons.close</v-icon>
-                    </v-btn>
-                    <v-tooltip left>
-                        <v-btn
-                            color="green"
-                            dark
-                            fab
-                            slot="activator"
-                            small
-                            v-if="canUpdateResources(selected) && selected.length === 1"
-                            v-on:click="openUpdateHandler()"
-                        >
-                            <v-icon>$vuetify.icons.edit</v-icon>
+                    <template v-slot:activator>
+                        <v-btn color="accent" dark fab hover v-model="fab">
+                            <v-icon v-if="fab">$vuetify.icons.close</v-icon>
+                            <v-icon v-else>$vuetify.icons.menu</v-icon>
                         </v-btn>
+                    </template>
+                    <v-tooltip left>
+                        <template v-slot:activator="{on}">
+                            <v-btn
+                                color="green"
+                                dark
+                                fab
+                                slot="activator"
+                                small
+                                v-if="canUpdateResources(selected) && selected.length === 1"
+                                v-on:click="openUpdateHandler()"
+                                v-on="on"
+                            >
+                                <v-icon>$vuetify.icons.edit</v-icon>
+                            </v-btn>
+                        </template>
                         <span>{{ lang('update') }}</span>
                     </v-tooltip>
 
                     <v-tooltip left>
-                        <v-btn
-                            color="indigo"
-                            dark
-                            fab
-                            slot="activator"
-                            small
-                            v-if="canAdd === true"
-                            v-on:click="openCreateHandler()"
-                        >
-                            <v-icon>$vuetify.icons.add</v-icon>
-                        </v-btn>
+                        <template v-slot:activator="{on}">
+                            <v-btn
+                                color="indigo"
+                                dark
+                                fab
+                                slot="activator"
+                                small
+                                v-if="canAdd === true"
+                                v-on:click="openCreateHandler()"
+                                v-on="on"
+                            >
+                                <v-icon>$vuetify.icons.add</v-icon>
+                            </v-btn>
+                        </template>
                         <span>{{ lang('create') }}</span>
                     </v-tooltip>
 
                     <v-tooltip left>
-                        <v-btn
-                            color="red"
-                            dark
-                            fab
-                            slot="activator"
-                            small
-                            v-if="canDeleteResources(selected) && selected.length >= 1"
-                            v-on:click="showDeleteConfirmation()"
-                        >
-                            <v-icon>$vuetify.icons.delete</v-icon>
-                        </v-btn>
+                        <template v-slot:activator="{on}">
+                            <v-btn
+                                color="red"
+                                dark
+                                fab
+                                slot="activator"
+                                small
+                                v-if="canDeleteResources(selected) && selected.length >= 1"
+                                v-on:click="showDeleteConfirmation()"
+                                v-on="on"
+                            >
+                                <v-icon>$vuetify.icons.delete</v-icon>
+                            </v-btn>
+                        </template>
                         <span>{{ lang('delete') }}</span>
                     </v-tooltip>
                     <slot :resources="selected" name="speedDialAfter"></slot>
@@ -139,60 +150,67 @@
                     :headers="headers"
                     :items="items"
                     :loading="loading"
-                    :pagination.sync="pagination"
-                    :rows-per-page-items="rowsPerPageItems"
-                    :rows-per-page-text="lang('rows-per-page-text')"
-                    :select-all="useCheckboxes"
-                    :total-items="totalItems"
+                    :options.sync="pagination"
+                    :items-per-page-options="rowsPerPageItems"
+                    :show-select="useCheckboxes"
+                    :server-items-length="totalItems"
                     class="elevation-1"
                     item-key="id"
                     v-model="selected"
                     v-on:input="onSelectedChange"
                 >
-                    <template slot="items" slot-scope="props">
-                        <tr @click="handleRowClick(props.item[resourceKeyName])">
+                    <template v-slot:item="{ item, isSelected, select }">
+                        <tr @click="handleRowClick(item[resourceKeyName])">
                             <td v-if="useCheckboxes">
                                 <v-checkbox
+                                    class="ma-0"
                                     hide-details
                                     primary
-                                    v-model="props.selected"
+                                    :input-value="isSelected"
+                                    @change="select(!isSelected)"
                                 ></v-checkbox>
                             </td>
-                            <td v-for="item in tableContent">
+                            <td v-for="headerItem in tableContent">
                                 <component
-                                    :content="props.item[item.value]"
-                                    :is="getColumnType(item.columnType)"
-                                    :item="props.item"
-                                    :table-column="item"
+                                    :content="item[headerItem.value]"
+                                    :is="getColumnType(headerItem.columnType)"
+                                    :item="item"
+                                    :table-column="headerItem"
                                 ></component>
                             </td>
-                            <td class="crud-actions">
-                                <v-tooltip left v-if="canUpdateResources([props.item])">
-                                    <v-btn
-                                        color="green"
-                                        flat
-                                        icon
-                                        slot="activator"
-                                        v-on:click="openUpdateHandler(props.item[resourceKeyName])"
-                                    >
-                                        <v-icon>$vuetify.icons.edit</v-icon>
-                                    </v-btn>
+                            <td class="crud-actions text-right">
+                                <v-tooltip left v-if="canUpdateResources([item])">
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn
+                                            color="green"
+                                            text
+                                            icon
+                                            slot="activator"
+                                            v-on="on"
+                                            @click="openUpdateHandler(item[resourceKeyName])"
+                                        >
+                                            <v-icon>$vuetify.icons.edit</v-icon>
+                                        </v-btn>
+                                    </template>
                                     <span>{{ lang('update') }}</span>
                                 </v-tooltip>
-                                <v-tooltip left v-if="canDeleteResources([props.item])">
-                                    <v-btn
-                                        color="red"
-                                        flat
-                                        icon
-                                        slot="activator"
-                                        @click="showDeleteConfirmation([props.item[resourceKeyName]])"
-                                    >
-                                        <v-icon>$vuetify.icons.delete</v-icon>
-                                    </v-btn>
+                                <v-tooltip left v-if="canDeleteResources([item])">
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn
+                                            color="red"
+                                            text
+                                            icon
+                                            slot="activator"
+                                            v-on="on"
+                                            @click="showDeleteConfirmation([item[resourceKeyName]])"
+                                        >
+                                            <v-icon>$vuetify.icons.delete</v-icon>
+                                        </v-btn>
+                                    </template>
                                     <span>{{ lang('delete') }}</span>
                                 </v-tooltip>
                                 <v-btn
-                                    flat
+                                    text
                                     icon
                                     v-else
                                     disabled
@@ -200,23 +218,24 @@
                                     <v-icon></v-icon>
                                 </v-btn>
 
-                                <slot :resource="props.item" name="crudActionsAfter"></slot>
+                                <slot :resource="item" name="crudActionsAfter"></slot>
                             </td>
                         </tr>
                     </template>
-                    <template slot="pageText" slot-scope="{ pageStart, pageStop, itemsLength }">
+                    <template slot="footer.page-text" slot-scope="{ pageStart, pageStop, itemsLength }">
                         {{lang('from')}} {{ pageStart }} {{lang('till')}} {{ pageStop }} {{lang('of')}} {{itemsLength}}
                     </template>
                     <template slot="no-data">
-                        <template v-if="!loading">
-                            {{lang('no-data')}}
-                        </template>
-                        <template v-else>
-                            {{lang('loading')}}
-                        </template>
+                        {{lang('no-data')}}
+                    </template>
+                    <template slot="loading">
+                        {{lang('loading')}}
                     </template>
                     <template slot="no-results">
                         {{lang('no-results')}}
+                    </template>
+                    <template v-slot:footer-items-per-page-text>
+                        {{lang('rows-per-page-text')}}
                     </template>
                 </v-data-table>
             </v-flex>
@@ -862,9 +881,7 @@
 
     td.crud-actions
     {
-        display:     flex;
-        float:       right;
-        padding-top: 0 !important;
+        padding-top: 7px !important;
     }
 
     @media only screen and (max-width: 599px)
@@ -899,7 +916,7 @@
             display: table-cell;
         }
 
-        .vuetify-resource td:not(.crud-actions)
+        .vuetify-resource td
         {
             display: none;
         }
