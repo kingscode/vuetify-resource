@@ -879,11 +879,6 @@
         width: 40px;
     }
 
-    td.crud-actions
-    {
-        padding-top: 7px !important;
-    }
-
     @media only screen and (max-width: 599px)
     {
         .vuetify-resource.with-search .v-speed-dial
