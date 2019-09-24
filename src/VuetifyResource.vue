@@ -150,12 +150,13 @@
                     v-on:input="onSelectedChange"
                 >
                     <template slot="items" slot-scope="props">
-                        <tr @click="handleRowClick(props.item[resourceKeyName])">
+                        <tr @click.stop="handleRowClick(props.item[resourceKeyName])">
                             <td v-if="useCheckboxes">
                                 <v-checkbox
                                     hide-details
                                     primary
-                                    v-model="props.selected"
+                                    :value="props.selected"
+                                    @click.stop="props.selected = !props.selected"
                                 ></v-checkbox>
                             </td>
                             <td v-for="item in tableContent">
@@ -173,7 +174,7 @@
                                         flat
                                         icon
                                         slot="activator"
-                                        v-on:click="openUpdateHandler(props.item[resourceKeyName])"
+                                        @click.stop="openUpdateHandler(props.item[resourceKeyName])"
                                     >
                                         <v-icon>$vuetify.icons.edit</v-icon>
                                     </v-btn>
@@ -185,7 +186,7 @@
                                         flat
                                         icon
                                         slot="activator"
-                                        @click="showDeleteConfirmation([props.item[resourceKeyName]])"
+                                        @click.stop="showDeleteConfirmation([props.item[resourceKeyName]])"
                                     >
                                         <v-icon>$vuetify.icons.delete</v-icon>
                                     </v-btn>
