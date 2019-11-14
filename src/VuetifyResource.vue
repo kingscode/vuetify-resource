@@ -151,9 +151,11 @@
                     :items="items"
                     :loading="loading"
                     :options.sync="pagination"
-                    :items-per-page-options="rowsPerPageItems"
                     :show-select="useCheckboxes"
                     :server-items-length="totalItems"
+                    :footer-props="{
+                        items-per-page-options: rowsPerPageItems
+                    }"
                     class="elevation-1"
                     item-key="id"
                     v-model="selected"
