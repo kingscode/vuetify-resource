@@ -151,7 +151,6 @@
                     :items="items"
                     :loading="loading"
                     :options.sync="pagination"
-                    :items-per-page-options="rowsPerPageItems"
                     :show-select="useCheckboxes"
                     :server-items-length="totalItems"
                     :footer-props="{
