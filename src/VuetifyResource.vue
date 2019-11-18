@@ -135,7 +135,7 @@
                 </v-speed-dial>
             </v-fab-transition>
             <v-flex>
-                <v-layout row v-if="canSearch">
+                <v-layout row v-if="canSearch" class="ma-0">
                     <v-flex mb-3 sm4 xs10>
                         <v-text-field
                             :append-icon="$vuetify.icons.search"
