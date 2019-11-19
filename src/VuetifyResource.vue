@@ -181,7 +181,7 @@
                                 ></component>
                             </td>
                             <td class="crud-actions text-right">
-                                <v-tooltip left v-if="canUpdateResources([item])">
+                                <v-tooltip left v-if="canUpdate">
                                     <template v-slot:activator="{ on }">
                                         <v-btn
                                             color="green"
@@ -189,6 +189,7 @@
                                             icon
                                             slot="activator"
                                             v-on="on"
+                                            :disabled="!canUpdateResources([item])"
                                             @click="openUpdateHandler(item[resourceKeyName])"
                                         >
                                             <v-icon>$vuetify.icons.edit</v-icon>
@@ -196,7 +197,7 @@
                                     </template>
                                     <span>{{ lang('update') }}</span>
                                 </v-tooltip>
-                                <v-tooltip left v-if="canDeleteResources([item])">
+                                <v-tooltip left v-if="canDelete">
                                     <template v-slot:activator="{ on }">
                                         <v-btn
                                             color="red"
@@ -204,6 +205,7 @@
                                             icon
                                             slot="activator"
                                             v-on="on"
+                                            :disabled="!canDeleteResources([item])"
                                             @click="showDeleteConfirmation([item[resourceKeyName]])"
                                         >
                                             <v-icon>$vuetify.icons.delete</v-icon>
@@ -211,14 +213,6 @@
                                     </template>
                                     <span>{{ lang('delete') }}</span>
                                 </v-tooltip>
-                                <v-btn
-                                    text
-                                    icon
-                                    v-else
-                                    disabled
-                                >
-                                    <v-icon></v-icon>
-                                </v-btn>
 
                                 <slot :resource="item" name="crudActionsAfter"></slot>
                             </td>
