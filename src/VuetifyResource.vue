@@ -67,9 +67,9 @@
                     :open-on-hover="true"
                     :right="true"
                     :top="true"
-                    :direction="speedDailDirection"
+                    :direction="speedDialDirection"
                     transition="slide-y-reverse-transition"
-                    v-if="speedDailNotEmpty"
+                    v-if="speedDialNotEmpty"
                     v-model="fab"
                 >
                     <template v-slot:activator>
@@ -293,14 +293,14 @@
                     'with-search': this.canSearch,
                 };
             },
-            speedDailNotEmpty() {
+            speedDialNotEmpty() {
                 if (this.canAdd || this.canUpdate || this.canDelete) {
                     return true;
                 }
 
                 if (typeof this.$scopedSlots.speedDialAfter !== 'undefined') {
-                    if (typeof this.showSpeedDail !== 'undefined') {
-                        return this.showSpeedDail;
+                    if (typeof this.showSpeedDial !== 'undefined') {
+                        return this.showSpeedDial;
                     }
                     return true;
                 }
@@ -438,8 +438,8 @@
             canDeleteResourceKey: {required: false, type: String, default: ''},
             canSearch: {required: false, type: Boolean, default: false},
             useCheckboxes: {required: false, type: Boolean, default: true},
-            showSpeedDail: {required: false, type: Boolean},
-            speedDailDirection: {required: false, type: String, default: 'left'},
+            showSpeedDial: {required: false, type: Boolean},
+            speedDialDirection: {required: false, type: String, default: 'left'},
 
             /**
              * texts

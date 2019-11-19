@@ -211,10 +211,10 @@ canDeleteResourceKey: {required: false, type: String, default: ''},
 canSearch: {required: false, type: Boolean, default: false},
 ```
 ```
-showSpeedDail: {required: false, type: Boolean},
+showSpeedDial: {required: false, type: Boolean},
 ```
 ```
-speedDailDirection: {required: false, type: String}, //left, right, top, bottom
+speedDialDirection: {required: false, type: String}, //left, right, top, bottom
 ```
 ```
 useCheckboxes: {required: false, type: Boolean},
