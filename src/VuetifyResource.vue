@@ -67,7 +67,7 @@
                     :open-on-hover="true"
                     :right="true"
                     :top="true"
-                    direction="bottom"
+                    :direction="speedDailDirection"
                     transition="slide-y-reverse-transition"
                     v-if="speedDailNotEmpty"
                     v-model="fab"
@@ -439,6 +439,7 @@
             canSearch: {required: false, type: Boolean, default: false},
             useCheckboxes: {required: false, type: Boolean, default: true},
             showSpeedDail: {required: false, type: Boolean},
+            speedDailDirection: {required: false, type: String, default: 'left'},
 
             /**
              * texts
