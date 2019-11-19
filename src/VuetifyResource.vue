@@ -187,7 +187,6 @@
                                             color="green"
                                             text
                                             icon
-                                            slot="activator"
                                             v-on="on"
                                             :disabled="!canUpdateResources([item])"
                                             @click="openUpdateHandler(item[resourceKeyName])"
@@ -203,7 +202,6 @@
                                             color="red"
                                             text
                                             icon
-                                            slot="activator"
                                             v-on="on"
                                             :disabled="!canDeleteResources([item])"
                                             @click="showDeleteConfirmation([item[resourceKeyName]])"
