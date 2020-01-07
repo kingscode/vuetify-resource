@@ -239,681 +239,685 @@
 </template>
 
 <script>
-    import ActivityOverlay from './components/ActivityOverlay.vue';
-    import Text from './columnTypes/Text.vue';
-    import Checkbox from './columnTypes/Checkbox.vue';
-    import DeleteConfirmation from './components/DeleteConfirmation.vue';
-    import Language from './mixins/Language.js';
+import ActivityOverlay from './components/ActivityOverlay.vue';
+import Text from './columnTypes/Text.vue';
+import Checkbox from './columnTypes/Checkbox.vue';
+import DeleteConfirmation from './components/DeleteConfirmation.vue';
+import Language from './mixins/Language.js';
 
-    export default {
-        name: 'vuetify-resource',
-        components: {DeleteConfirmation, ActivityOverlay},
-        mixins: [Language],
-        data() {
+export default {
+    name: 'vuetify-resource',
+    components: {DeleteConfirmation, ActivityOverlay},
+    mixins: [Language],
+    data() {
+        return {
+            fab: false,
+            search: '',
+            totalItems: 0,
+            items: [],
+            loading: true,
+            pagination: {
+                rowsPerPage: this.rowsPerPage || 10,
+            },
+            selected: [],
+            headers: [],
+            dialog: {
+                create: false,
+                update: false,
+            },
+            snackbar: {
+                text: '',
+                active: false,
+                color: 'success',
+            },
+            activity: {
+                isUpdating: false,
+                isDeleting: false,
+                isCreating: false,
+            },
+            lastOpenedHash: null,
+        };
+    },
+    computed: {
+        resourceHtmlClass() {
             return {
-                fab: false,
-                search: '',
-                totalItems: 0,
-                items: [],
-                loading: true,
-                pagination: {
-                    rowsPerPage: this.rowsPerPage || 10,
-                },
-                selected: [],
-                headers: [],
-                dialog: {
-                    create: false,
-                    update: false,
-                },
-                snackbar: {
-                    text: '',
-                    active: false,
-                    color: 'success',
-                },
-                activity: {
-                    isUpdating: false,
-                    isDeleting: false,
-                    isCreating: false,
-                },
-                lastOpenedHash: null,
+                'vuetify-resource': true,
+                'with-search': this.canSearch,
             };
         },
-        computed: {
-            resourceHtmlClass() {
+        speedDialNotEmpty() {
+            if (!this.showSpeedDial) {
+                return false;
+            }
+
+            if (this.canAdd || this.canUpdate || this.canDelete) {
+                return true;
+            }
+
+            if (typeof this.$scopedSlots.speedDialAfter !== 'undefined') {
+                if (typeof this.showSpeedDial !== 'undefined') {
+                    return this.showSpeedDial;
+                }
+                return true;
+            }
+            return false;
+        },
+    },
+    props: {
+        /**
+         * getDataCallBack
+         *
+         * @param pagination
+         * @return promise with resolving items and total for the table
+         */
+        getDataCallback: {
+            required: true,
+            type: Function,
+        },
+
+        /**
+         * getItemCallback
+         *
+         * get the data of a single resource by the key (key is the id by default)
+         *
+         * @param key
+         * @return promise with resolving the data of an resource
+         */
+        getItemCallback: {
+            required: false,
+            type: Function,
+        },
+
+        /**
+         * beforeCreateCallback
+         * the callback wich is called before opening the create form
+         */
+        beforeCreateCallback: {
+            required: false,
+            type: Function,
+        },
+
+        /**
+         * createCallBack
+         * the callback which is called when the create form is saved
+         *
+         * @return promise
+         */
+        createCallback: {
+            required: false,
+            type: Function,
+        },
+
+        /**
+         * beforeUpdateCallback
+         * the callback which is called before the update dialog is opened
+         */
+        beforeUpdateCallback: {
+            required: false,
+            type: Function,
+        },
+
+        /**
+         * updateCallback
+         * the callback wich is called when the update form is saved
+         *
+         * @return promise
+         */
+        updateCallback: {
+            required: false,
+            type: Function,
+        },
+
+        /**
+         * deleteCallback
+         * the callback which is called when the delete action is called
+         *
+         * @return promise
+         */
+        deleteCallback: {
+            required: false,
+            type: Function,
+        },
+
+        /**
+         * useResourceKeyInUrl
+         * Do you want the resource key (by default the resource's id) in the hash in the url?
+         *
+         * @return boolean
+         */
+        useResourceKeyInUrl: {
+            required: false,
+            type: Boolean,
+            default: true,
+        },
+
+        /**
+         * resourceKeyName
+         * What is the name of the resource key? (default: id)
+         * Notice: useResourceKeyInUrl must be true to use this property
+         *
+         * @return string
+         */
+        resourceKeyName: {
+            required: false,
+            type: String,
+            default: 'id',
+        },
+
+        /**
+         * getItemByCallback
+         * find items by a callback (true) or from the items array (false)
+         *
+         * @return string
+         */
+        shouldGetItemByCallback: {
+            required: false,
+            type: Boolean,
+            default: true,
+        },
+
+        /**
+         * @param array with object(s) for each column in the table
+         *              {
+         *                  text:       string              the text which is presented above the column
+         *                  align:      string
+         *                  sortable:   coolean
+         *                  value:      string
+         *                  columnType: object/component or string
+         *              }
+         */
+        tableContent: {required: true, type: Array},
+        canUpdate: {required: false, type: Boolean, default: true},
+        canUpdateResourceKey: {required: false, type: String, default: ''},
+        canAdd: {required: false, type: Boolean, default: true},
+        canDelete: {required: false, type: Boolean, default: true},
+        canDeleteResourceKey: {required: false, type: String, default: ''},
+        canSearch: {required: false, type: Boolean, default: false},
+        useCheckboxes: {required: false, type: Boolean, default: true},
+        showSpeedDial: {required: false, type: Boolean},
+        speedDialDirection: {required: false, type: String, default: 'left'},
+
+        /**
+         * texts
+         *
+         * @return Object with the texts you want to overrule
+         * {
+         *     save: 'Save',
+         *     from: 'from',
+         *     till: 'till',
+         *     'no-data': 'There is nothing found',
+         *     'no-results': 'There is nothing found for this filter',
+         *     'rows-per-page-text': 'Rows per page'
+         * }
+         */
+        texts: {
+            required: false,
+            type: Object,
+        },
+
+        meta: {
+            required: false,
+            type: Object,
+            default: function () {
                 return {
-                    'vuetify-resource': true,
-                    'with-search': this.canSearch,
+                    name: 'Resource',
+                    namePlural: 'Resources',
                 };
             },
-            speedDialNotEmpty() {
-                if (this.canAdd || this.canUpdate || this.canDelete) {
-                    return true;
-                }
+        },
 
-                if (typeof this.$scopedSlots.speedDialAfter !== 'undefined') {
-                    if (typeof this.showSpeedDial !== 'undefined') {
-                        return this.showSpeedDial;
-                    }
-                    return true;
-                }
-                return false;
+        /**
+         * rowsPerPageItems
+         * The rows per page option selection
+         *
+         * @return array
+         */
+        rowsPerPageItems: {
+            required: false,
+            type: Array,
+            default: () => {
+                return [10, 25, 100];
             },
         },
-        props: {
-            /**
-             * getDataCallBack
-             *
-             * @param pagination
-             * @return promise with resolving items and total for the table
-             */
-            getDataCallback: {
-                required: true,
-                type: Function,
-            },
 
-            /**
-             * getItemCallback
-             *
-             * get the data of a single resource by the key (key is the id by default)
-             *
-             * @param key
-             * @return promise with resolving the data of an resource
-             */
-            getItemCallback: {
-                required: false,
-                type: Function,
-            },
-
-            /**
-             * beforeCreateCallback
-             * the callback wich is called before opening the create form
-             */
-            beforeCreateCallback: {
-                required: false,
-                type: Function,
-            },
-
-            /**
-             * createCallBack
-             * the callback which is called when the create form is saved
-             *
-             * @return promise
-             */
-            createCallback: {
-                required: false,
-                type: Function,
-            },
-
-            /**
-             * beforeUpdateCallback
-             * the callback which is called before the update dialog is opened
-             */
-            beforeUpdateCallback: {
-                required: false,
-                type: Function,
-            },
-
-            /**
-             * updateCallback
-             * the callback wich is called when the update form is saved
-             *
-             * @return promise
-             */
-            updateCallback: {
-                required: false,
-                type: Function,
-            },
-
-            /**
-             * deleteCallback
-             * the callback which is called when the delete action is called
-             *
-             * @return promise
-             */
-            deleteCallback: {
-                required: false,
-                type: Function,
-            },
-
-            /**
-             * useResourceKeyInUrl
-             * Do you want the resource key (by default the resource's id) in the hash in the url?
-             *
-             * @return boolean
-             */
-            useResourceKeyInUrl: {
-                required: false,
-                type: Boolean,
-                default: true,
-            },
-
-            /**
-             * resourceKeyName
-             * What is the name of the resource key? (default: id)
-             * Notice: useResourceKeyInUrl must be true to use this property
-             *
-             * @return string
-             */
-            resourceKeyName: {
-                required: false,
-                type: String,
-                default: 'id',
-            },
-
-            /**
-             * getItemByCallback
-             * find items by a callback (true) or from the items array (false)
-             *
-             * @return string
-             */
-            shouldGetItemByCallback: {
-                required: false,
-                type: Boolean,
-                default: true,
-            },
-
-            /**
-             * @param array with object(s) for each column in the table
-             *              {
-             *                  text:       string              the text which is presented above the column
-             *                  align:      string
-             *                  sortable:   coolean
-             *                  value:      string
-             *                  columnType: object/component or string
-             *              }
-             */
-            tableContent: {required: true, type: Array},
-            canUpdate: {required: false, type: Boolean, default: true},
-            canUpdateResourceKey: {required: false, type: String, default: ''},
-            canAdd: {required: false, type: Boolean, default: true},
-            canDelete: {required: false, type: Boolean, default: true},
-            canDeleteResourceKey: {required: false, type: String, default: ''},
-            canSearch: {required: false, type: Boolean, default: false},
-            useCheckboxes: {required: false, type: Boolean, default: true},
-            showSpeedDial: {required: false, type: Boolean},
-            speedDialDirection: {required: false, type: String, default: 'left'},
-
-            /**
-             * texts
-             *
-             * @return Object with the texts you want to overrule
-             * {
-             *     save: 'Save',
-             *     from: 'from',
-             *     till: 'till',
-             *     'no-data': 'There is nothing found',
-             *     'no-results': 'There is nothing found for this filter',
-             *     'rows-per-page-text': 'Rows per page'
-             * }
-             */
-            texts: {
-                required: false,
-                type: Object,
-            },
-
-            meta: {
-                required: false,
-                type: Object,
-                default: function () {
-                    return {
-                        name: 'Resource',
-                        namePlural: 'Resources',
-                    };
-                },
-            },
-
-            /**
-             * rowsPerPageItems
-             * The rows per page option selection
-             *
-             * @return array
-             */
-            rowsPerPageItems: {
-                required: false,
-                type: Array,
-                default: () => {
-                    return [10, 25, 100];
-                },
-            },
-
-            /**
-             * rowsPerPage
-             * The number of rows
-             *
-             * @return string
-             */
-            rowsPerPage: {
-                required: false,
-                type: Number,
-                default: 10,
-            },
+        /**
+         * rowsPerPage
+         * The number of rows
+         *
+         * @return string
+         */
+        rowsPerPage: {
+            required: false,
+            type: Number,
+            default: 10,
         },
-        watch: {
-            pagination: {
-                handler() {
+    },
+    watch: {
+        pagination: {
+            handler() {
+                this.getDataHandler();
+            },
+            deep: true,
+        },
+        selected: {
+            handler() {
+                this.$emit('selected', this.selected);
+            },
+            deep: true,
+        },
+        $route: {
+            handler() {
+                this.handleUrlChange();
+            },
+            deep: true,
+        },
+        search: {
+            handler() {
+                clearTimeout(this.searchTimeout);
+                this.searchTimeout = setTimeout(() => {
                     this.getDataHandler();
-                },
-                deep: true,
+                }, 400);
             },
-            selected: {
-                handler() {
-                    this.$emit('selected', this.selected);
-                },
-                deep: true,
-            },
-            $route: {
-                handler() {
+            deep: true,
+        },
+    },
+    created() {
+        this.headers = JSON.parse(JSON.stringify(this.tableContent));
+        this.headers.push({text: '', value: 'crud-actions', sortable: false});
+    },
+    methods: {
+        /**
+         * getDataHandler
+         * calls the getDataCallback which is supposed to load all the items for the table
+         * this callback needs to return a promise with resolving items and total
+         *
+         * @return void
+         */
+        getDataHandler() {
+            this.loading = true;
+            this.getDataCallback(this.pagination, this.search)
+                .then(data => {
+                    this.clearSelected();
+                    this.items = data.items;
+                    this.totalItems = data.total;
+                    this.loading = false;
                     this.handleUrlChange();
-                },
-                deep: true,
-            },
-            search: {
-                handler() {
-                    clearTimeout(this.searchTimeout);
-                    this.searchTimeout = setTimeout(() => {
+                })
+
+                .catch((e) => {
+                    console.error(e);
+                    this.activity.isCreating = false;
+                    this.showSnackbar(this.lang('snackbar-get-error'), 'error');
+
+                });
+        },
+
+        /**
+         * openCreateHandler
+         * opens the create dialog and calls the beforeCreateCallback
+         *
+         * @return void
+         */
+        openCreateHandler() {
+            this.beforeCreateCallback(this.selected);
+            this.dialog.create = true;
+        },
+
+        /**
+         * createHandler
+         * Handles the save/create action calls the createCallback and handles the promise
+         *
+         * @return void
+         */
+        createHandler() {
+            if (!this.activity.isCreating) {
+                this.activity.isCreating = true;
+                this.createCallback()
+                    .then(() => {
+                        this.activity.isCreating = false;
+                        this.dialog.create = false;
+                        this.showSnackbar(this.lang('snackbar-saved'));
                         this.getDataHandler();
-                    }, 400);
-                },
-                deep: true,
-            },
-        },
-        created() {
-            this.headers = JSON.parse(JSON.stringify(this.tableContent));
-            this.headers.push({text: '', value: 'crud-actions', sortable: false});
-        },
-        methods: {
-            /**
-             * getDataHandler
-             * calls the getDataCallback which is supposed to load all the items for the table
-             * this callback needs to return a promise with resolving items and total
-             *
-             * @return void
-             */
-            getDataHandler() {
-                this.loading = true;
-                this.getDataCallback(this.pagination, this.search)
-                    .then(data => {
-                        this.clearSelected();
-                        this.items = data.items;
-                        this.totalItems = data.total;
-                        this.loading = false;
-                        this.handleUrlChange();
                     })
 
                     .catch((e) => {
                         console.error(e);
                         this.activity.isCreating = false;
-                        this.showSnackbar(this.lang('snackbar-get-error'), 'error');
+                        this.showSnackbar(this.lang('snackbar-save-error'), 'error');
 
                     });
-            },
+            }
+        },
 
-            /**
-             * openCreateHandler
-             * opens the create dialog and calls the beforeCreateCallback
-             *
-             * @return void
-             */
-            openCreateHandler() {
-                this.beforeCreateCallback(this.selected);
-                this.dialog.create = true;
-            },
+        /**
+         * openUpdateHandler
+         * opens the update dialog and calls the beforeUpdateCallback
+         *
+         * @return void
+         */
+        openUpdateHandler(resourceKey) {
+            if (typeof resourceKey === 'undefined') {
+                resourceKey = this.selected[0][this.resourceKeyName];
 
-            /**
-             * createHandler
-             * Handles the save/create action calls the createCallback and handles the promise
-             *
-             * @return void
-             */
-            createHandler() {
-                if (!this.activity.isCreating) {
-                    this.activity.isCreating = true;
-                    this.createCallback()
-                        .then(() => {
-                            this.activity.isCreating = false;
-                            this.dialog.create = false;
-                            this.showSnackbar(this.lang('snackbar-saved'));
-                            this.getDataHandler();
-                        })
-
-                        .catch((e) => {
-                            console.error(e);
-                            this.activity.isCreating = false;
-                            this.showSnackbar(this.lang('snackbar-save-error'), 'error');
-
-                        });
-                }
-            },
-
-            /**
-             * openUpdateHandler
-             * opens the update dialog and calls the beforeUpdateCallback
-             *
-             * @return void
-             */
-            openUpdateHandler(resourceKey) {
-                if (typeof resourceKey === 'undefined') {
-                    resourceKey = this.selected[0][this.resourceKeyName];
-
-                }
-                this.setIndentificationKey(resourceKey);
-                this.getItemByIdentificationKey(resourceKey, (item) => {
-                    if (item === false) {
-                        this.showSnackbar(this.lang('snackbar-get-error'), 'error');
-                        return false;
-                    } else {
-                        this.lastOpenedHash = this.getIndentificationKey();
-                        this.selected = [item];
-                        this.onSelectedChange();
-                        // deep clone so selected wont be triggered
-                        // @TODO on a new major version we should change this that this isn't an array
-                        this.beforeUpdateCallback([JSON.parse(JSON.stringify(item))]);
-                        this.dialog.update = true;
-                    }
-                });
-            },
-
-            /**
-             * updateHandler
-             * Handles the save/update action calls the updateCallback and handles the promise
-             *
-             * @return void
-             */
-            updateHandler() {
-                if (!this.activity.isUpdating) {
-                    this.activity.isUpdating = true;
-                    this.updateCallback(this.selected)
-                        .then(() => {
-                            this.activity.isUpdating = false;
-                            this.dialog.update = false;
-                            this.showSnackbar(this.lang('snackbar-saved'));
-                            this.getDataHandler();
-                        })
-                        .catch((e) => {
-                            console.error(e);
-                            this.activity.isUpdating = false;
-                            this.showSnackbar(this.lang('snackbar-save-error'), 'error');
-
-                        });
-                }
-            },
-            showDeleteConfirmation(ids) {
-                if (typeof ids === 'undefined') {
-                    ids = this.selected.map(item => item[this.resourceKeyName]);
-                }
-                this.$refs.deleteConfirmation.ids = ids;
-                this.$refs.deleteConfirmation.dialog = true;
-            },
-            /**
-             * deleteHandler
-             * Handles the delete action and calls the deleteCallback and handles the promise
-             *
-             * @return void
-             */
-            deleteHandler(ids) {
-                if (!this.activity.isDeleting) {
-                    this.activity.isDeleting = true;
-                    this.deleteCallback(ids)
-                        .then(() => {
-                            this.activity.isDeleting = false;
-                            this.showSnackbar(this.lang('snackbar-deleted'));
-                            this.getDataHandler();
-                        })
-                        .catch((e) => {
-                            console.error(e);
-                            this.activity.isDeleting = false;
-                            this.showSnackbar(this.lang('snackbar-delete-error'), 'error');
-
-                        });
-                }
-            },
-
-            /**
-             * showSnackbar
-             * an easy way to influence the snackbar
-             *
-             * @param content
-             * @param color default: success
-             *
-             * @return void
-             */
-            showSnackbar(content, color = 'success') {
-                this.snackbar.text = content;
-                this.snackbar.active = true;
-                this.snackbar.color = color;
-            },
-
-            /**
-             * clearSelected
-             * clear everything that is selected
-             *
-             * @return void
-             */
-            clearSelected() {
-
-                this.selected = [];
-            },
-
-            /**
-             * setIdentificationKey
-             * set the identification key to the hash of the url
-             *
-             * @param key
-             */
-            setIndentificationKey(key) {
-                if (this.useResourceKeyInUrl) {
-                    window.location.hash = '#' + key;
-                }
-            },
-
-            /**
-             * getIdentificationKey
-             * get the identification key from to the hash of the url
-             *
-             * @return key
-             */
-            getIndentificationKey() {
-
-                return window.location.hash.substring(1);
-            },
-
-            /**
-             * getItemByIdentificationKey
-             *
-             * call the getItemFromCallbackByIdentificationKey method or the getItemFromItemsByIdentificationKey method
-             * the choise is made by the boolean property: shouldGetItemByCallback
-             */
-            getItemByIdentificationKey(key, callback) {
-                if (this.shouldGetItemByCallback) {
-                    this.getItemFromCallbackByIdentificationKey(key, callback);
+            }
+            this.setIndentificationKey(resourceKey);
+            this.getItemByIdentificationKey(resourceKey, (item) => {
+                if (item === false) {
+                    this.showSnackbar(this.lang('snackbar-get-error'), 'error');
+                    return false;
                 } else {
-                    this.getItemFromItemsByIdentificationKey(key, callback);
+                    this.lastOpenedHash = this.getIndentificationKey();
+                    this.selected = [item];
+                    this.onSelectedChange();
+                    // deep clone so selected wont be triggered
+                    // @TODO on a new major version we should change this that this isn't an array
+                    this.beforeUpdateCallback([JSON.parse(JSON.stringify(item))]);
+                    this.dialog.update = true;
                 }
-            },
+            });
+        },
 
-            /**
-             * getItemFromCallbackByIdentificationKey
-             *
-             * get the items from the api callback (getItemCallback) and call the callback
-             */
-            getItemFromCallbackByIdentificationKey(key, callback) {
-                this.getItemCallback(key)
-                    .then(data => {
-                        callback(data.item);
+        /**
+         * updateHandler
+         * Handles the save/update action calls the updateCallback and handles the promise
+         *
+         * @return void
+         */
+        updateHandler() {
+            if (!this.activity.isUpdating) {
+                this.activity.isUpdating = true;
+                this.updateCallback(this.selected)
+                    .then(() => {
+                        this.activity.isUpdating = false;
+                        this.dialog.update = false;
+                        this.showSnackbar(this.lang('snackbar-saved'));
+                        this.getDataHandler();
                     })
                     .catch((e) => {
                         console.error(e);
-                    });
-            },
+                        this.activity.isUpdating = false;
+                        this.showSnackbar(this.lang('snackbar-save-error'), 'error');
 
-            /**
-             * getItemFromItemsByIdentificationKey
-             *
-             * get the items from the this.selected and call the callback
-             */
-            getItemFromItemsByIdentificationKey(key, callback) {
-                let returnItem = false;
-                this.items.forEach((item) => {
-                    if (item[this.resourceKeyName] === key) {
-                        returnItem = item;
+                    });
+            }
+        },
+        showDeleteConfirmation(ids) {
+            if (typeof ids === 'undefined') {
+                ids = this.selected.map(item => item[this.resourceKeyName]);
+            }
+            this.$refs.deleteConfirmation.ids = ids;
+            this.$refs.deleteConfirmation.dialog = true;
+        },
+        /**
+         * deleteHandler
+         * Handles the delete action and calls the deleteCallback and handles the promise
+         *
+         * @return void
+         */
+        deleteHandler(ids) {
+            if (!this.activity.isDeleting) {
+                this.activity.isDeleting = true;
+                this.deleteCallback(ids)
+                    .then(() => {
+                        this.activity.isDeleting = false;
+                        this.showSnackbar(this.lang('snackbar-deleted'));
+                        this.getDataHandler();
+                    })
+                    .catch((e) => {
+                        console.error(e);
+                        this.activity.isDeleting = false;
+                        this.showSnackbar(this.lang('snackbar-delete-error'), 'error');
+
+                    });
+            }
+        },
+
+        /**
+         * showSnackbar
+         * an easy way to influence the snackbar
+         *
+         * @param content
+         * @param color default: success
+         *
+         * @return void
+         */
+        showSnackbar(content, color = 'success') {
+            this.snackbar.text = content;
+            this.snackbar.active = true;
+            this.snackbar.color = color;
+        },
+
+        /**
+         * clearSelected
+         * clear everything that is selected
+         *
+         * @return void
+         */
+        clearSelected() {
+
+            this.selected = [];
+        },
+
+        /**
+         * setIdentificationKey
+         * set the identification key to the hash of the url
+         *
+         * @param key
+         */
+        setIndentificationKey(key) {
+            if (this.useResourceKeyInUrl) {
+                window.location.hash = '#' + key;
+            }
+        },
+
+        /**
+         * getIdentificationKey
+         * get the identification key from to the hash of the url
+         *
+         * @return key
+         */
+        getIndentificationKey() {
+
+            return window.location.hash.substring(1);
+        },
+
+        /**
+         * getItemByIdentificationKey
+         *
+         * call the getItemFromCallbackByIdentificationKey method or the getItemFromItemsByIdentificationKey method
+         * the choise is made by the boolean property: shouldGetItemByCallback
+         */
+        getItemByIdentificationKey(key, callback) {
+            if (this.shouldGetItemByCallback) {
+                this.getItemFromCallbackByIdentificationKey(key, callback);
+            } else {
+                this.getItemFromItemsByIdentificationKey(key, callback);
+            }
+        },
+
+        /**
+         * getItemFromCallbackByIdentificationKey
+         *
+         * get the items from the api callback (getItemCallback) and call the callback
+         */
+        getItemFromCallbackByIdentificationKey(key, callback) {
+            this.getItemCallback(key)
+                .then(data => {
+                    callback(data.item);
+                })
+                .catch((e) => {
+                    console.error(e);
+                });
+        },
+
+        /**
+         * getItemFromItemsByIdentificationKey
+         *
+         * get the items from the this.selected and call the callback
+         */
+        getItemFromItemsByIdentificationKey(key, callback) {
+            let returnItem = false;
+            this.items.forEach((item) => {
+                if (item[this.resourceKeyName] === key) {
+                    returnItem = item;
+                    return;
+                }
+            });
+            callback(returnItem);
+        },
+
+        /**
+         * handleUrlChange
+         * get the items by the identificationkey (default the id)
+         * the items will be recheived via the getItemByIdentificationKey method wich eather gets them from the
+         * itemCallback or the selected array
+         * and then open the update dialog
+         */
+        handleUrlChange() {
+            if (this.useResourceKeyInUrl && this.getIndentificationKey() !== '') {
+                this.getItemByIdentificationKey(this.getIndentificationKey(), (item) => {
+                    if (item === false) {
+                        this.showSnackbar('Het is niet gelukt om een item te vinden.', 'error');
+                        return false;
+                    } else {
+                        if (this.lastOpenedHash !== this.getIndentificationKey()) {
+                            this.lastOpenedHash = this.getIndentificationKey();
+                            this.selected = [item];
+                            this.onSelectedChange();
+                            this.beforeUpdateCallback(this.selected);
+                            this.dialog.update = true;
+                        }
+                    }
+                });
+            }
+        },
+
+        getColumnType(columnType) {
+            if (typeof columnType === 'object') {
+                return columnType;
+            } else if (typeof columnType === 'string') {
+                switch (columnType.toLowerCase()) {
+                    case 'checkbox':
+                        return Checkbox;
+                    default:
+                    case 'text':
+                        return Text;
+                }
+            }
+            return Text;
+        },
+
+        /**
+         * onSelectedChange
+         * When the selected in the vuetify table changes, emit the v-model
+         */
+        onSelectedChange() {
+            this.$emit('input', this.selected);
+        },
+
+        canDeleteResources(selected) {
+            let canDelete = this.canDelete;
+            if (this.canDeleteResourceKey !== '') {
+                selected.forEach((resource) => {
+                    if (resource[this.canDeleteResourceKey] === false) {
+                        canDelete = false;
                         return;
                     }
                 });
-                callback(returnItem);
-            },
-
-            /**
-             * handleUrlChange
-             * get the items by the identificationkey (default the id)
-             * the items will be recheived via the getItemByIdentificationKey method wich eather gets them from the
-             * itemCallback or the selected array
-             * and then open the update dialog
-             */
-            handleUrlChange() {
-                if (this.useResourceKeyInUrl && this.getIndentificationKey() !== '') {
-                    this.getItemByIdentificationKey(this.getIndentificationKey(), (item) => {
-                        if (item === false) {
-                            this.showSnackbar('Het is niet gelukt om een item te vinden.', 'error');
-                            return false;
-                        } else {
-                            if (this.lastOpenedHash !== this.getIndentificationKey()) {
-                                this.lastOpenedHash = this.getIndentificationKey();
-                                this.selected = [item];
-                                this.onSelectedChange();
-                                this.beforeUpdateCallback(this.selected);
-                                this.dialog.update = true;
-                            }
-                        }
-                    });
-                }
-            },
-
-            getColumnType(columnType) {
-                if (typeof columnType === 'object') {
-                    return columnType;
-                } else if (typeof columnType === 'string') {
-                    switch (columnType.toLowerCase()) {
-                        case 'checkbox':
-                            return Checkbox;
-                        default:
-                        case 'text':
-                            return Text;
-                    }
-                }
-                return Text;
-            },
-
-            /**
-             * onSelectedChange
-             * When the selected in the vuetify table changes, emit the v-model
-             */
-            onSelectedChange() {
-                this.$emit('input', this.selected);
-            },
-
-            canDeleteResources(selected) {
-                let canDelete = this.canDelete;
-                if (this.canDeleteResourceKey !== '') {
-                    selected.forEach((resource) => {
-                        if (resource[this.canDeleteResourceKey] === false) {
-                            canDelete = false;
-                            return;
-                        }
-                    });
-                }
-                return canDelete;
-            },
-
-            canUpdateResources(selected) {
-                let canUpdate = this.canUpdate;
-                if (this.canUpdateResourceKey !== '') {
-                    selected.forEach((resource) => {
-                        if (resource[this.canUpdateResourceKey] === false) {
-                            canUpdate = false;
-                            return;
-                        }
-                    });
-                }
-                return canUpdate;
-            },
-
-            cancelUpdate() {
-                history.pushState('', document.title, window.location.pathname + window.location.search);
-
-                this.dialog.update = false;
-            },
-
-            handleRowClick(ResourceKey) {
-                this.$emit('row-click', ResourceKey);
-            },
+            }
+            return canDelete;
         },
-    };
+
+        canUpdateResources(selected) {
+            let canUpdate = this.canUpdate;
+            if (this.canUpdateResourceKey !== '') {
+                selected.forEach((resource) => {
+                    if (resource[this.canUpdateResourceKey] === false) {
+                        canUpdate = false;
+                        return;
+                    }
+                });
+            }
+            return canUpdate;
+        },
+
+        cancelUpdate() {
+            history.pushState('', document.title, window.location.pathname + window.location.search);
+
+            this.dialog.update = false;
+        },
+
+        handleRowClick(ResourceKey) {
+            this.$emit('row-click', ResourceKey);
+        },
+    },
+};
 </script>
 <style>
-    .vuetify-resource
-    {
-        position: relative;
-    }
+.vuetify-resource
+{
+    position: relative;
+}
 
-    .vuetify-resource .v-speed-dial
-    {
-        position: absolute;
-        top:      -35px;
-        right:    5px;
-        z-index:  2;
-    }
+.vuetify-resource .v-speed-dial
+{
+    position: absolute;
+    top:      -35px;
+    right:    5px;
+    z-index:  2;
+}
 
+.vuetify-resource.with-search .v-speed-dial
+{
+    top:   15px;
+    right: 5px;
+}
+
+.vuetify-resource th:first-child:not(.column)
+{
+    width: 40px;
+}
+
+@media only screen and (max-width: 599px)
+{
     .vuetify-resource.with-search .v-speed-dial
     {
-        top:   15px;
-        right: 5px;
+        top: 65px;
     }
 
-    .vuetify-resource th:first-child:not(.column)
+    .v-speed-dial
     {
-        width: 40px;
+        right: 0;
     }
 
-    @media only screen and (max-width: 599px)
+    .vuetify-resource
     {
-        .vuetify-resource.with-search .v-speed-dial
-        {
-            top: 65px;
-        }
-
-        .v-speed-dial
-        {
-            right: 0;
-        }
-
-        .vuetify-resource
-        {
-            margin-right: 0;
-        }
-
-        .datatable__actions__select
-        {
-            display: none;
-        }
-
-        .vuetify-resource th
-        {
-            display: none;
-        }
-
-        .vuetify-resource th:first-child, .vuetify-resource th:nth-child(2)
-        {
-            display: table-cell;
-        }
-
-        .vuetify-resource td
-        {
-            display: none;
-        }
-
-        .vuetify-resource td:first-child, .vuetify-resource td:nth-child(2)
-        {
-            display: table-cell;
-        }
+        margin-right: 0;
     }
+
+    .datatable__actions__select
+    {
+        display: none;
+    }
+
+    .vuetify-resource th
+    {
+        display: none;
+    }
+
+    .vuetify-resource th:first-child, .vuetify-resource th:nth-child(2)
+    {
+        display: table-cell;
+    }
+
+    .vuetify-resource td
+    {
+        display: none;
+    }
+
+    .vuetify-resource td:first-child, .vuetify-resource td:nth-child(2)
+    {
+        display: table-cell;
+    }
+}
 </style>
