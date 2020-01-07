@@ -294,13 +294,7 @@ export default {
                 return true;
             }
 
-            if (typeof this.$scopedSlots.speedDialAfter !== 'undefined') {
-                if (typeof this.showSpeedDial !== 'undefined') {
-                    return this.showSpeedDial;
-                }
-                return true;
-            }
-            return false;
+            return typeof this.$scopedSlots.speedDialAfter !== 'undefined';
         },
     },
     props: {
