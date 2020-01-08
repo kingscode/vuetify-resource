@@ -175,7 +175,7 @@ example for crudActionsAfter slot:
 
 ```
 /**
- * rowsPerPageItems
+ * itemsPerPageOptions
  * The rows per page option selection
  *
  * @return array
@@ -184,8 +184,8 @@ example for crudActionsAfter slot:
 
 ```
 /**
- * rowsPerPage
- * The number of rows
+ * itemsPerPage
+ * The number of items
  *
  * @return string
  */
@@ -279,10 +279,10 @@ selected
         },
         methods: {
             /***
-             * @param Pagination const {sortBy, descending, page, rowsPerPage} = this.pagination;
+             * @param Pagination const {sortBy, descending, page, itemsPerPage} = this.pagination;
              */
             getDataFromApi(pagination) {
-                const {sortBy, descending, page, rowsPerPage} = pagination;
+                const {sortBy, descending, page, itemsPerPage} = pagination;
                 return new Promise((resolve, reject) => {
                     let items = [
                         {
