@@ -211,7 +211,7 @@ canDeleteResourceKey: {required: false, type: String, default: ''},
 canSearch: {required: false, type: Boolean, default: false},
 ```
 ```
-showSpeedDial: {required: false, type: Boolean},
+showSpeedDial: {required: false, type: Boolean, default: true},
 ```
 ```
 speedDialDirection: {required: false, type: String}, //left, right, top, bottom
