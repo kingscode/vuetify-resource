@@ -428,7 +428,7 @@ export default {
         canDeleteResourceKey: {required: false, type: String, default: ''},
         canSearch: {required: false, type: Boolean, default: false},
         useCheckboxes: {required: false, type: Boolean, default: true},
-        showSpeedDial: {required: false, type: Boolean},
+        showSpeedDial: {required: false, type: Boolean, default: true},
         speedDialDirection: {required: false, type: String, default: 'left'},
 
         /**
