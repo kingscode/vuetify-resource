@@ -154,7 +154,7 @@
                     :show-select="useCheckboxes"
                     :server-items-length="totalItems"
                     :footer-props="{
-                        itemsPerPageOptions: rowsPerPageItems
+                        itemsPerPageOptions: itemsPerPageOptions
                     }"
                     class="elevation-1"
                     item-key="id"
@@ -461,12 +461,12 @@ export default {
         },
 
         /**
-         * rowsPerPageItems
+         * itemsPerPageOptions
          * The rows per page option selection
          *
          * @return array
          */
-        rowsPerPageItems: {
+        itemsPerPageOptions: {
             required: false,
             type: Array,
             default: () => {
