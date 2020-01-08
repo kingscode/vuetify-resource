@@ -257,7 +257,7 @@ export default {
             items: [],
             loading: true,
             pagination: {
-                rowsPerPage: this.rowsPerPage || 10,
+                itemsPerPage: this.itemsPerPage || 10,
             },
             selected: [],
             headers: [],
@@ -475,12 +475,12 @@ export default {
         },
 
         /**
-         * rowsPerPage
+         * itemsPerPage
          * The number of rows
          *
          * @return string
          */
-        rowsPerPage: {
+        itemsPerPage: {
             required: false,
             type: Number,
             default: 10,
