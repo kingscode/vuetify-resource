@@ -257,7 +257,7 @@ export default {
             items: [],
             loading: true,
             pagination: {
-                rowsPerPage: this.rowsPerPage || 10,
+                itemsPerPage: this.rowsPerPage || 10,
             },
             selected: [],
             headers: [],
