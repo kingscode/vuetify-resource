@@ -26,4 +26,7 @@ module.exports = {
             }),
         ],
     },
+    'transpileDependencies': [
+        'vuetify',
+    ],
 };
