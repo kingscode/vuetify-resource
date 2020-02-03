@@ -189,7 +189,7 @@
                                             icon
                                             v-on="on"
                                             :disabled="!canUpdateResources([item])"
-                                            @click="openUpdateHandler(item[resourceKeyName])"
+                                            @click.stop="openUpdateHandler(item[resourceKeyName])"
                                         >
                                             <v-icon>$vuetify.icons.edit</v-icon>
                                         </v-btn>
@@ -204,7 +204,7 @@
                                             icon
                                             v-on="on"
                                             :disabled="!canDeleteResources([item])"
-                                            @click="showDeleteConfirmation([item[resourceKeyName]])"
+                                            @click.stop="showDeleteConfirmation([item[resourceKeyName]])"
                                         >
                                             <v-icon>$vuetify.icons.delete</v-icon>
                                         </v-btn>
