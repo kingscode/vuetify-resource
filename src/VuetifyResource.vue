@@ -169,7 +169,7 @@
                                     hide-details
                                     primary
                                     :input-value="isSelected"
-                                    @change="select(!isSelected)"
+                                    @click.stop="select(!isSelected)"
                                 ></v-checkbox>
                             </td>
                             <td v-for="headerItem in tableContent">
