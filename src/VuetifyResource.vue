@@ -35,13 +35,13 @@
         >
             <v-card v-if="dialog.update">
                 <v-toolbar class="primary" dark style="flex: 0 0 auto;">
-                    <v-btn @click.native="cancelUpdate" dark icon>
+                    <v-btn @click.native="cancelUpdate" dark icon class="close-button">
                         <v-icon>$vuetify.icons.close</v-icon>
                     </v-btn>
                     <v-toolbar-title>{{ meta.name }}</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
-                        <v-btn @click="updateHandler()" dark text>{{lang('save')}}</v-btn>
+                        <v-btn @click="updateHandler()" dark text class="save-button">{{lang('save')}}</v-btn>
                         <slot name="updateToolbar"></slot>
                     </v-toolbar-items>
                 </v-toolbar>
@@ -89,6 +89,7 @@
                                 v-if="canUpdateResources(selected) && selected.length === 1"
                                 v-on:click="openUpdateHandler()"
                                 v-on="on"
+                                class="edit-button"
                             >
                                 <v-icon>$vuetify.icons.edit</v-icon>
                             </v-btn>
@@ -107,6 +108,7 @@
                                 v-if="canAdd === true"
                                 v-on:click="openCreateHandler()"
                                 v-on="on"
+                                class="add-button"
                             >
                                 <v-icon>$vuetify.icons.add</v-icon>
                             </v-btn>
@@ -125,6 +127,7 @@
                                 v-if="canDeleteResources(selected) && selected.length >= 1"
                                 v-on:click="showDeleteConfirmation()"
                                 v-on="on"
+                                class="delete-button"
                             >
                                 <v-icon>$vuetify.icons.delete</v-icon>
                             </v-btn>
@@ -190,6 +193,7 @@
                                             v-on="on"
                                             :disabled="!canUpdateResources([item])"
                                             @click.stop="openUpdateHandler(item[resourceKeyName])"
+                                            class="edit-button"
                                         >
                                             <v-icon>$vuetify.icons.edit</v-icon>
                                         </v-btn>
@@ -205,6 +209,7 @@
                                             v-on="on"
                                             :disabled="!canDeleteResources([item])"
                                             @click.stop="showDeleteConfirmation([item[resourceKeyName]])"
+                                            class="delete-button"
                                         >
                                             <v-icon>$vuetify.icons.delete</v-icon>
                                         </v-btn>

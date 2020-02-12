@@ -6,7 +6,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="grey" text @click="dialog = false">{{lang('cancel')}}</v-btn>
-                <v-btn color="priamry darken-1" text @click="handleDelete">{{lang('delete')}}</v-btn>
+                <v-btn color="priamry darken-1" text @click="handleDelete" class="confirm-delete-button">{{lang('delete')}}</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
