@@ -249,10 +249,14 @@ import Text from './columnTypes/Text.vue';
 import Checkbox from './columnTypes/Checkbox.vue';
 import DeleteConfirmation from './components/DeleteConfirmation.vue';
 import Language from './mixins/Language.js';
+import {VBtn, VCard, VDialog, VIcon, VToolbar} from 'vuetify/lib';
 
 export default {
     name: 'vuetify-resource',
-    components: {DeleteConfirmation, ActivityOverlay},
+    components: {
+        DeleteConfirmation, ActivityOverlay,
+        VDialog, VCard, VToolbar, VBtn, VIcon,
+    },
     mixins: [Language],
     data() {
         return {
