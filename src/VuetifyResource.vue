@@ -15,8 +15,9 @@
                     <v-toolbar-title>{{ meta.name }}</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
-                        <v-btn @click="createHandler()" dark text>{{lang('save')}}</v-btn>
-                        <slot name="createToolbar"></slot>
+                        <slot name="createToolbar">
+                            <v-btn @click="createHandler()" dark text>{{lang('save')}}</v-btn>
+                        </slot>
                     </v-toolbar-items>
                 </v-toolbar>
                 <v-card-text>
@@ -41,8 +42,9 @@
                     <v-toolbar-title>{{ meta.name }}</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
-                        <v-btn @click="updateHandler()" dark text class="save-button">{{lang('save')}}</v-btn>
-                        <slot name="updateToolbar"></slot>
+                        <slot name="updateToolbar">
+                            <v-btn @click="updateHandler()" dark text class="save-button">{{lang('save')}}</v-btn>
+                        </slot>
                     </v-toolbar-items>
                 </v-toolbar>
                 <v-card-text>
