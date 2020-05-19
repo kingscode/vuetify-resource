@@ -252,6 +252,8 @@ import Language from './mixins/Language.js';
 import {
     VBtn,
     VCard,
+    VCardText,
+    VCheckbox,
     VDataTable,
     VDialog,
     VFabTransition,
@@ -263,8 +265,9 @@ import {
     VSpeedDial,
     VTextField,
     VToolbar,
+    VToolbarItems,
+    VToolbarTitle,
     VTooltip,
-    VCheckbox,
 } from 'vuetify/lib';
 
 export default {
@@ -273,7 +276,7 @@ export default {
         DeleteConfirmation, ActivityOverlay,
         /* Vuetify components: */
         VDialog, VCard, VToolbar, VBtn, VIcon, VFlex, VTextField, VSnackbar, VLayout, VFabTransition, VSpeedDial,
-        VDataTable, VSpacer, VTooltip, VCheckbox
+        VDataTable, VSpacer, VTooltip, VCheckbox, VCardText, VToolbarItems, VToolbarTitle,
     },
     mixins: [Language],
     data() {

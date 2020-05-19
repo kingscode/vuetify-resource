@@ -12,10 +12,13 @@
 </template>
 
 <script>
+import { VTooltip } from 'vuetify/lib';
     export default {
         name: 'TextType',
         props: ['content', 'item', 'tableColumn'],
-
+        components: {
+            VTooltip
+        },
         data() {
             return {};
         },
