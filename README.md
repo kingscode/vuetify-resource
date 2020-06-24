@@ -229,108 +229,110 @@ selected
 
 ``` javascript
 <template>
-    <v-app>
-        <div class="page page-news">
-            <vuetify-resource
-                :getItemCallback="getItemFromApi"
-                :getDataCallback="getDataFromApi"
-                :tableContent="tableContent"
-                :createCallback="createNews"
-                :updateCallback="updateNews"
-                :deleteCallback="deleteNews"
-            >
-                <div slot="createContent">
-                    place here your form
-                </div>
-                <div slot="updateContent">
-                    place here your form
-                </div>
-            </vuetify-resource>
-            
+    <vuetify-resource
+        :getItemCallback="getItemFromApi"
+        :getDataCallback="getDataFromApi"
+        :tableContent="tableContent"
+        :createCallback="createNews"
+        :updateCallback="updateNews"
+        :deleteCallback="deleteNews"
+    >
+        <div slot="createContent">
+            place here your form
         </div>
-    </v-app>
+        <div slot="updateContent">
+            place here your form
+        </div>
+    </vuetify-resource>
 </template>
 
 <script>
 
-    import ResourceList from '@kingscode/vuetify-resource';
-    import Text from '@kingscode/vuetify-resource/columnTypes/Text';
-    import Checkbox from '@kingscode/vuetify-resource/columnTypes/Checkbox';
+import VuetfiyResource from '@kingscode/vuetify-resource';
+import Text from '@kingscode/vuetify-resource/columnTypes/Text';
+import Checkbox from '@kingscode/vuetify-resource/columnTypes/Checkbox';
 
-    export default {
-        components: {
-            ResourceList,
-        },
-        name: 'News',
-        data() {
-            return {
-                tableContent: [
+export default {
+    components: {
+        VuetfiyResource,
+    },
+    name: 'News',
+    data() {
+        return {
+            tableContent: [
+                {
+                    text: 'Titel',
+                    align: 'left',
+                    sortable: true,
+                    value: 'title',
+                },
+            ],
+            createForm: {values: {}},
+            updateForm: {values: {}},
+        };
+    },
+    methods: {
+        /**
+         * Get the data for the table from the API
+         */
+        getDataFromApi(pagination) {
+            const {sortBy, descending, page, rowsPerPage} = pagination;
+            return new Promise((resolve, reject) => {
+                let items = [
                     {
-                        text: 'Titel',
-                        align: 'left',
-                        sortable: true,
-                        value: 'title',
-                        columnType: Text,
+                        title: 'hello'
                     },
-                ],
-                createForm: {values: {}},
-                updateForm: {values: {}},
-            };
-        },
-        methods: {
-            /***
-             * @param Pagination const {sortBy, descending, page, rowsPerPage} = this.pagination;
-             */
-            getDataFromApi(pagination) {
-                const {sortBy, descending, page, rowsPerPage} = pagination;
-                return new Promise((resolve, reject) => {
-                    let items = [
-                        {
-                            title: 'hello'
-                        },
-                        {
-                            title: 'hello2'
-                        }
-                    ];
-                    let total = 2;
-                    resolve({
-                        items,
-                        total,
-                    });
-
-                });
-            },
-            getItemFromApi(id) {
-                return new Promise((resolve, reject) => {
-                    let item = [title: 'hallo'];
-                    resolve({
-                        item
-                    });
-                });
-            },
-            createNews() {
-                return new Promise((resolve, reject) => {
-                                resolve();
-                });
-            },
-            updateNews(selected) {
-                return new Promise((resolve, reject) => {
-                    resolve();
+                    {
+                        title: 'hello2'
+                    }
+                ];
+                resolve({
+                    items,
+                    items.length, //this is the servers total
                 });
 
-            },
-            deleteNews(items) {
-                return new Promise((resolve, reject) => {
-                    resolve();
-                });
-            },
+            });
         },
-    };
+        /**
+         * Get the data from one single resource, this is used for filling the forms
+         */
+        getItemFromApi(id) {
+            return new Promise((resolve, reject) => {
+                let item = [title: 'hallo'];
+                resolve({
+                    item
+                });
+            });
+        },
+        /**
+         * Create an item on the server
+         */
+        createNews() {
+            return new Promise((resolve, reject) => {
+                resolve();
+            });
+        },
+        /**
+         * Update an item on the server
+         */
+        updateNews(selected) {
+            return new Promise((resolve, reject) => {
+                resolve();
+            });
+
+        },
+
+        /**
+         * Delete an item on the server
+         */
+        deleteNews(items) {
+            return new Promise((resolve, reject) => {
+                resolve();
+            });
+        },
+    },
+};
 </script>
-
-<style scoped>
-
-</style>
 
 ```
 
