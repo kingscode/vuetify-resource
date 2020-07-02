@@ -571,11 +571,9 @@ export default {
                     this.handleUrlChange();
                 })
 
-                .catch((e) => {
-                    console.error(e);
+                .catch(() => {
                     this.activity.isCreating = false;
                     this.showSnackbar(this.lang('snackbar-get-error'), 'error');
-
                 });
         },
 
@@ -607,8 +605,7 @@ export default {
                         this.getDataHandler();
                     })
 
-                    .catch((e) => {
-                        console.error(e);
+                    .catch(() => {
                         this.activity.isCreating = false;
                         this.showSnackbar(this.lang('snackbar-save-error'), 'error');
 
@@ -660,7 +657,7 @@ export default {
                         this.showSnackbar(this.lang('snackbar-saved'));
                         this.getDataHandler();
                     })
-                    .catch((e) => {
+                    .catch(() => {
                         this.activity.isUpdating = false;
                         this.showSnackbar(this.lang('snackbar-save-error'), 'error');
 
@@ -689,8 +686,7 @@ export default {
                         this.showSnackbar(this.lang('snackbar-deleted'));
                         this.getDataHandler();
                     })
-                    .catch((e) => {
-                        console.error(e);
+                    .catch(() => {
                         this.activity.isDeleting = false;
                         this.showSnackbar(this.lang('snackbar-delete-error'), 'error');
 
