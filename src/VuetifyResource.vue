@@ -661,7 +661,6 @@ export default {
                         this.getDataHandler();
                     })
                     .catch((e) => {
-                        console.error(e);
                         this.activity.isUpdating = false;
                         this.showSnackbar(this.lang('snackbar-save-error'), 'error');
 
