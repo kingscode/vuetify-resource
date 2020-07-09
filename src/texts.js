@@ -12,7 +12,7 @@ export default {
     'no-results': 'There is nothing found for this filter',
     'rows-per-page-text': 'Rows per page',
     'snackbar-saved': 'It\'s successfully saved!',
-    'snackbar-savee-rror': 'Something went wrong, please try again later',
+    'snackbar-save-error': 'Something went wrong, please try again later',
     'snackbar-get-error': 'Something went wrong, please try again later',
     'snackbar-deleted': 'It\'s successfully deleted!',
     'snackbar-delete-error': 'Something went wrong, please try again later',
