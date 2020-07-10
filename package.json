@@ -38,6 +38,11 @@
         "vue-loader": "^15.9.2",
         "vue-template-compiler": "^2.6.11"
     },
+    "eslintConfig": {
+        "parserOptions": {
+            "ecmaVersion": 2017
+        }
+    },
     "files": [
         "dist/*",
         "src/*",
