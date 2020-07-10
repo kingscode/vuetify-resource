@@ -34,7 +34,7 @@
         "@vue/cli-service": "^4.4.1",
         "babel-core": "7.0.0-bridge.0",
         "sass": "^1.26.8",
-        "sass-loader": "^7.3.1",
+        "sass-loader": "^9.0.2",
         "vue-loader": "^15.9.2",
         "vue-template-compiler": "^2.6.11"
     },
