@@ -147,7 +147,6 @@
                             :append-icon="$vuetify.icons.search"
                             :label="lang('search')"
                             hide-details
-                            single-line
                             v-model="search"
                         ></v-text-field>
                     </v-flex>
@@ -163,8 +162,10 @@
                         itemsPerPageOptions: rowsPerPageItems
                     }"
                     class="elevation-1"
+                    :mobile-breakpoint="0"
                     item-key="id"
                     v-model="selected"
+                    :class="{'has-checkboxes': useCheckboxes}"
                     v-on:input="onSelectedChange"
                 >
                     <template v-slot:item="{ item, isSelected, select }">
@@ -550,7 +551,7 @@ export default {
     },
     created() {
         this.headers = JSON.parse(JSON.stringify(this.tableContent));
-        this.headers.push({text: '', value: 'crud-actions', sortable: false});
+        this.headers.push({text: '', value: 'crud-actions', sortable: false, class: 'crud-actions'});
     },
     methods: {
         /**
@@ -895,7 +896,7 @@ export default {
     right: 5px;
 }
 
-.vuetify-resource th:first-child:not(.column)
+.vuetify-resource .has-checkboxes th:first-child:not(.column)
 {
     width: 40px;
 }
@@ -927,7 +928,7 @@ export default {
         display: none;
     }
 
-    .vuetify-resource th:first-child, .vuetify-resource th:nth-child(2)
+    .vuetify-resource th:first-child, .vuetify-resource .has-checkboxes th:nth-child(2), .vuetify-resource th.crud-actions
     {
         display: table-cell;
     }
@@ -937,9 +938,13 @@ export default {
         display: none;
     }
 
-    .vuetify-resource td:first-child, .vuetify-resource td:nth-child(2)
+    .vuetify-resource td:first-child, .vuetify-resource .has-checkboxes td:nth-child(2), .vuetify-resource td.crud-actions
     {
         display: table-cell;
+    }
+
+    .vuetify-resource .v-data-footer__select {
+        display: none;
     }
 }
 </style>
