@@ -237,9 +237,6 @@
                     <template slot="no-results">
                         {{lang('no-results')}}
                     </template>
-                    <template v-slot:footer-items-per-page-text>
-                        {{lang('rows-per-page-text')}}
-                    </template>
                 </v-data-table>
             </v-flex>
         </v-layout>
