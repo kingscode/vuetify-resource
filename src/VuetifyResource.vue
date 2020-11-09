@@ -84,7 +84,7 @@
                     <v-tooltip left>
                         <template v-slot:activator="{on}">
                             <v-btn
-                                color="green"
+                                :color="speedDialColors.edit"
                                 dark
                                 fab
                                 slot="activator"
@@ -94,7 +94,7 @@
                                 v-on="on"
                                 class="edit-button"
                             >
-                                <v-icon>$vuetify.icons.edit</v-icon>
+                                <v-icon>{{crudIcons.edit}}</v-icon>
                             </v-btn>
                         </template>
                         <span>{{ lang('update') }}</span>
@@ -103,7 +103,7 @@
                     <v-tooltip left>
                         <template v-slot:activator="{on}">
                             <v-btn
-                                color="indigo"
+                                :color="speedDialColors.create"
                                 dark
                                 fab
                                 slot="activator"
@@ -113,7 +113,7 @@
                                 v-on="on"
                                 class="add-button"
                             >
-                                <v-icon>$vuetify.icons.add</v-icon>
+                                <v-icon>{{crudIcons.create}}</v-icon>
                             </v-btn>
                         </template>
                         <span>{{ lang('create') }}</span>
@@ -122,7 +122,7 @@
                     <v-tooltip left>
                         <template v-slot:activator="{on}">
                             <v-btn
-                                color="red"
+                                :color="speedDialColors.delete"
                                 dark
                                 fab
                                 slot="activator"
@@ -132,7 +132,7 @@
                                 v-on="on"
                                 class="delete-button"
                             >
-                                <v-icon>$vuetify.icons.delete</v-icon>
+                                <v-icon>{{crudIcons.delete}}</v-icon>
                             </v-btn>
                         </template>
                         <span>{{ lang('delete') }}</span>
@@ -191,7 +191,7 @@
                                 <v-tooltip left v-if="canUpdate">
                                     <template v-slot:activator="{ on }">
                                         <v-btn
-                                            color="green"
+                                            :color="crudColors.edit"
                                             text
                                             icon
                                             v-on="on"
@@ -199,7 +199,7 @@
                                             @click.stop="openUpdateHandler(item[resourceKeyName])"
                                             class="edit-button"
                                         >
-                                            <v-icon>$vuetify.icons.edit</v-icon>
+                                            <v-icon :size="crudIconSize">{{crudIcons.edit}}</v-icon>
                                         </v-btn>
                                     </template>
                                     <span>{{ lang('update') }}</span>
@@ -207,7 +207,7 @@
                                 <v-tooltip left v-if="canDelete">
                                     <template v-slot:activator="{ on }">
                                         <v-btn
-                                            color="red"
+                                            :color="crudColors.delete"
                                             text
                                             icon
                                             v-on="on"
@@ -215,7 +215,7 @@
                                             @click.stop="showDeleteConfirmation([item[resourceKeyName]])"
                                             class="delete-button"
                                         >
-                                            <v-icon>$vuetify.icons.delete</v-icon>
+                                            <v-icon :size="crudIconSize">{{crudIcons.delete}}</v-icon>
                                         </v-btn>
                                     </template>
                                     <span>{{ lang('delete') }}</span>
@@ -352,6 +352,40 @@ export default {
 
             return typeof this.$scopedSlots.speedDialAfter !== 'undefined';
         },
+        colors () {
+          const { style: { edit, create, drop, basic } } = VuetifyResourceOptions;
+
+          return {
+            edit: edit.color || 'green',
+            delete: drop.color || 'red',
+            create: create.color || 'indigo',
+            all: basic ? basic.color : null,
+            onlyCrudActions : basic && !basic.onlySpeedDial,
+            onlySpeedDial : basic && !basic.onlyCrudActions,
+          };
+        },
+        crudColors() {
+          return {
+            edit: this.colors.onlyCrudActions ? this.colors.all : this.colors.edit,
+            delete: this.colors.onlyCrudActions ? this.colors.all : this.colors.delete,
+            create: this.colors.onlyCrudActions ? this.colors.all : this.colors.create,
+          };
+        },
+        speedDialColors() {
+          return {
+            edit: this.colors.onlySpeedDial ? this.colors.all : this.colors.edit,
+            delete: this.colors.onlySpeedDial ? this.colors.all : this.colors.delete,
+            create: this.colors.onlySpeedDial ? this.colors.all : this.colors.create,
+          };
+        },
+        crudIcons() {
+            return {
+                edit: VuetifyResourceOptions.style.edit.icon || this.$vuetify.icons.values.edit,
+                delete: VuetifyResourceOptions.style.drop.icon || this.$vuetify.icons.values.delete,
+                create: VuetifyResourceOptions.style.create.icon || this.$vuetify.icons.values.add,
+            };
+        },
+        crudIconSize: () => VuetifyResourceOptions.style.basic ? VuetifyResourceOptions.style.basic.size : null,
     },
     props: {
         /**
