@@ -271,7 +271,32 @@ import {
     VTooltip,
 } from 'vuetify/lib';
 
+let VuetifyResourceOptions = {
+    style: {
+        edit: {},
+        drop: {},
+        create: {},
+    },
+};
+
 export default {
+    /**
+     * use
+     *
+     * @param options.style.edit
+     * @param options.style.delete
+     * @param options.style.create
+     * @param options.style.basic
+     * @return Object with style-properties
+     */
+    use(options) {
+        if(options && options.style) {
+            VuetifyResourceOptions.style.edit = options.style.edit || {};
+            VuetifyResourceOptions.style.drop = options.style.delete || {};
+            VuetifyResourceOptions.style.create = options.style.create || {};
+            VuetifyResourceOptions.style.basic = options.style.basic || null;
+        }
+    },
     name: 'vuetify-resource',
     components: {
         DeleteConfirmation, ActivityOverlay,
