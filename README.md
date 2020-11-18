@@ -12,6 +12,48 @@ it can be used in CMS driven by vue/vuetify
 # npm
 npm install @kingscode/vuetify-resource --save
 ```
+
+## Global styling
+A global option for styling the crudaction and speeddial buttons. 
+When you import the VuetifyResource, you can set the style-options.
+These are the options you can use as **default**:
+- `color`, change color of button
+- `size`, change only the size of the crudactions
+- `onlyCrudActions`, set default styling for all crudactions
+- `onlySpeedDial`, set default styling for all speeddial actions
+
+The styling will default applies for crudactions and speeddials.
+
+Example for changing styling of crudactions only:
+```
+VuetifyResource.use({
+  style: {
+    default: {
+      color: '#222222',
+      size: 18,
+      onlyCrudActions: true,
+    },
+  },
+});
+```
+
+You could also use property settings for changing the buttons individually. 
+These are the options you can use as **individually**:
+- `color`;
+- `icon`.
+
+Example for changing only the styling of the create-button:
+```
+VuetifyResource.use({
+  style: {
+    create: {
+      color: '#1C87DB',
+      icon: 'fa-calendar-plus',
+    },
+  },
+});
+```
+
 ## Slots
 
 - createToolbar (you can add something before the save button, like other buttons, or an titlte)
