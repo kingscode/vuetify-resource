@@ -286,7 +286,7 @@ export default {
      * @param options.style.edit
      * @param options.style.delete
      * @param options.style.create
-     * @param options.style.basic
+     * @param options.style.default
      * @return Object with style-properties
      */
     use(options) {
@@ -294,7 +294,7 @@ export default {
             VuetifyResourceOptions.style.edit = options.style.edit || {};
             VuetifyResourceOptions.style.drop = options.style.delete || {};
             VuetifyResourceOptions.style.create = options.style.create || {};
-            VuetifyResourceOptions.style.basic = options.style.basic || null;
+            VuetifyResourceOptions.style.default = options.style.default || null;
         }
     },
     name: 'vuetify-resource',
@@ -353,29 +353,30 @@ export default {
             return typeof this.$scopedSlots.speedDialAfter !== 'undefined';
         },
         colors () {
-          const { style: { edit, create, drop, basic } } = VuetifyResourceOptions;
+          const { style: { edit, create, drop } } = VuetifyResourceOptions;
+          const base = VuetifyResourceOptions.style.default;
 
           return {
             edit: edit.color || 'green',
             delete: drop.color || 'red',
             create: create.color || 'indigo',
-            all: basic ? basic.color : null,
-            onlyCrudActions : basic && !basic.onlySpeedDial,
-            onlySpeedDial : basic && !basic.onlyCrudActions,
+            default: base && base.color != null ? base.color : null,
+            onlyCrudActions : base && !base.onlySpeedDial,
+            onlySpeedDial : base && !base.onlyCrudActions,
           };
         },
         crudColors() {
           return {
-            edit: this.colors.onlyCrudActions ? this.colors.all : this.colors.edit,
-            delete: this.colors.onlyCrudActions ? this.colors.all : this.colors.delete,
-            create: this.colors.onlyCrudActions ? this.colors.all : this.colors.create,
+            edit: this.colors.onlyCrudActions && this.colors.default  ? this.colors.default : this.colors.edit,
+            delete: this.colors.onlyCrudActions && this.colors.default ? this.colors.default : this.colors.delete,
+            create: this.colors.onlyCrudActions && this.colors.default  ? this.colors.default : this.colors.create,
           };
         },
         speedDialColors() {
           return {
-            edit: this.colors.onlySpeedDial ? this.colors.all : this.colors.edit,
-            delete: this.colors.onlySpeedDial ? this.colors.all : this.colors.delete,
-            create: this.colors.onlySpeedDial ? this.colors.all : this.colors.create,
+            edit: this.colors.onlySpeedDial && this.colors.default ? this.colors.default : this.colors.edit,
+            delete: this.colors.onlySpeedDial && this.colors.default ? this.colors.default : this.colors.delete,
+            create: this.colors.onlySpeedDial && this.colors.default ? this.colors.default : this.colors.create,
           };
         },
         crudIcons() {
@@ -385,7 +386,7 @@ export default {
                 create: VuetifyResourceOptions.style.create.icon || this.$vuetify.icons.values.add,
             };
         },
-        crudIconSize: () => VuetifyResourceOptions.style.basic ? VuetifyResourceOptions.style.basic.size : null,
+        crudIconSize: () => VuetifyResourceOptions.style.default ? VuetifyResourceOptions.style.default.size : null,
     },
     props: {
         /**
