@@ -356,6 +356,7 @@ export default {
       return {
         'vuetify-resource': true,
         'with-search': this.canSearch,
+        'row-click': this.hasClickableRows,
       };
     },
     speedDialNotEmpty() {
@@ -410,6 +411,9 @@ export default {
       };
     },
     crudIconSize: () => VuetifyResourceOptions.style.default ? VuetifyResourceOptions.style.default.size : null,
+    hasClickableRows() {
+      return 'row-click' in this.$listeners;
+    }
   },
   props: {
     /**
@@ -1019,6 +1023,10 @@ export default {
 
 .vuetify-resource .has-checkboxes th:first-child:not(.column) {
   width: 40px;
+}
+
+.vuetify-resource.row-click tr{
+  cursor: pointer;
 }
 
 @media only screen and (max-width: 599px) {
