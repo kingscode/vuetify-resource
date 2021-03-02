@@ -405,9 +405,9 @@ export default {
     },
     crudIcons() {
       return {
-        edit: VuetifyResourceOptions.style.edit.icon || this.$vuetify.icons.values.edit,
-        delete: VuetifyResourceOptions.style.drop.icon || this.$vuetify.icons.values.delete,
-        create: VuetifyResourceOptions.style.create.icon || this.$vuetify.icons.values.add,
+        edit: VuetifyResourceOptions.style.edit.icon || '$vuetify.icons.edit',
+        delete: VuetifyResourceOptions.style.drop.icon || '$vuetify.icons.delete',
+        create: VuetifyResourceOptions.style.create.icon || '$vuetify.icons.add',
       };
     },
     crudIconSize: () => VuetifyResourceOptions.style.default ? VuetifyResourceOptions.style.default.size : null,
