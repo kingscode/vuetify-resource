@@ -782,6 +782,7 @@ export default {
         this.updateCallback(this.selected)
             .then(() => {
               this.activity.isUpdating = false;
+              history.pushState('', document.title, window.location.pathname + window.location.search);
               this.dialog.update = false;
               this.showSnackbar(this.lang('snackbar-saved'));
               this.getDataHandler();
