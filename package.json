@@ -20,19 +20,24 @@
     "main": "dist/vuetify-resource.common.js",
     "homepage": "https://github.com/kingscode/vuetify-resource#readme",
     "scripts": {
-        "serve": "vue-cli-service serve",
-        "build": "vue-cli-service build --target lib --name vuetify-resource ./src/VuetifyResource.vue",
-        "test:e2e": "vue-cli-service test:e2e",
-        "test:unit": "vue-cli-service test:unit"
+        "serve": "vue-cli-service serve ./playground/main.js",
+        "build": "vue-cli-service build --target lib --name vuetify-resource ./src/VuetifyResource.vue"
     },
     "peerDependencies": {
         "vue": "^2.6.11",
-        "vuetify": "^2.2.27",
-        "vue-loader": "^15.9.2"
+        "vue-loader": "^15.9.2",
+        "vuetify": "^2.2.27"
     },
     "devDependencies": {
-        "@vue/cli-service": "^4.4.6",
-        "vue-template-compiler": "^2.6.11"
+        "@vue/cli-service": "^4.5.11",
+        "babel-core": "7.0.0-bridge.0",
+        "sass": "^1.19.0",
+        "sass-loader": "^8.0.0",
+        "vue": "^2.6.10",
+        "vue-cli-plugin-vuetify": "^2.2.2",
+        "vue-template-compiler": "^2.6.11",
+        "vuetify": "^2.4.5",
+        "vuetify-loader": "^1.7.2"
     },
     "files": [
         "dist/*",
