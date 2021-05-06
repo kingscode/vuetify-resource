@@ -595,6 +595,9 @@ export default {
       type: String,
       default: 'left',
     },
+    searchQuery: {
+      type: String,
+    },
 
     /**
      * texts
@@ -678,6 +681,9 @@ export default {
         }, 400);
       },
       deep: true,
+    },
+    searchQuery() {
+      this.search = this.searchQuery;
     },
   },
   created() {
