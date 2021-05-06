@@ -237,6 +237,12 @@
           <template slot="no-results">
             {{ lang('no-results') }}
           </template>
+          <template v-for="(_, name) in $slots" v-slot:[name]>
+            <slot :name="name"/>
+          </template>
+          <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
+            <slot :name="name" v-bind="slotData"/>
+          </template>
         </v-data-table>
       </v-flex>
     </v-layout>
@@ -413,7 +419,7 @@ export default {
     crudIconSize: () => VuetifyResourceOptions.style.default ? VuetifyResourceOptions.style.default.size : null,
     hasClickableRows() {
       return 'row-click' in this.$listeners;
-    }
+    },
   },
   props: {
     /**
@@ -1019,14 +1025,14 @@ export default {
 
 .vuetify-resource.with-search .v-speed-dial {
   right: 5px;
-  top: 15px;
+  top:   15px;
 }
 
 .vuetify-resource .has-checkboxes th:first-child:not(.column) {
   width: 40px;
 }
 
-.vuetify-resource.row-click tr{
+.vuetify-resource.row-click tr {
   cursor: pointer;
 }
 
