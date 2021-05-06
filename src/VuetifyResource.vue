@@ -242,7 +242,7 @@
           <template v-for="(_, name) in $slots" v-slot:[name]>
             <slot :name="name"/>
           </template>
-          <template v-for="(_, name) in $scopedSlots" v-slot="name" slot-scope="slotData">
+          <template v-for="(_, name) in $scopedSlots" :slot="name" slot-scope="slotData">
             <slot :name="name" v-bind="slotData"/>
           </template>
         </v-data-table>
