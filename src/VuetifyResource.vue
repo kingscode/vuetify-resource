@@ -166,6 +166,8 @@
             :show-select="useCheckboxes"
             class="elevation-1"
             item-key="id"
+            v-bind="$attrs"
+            v-on="$listeners"
             v-on:input="onSelectedChange"
         >
           <template v-slot:item="{ item, isSelected, select }">
