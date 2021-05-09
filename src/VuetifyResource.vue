@@ -171,7 +171,7 @@
             v-on:input="onSelectedChange"
         >
           <template v-slot:item="{ item, isSelected, select }">
-            <tr @click="handleRowClick(item[resourceKeyName])">
+            <tr @click="handleRowClick(item[resourceKeyName])" :class="item.itemClass">
               <td v-if="useCheckboxes">
                 <v-checkbox
                     :input-value="isSelected"
