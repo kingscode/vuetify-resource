@@ -149,6 +149,7 @@
                 :label="lang('search')"
                 hide-details
             ></v-text-field>
+            <slot name="afterSearchBar"></slot>
           </v-flex>
         </v-layout>
         <v-data-table
