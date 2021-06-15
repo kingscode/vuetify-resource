@@ -680,6 +680,7 @@ export default {
       handler() {
         clearTimeout(this.searchTimeout);
         this.searchTimeout = setTimeout(() => {
+          this.pagination.page = 1
           this.getDataHandler();
         }, 400);
       },
