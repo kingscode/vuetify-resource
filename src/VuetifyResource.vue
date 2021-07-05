@@ -187,7 +187,7 @@
               <td v-for="headerItem in tableContent">
                 <component
                     :is="getColumnType(headerItem.columnType)"
-                    :content="item[headerItem.value]"
+                    :content="formatValue(headerItem, item[headerItem.value])"
                     :item="item"
                     :table-column="headerItem"
                 ></component>
@@ -680,7 +680,7 @@ export default {
       handler() {
         clearTimeout(this.searchTimeout);
         this.searchTimeout = setTimeout(() => {
-          this.pagination.page = 1
+          this.pagination.page = 1;
           this.getDataHandler();
         }, 400);
       },
@@ -1019,6 +1019,13 @@ export default {
 
     handleRowClick(ResourceKey) {
       this.$emit('row-click', ResourceKey);
+    },
+    formatValue(headerItem, value) {
+      if (typeof headerItem.formatter !== 'undefined') {
+        return headerItem.formatter(value);
+      }
+
+      return headerItem.value;
     },
   },
 };

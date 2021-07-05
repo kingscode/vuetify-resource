@@ -183,6 +183,7 @@ example for crudActionsAfter slot:
  *         sortable:   coolean
  *         value:      string
  *         columnType: object/component
+ *         formatter: function             a function which returns a formatter value
  *     }
  */
 ``` 
