@@ -1025,7 +1025,7 @@ export default {
         return headerItem.formatter(value);
       }
 
-      return headerItem.value;
+      return value;
     },
   },
 };
