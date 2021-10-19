@@ -267,6 +267,9 @@ useCheckboxes: {required: false, type: Boolean},
 
 selected
 
+## functions
+
+`reload` (`this.$refs.yourResource.reload()`) resets pagination and reloads it
 
 ## SPA example
 
