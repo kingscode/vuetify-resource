@@ -1027,6 +1027,10 @@ export default {
 
       return value;
     },
+    reload() {
+      this.pagination.page = 1
+      this.getDataHandler();
+    }
   },
 };
 </script>
