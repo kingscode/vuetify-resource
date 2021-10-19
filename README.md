@@ -262,6 +262,8 @@ speedDialDirection: {required: false, type: String}, //left, right, top, bottom
 ```
 useCheckboxes: {required: false, type: Boolean},
 ```
+```defaultSortBy {required: false, type: String}```
+```defaultSortDesc {required: false, type: Boolean}```
 
 ## Events
 
