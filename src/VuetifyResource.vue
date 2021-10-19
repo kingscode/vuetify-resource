@@ -656,6 +656,14 @@ export default {
       type: Number,
       default: 10,
     },
+    defaultSortBy: {
+      required: false,
+      type: String,
+    },
+    defaultSortDesc: {
+      required: false,
+      type: Boolean,
+    },
   },
   watch: {
     pagination: {
@@ -698,6 +706,12 @@ export default {
       sortable: false,
       class: 'crud-actions',
     });
+  },
+  mounted() {
+    if (this.defaultSortBy) {
+      this.pagination.sortBy = [this.defaultSortBy];
+      this.pagination.sortDesc = this.defaultSortDesc ? [this.defaultSortDesc] : [false]
+    }
   },
   methods: {
     /**
