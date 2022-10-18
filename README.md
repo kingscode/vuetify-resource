@@ -1,4 +1,4 @@
-# Vuetify resource
+# Vuetify resource for vuetify 2 and vue 2 only
 
 An easy way to create a resource or crud list with the vuetify data table.
 With default a create, update and delete dialogs/actions and potential your own actions.
